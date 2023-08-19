@@ -1,4 +1,4 @@
-# Categorial-SPC-Outlook-Generator
+# Categorial-SPC-Outlook-Display
 
 Prerequisites:
 - Python 3
