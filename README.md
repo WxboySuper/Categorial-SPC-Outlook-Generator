@@ -13,4 +13,6 @@ Instructions:
 4. Open the program in either a Code Editor or Notepad and edit the places throughout the code that need file or location paths
 5. Run the program
 
+These are Official Outlooks from the NOAA NWS Storm Prediction Center drawn and exported on an Image.
+
 If you have any issues let me know on Discord @WeatherboySuper
