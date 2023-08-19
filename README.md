@@ -1,0 +1,1 @@
+# Categorial-SPC-Outlook-Generator
