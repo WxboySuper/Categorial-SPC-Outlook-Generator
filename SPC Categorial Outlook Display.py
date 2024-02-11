@@ -45,7 +45,8 @@ def display_spc_outlook(outlook_data):
     current_directory = os.path.dirname(os.path.abspath(__file__))
     states_shapefile = os.path.join(current_directory, 's_11au16.shp')  
     states = gpd.read_file(states_shapefile)  
-    states.plot(ax=ax, facecolor='none', edgecolor='black', lw=0.5)
+    states.plot(ax=ax, edgecolor='white', lw=0.5)
+    ax.set_facecolor("black")
 
     # Read and plot the U.S. interstate highways shapefile
     highways_shapefile = os.path.join(current_directory, 'USA_Freeway_System.shp')
@@ -73,8 +74,9 @@ def display_spc_outlook(outlook_data):
     plt.title('')
 
     # Add the header image
-    header_img = plt.imread(os.path.join(current_directory, 'WTUS_SPC_Banner_nobg.png'))  
-    header_img = OffsetImage(header_img, zoom=0.4)
+    #header_img = plt.imread(os.path.join(current_directory, 'WTUS_SPC_Banner_nobg.png'))  
+    header_img = plt.imread(os.path.join(current_directory, 'SPC_Outlook-full.png'))
+    header_img = OffsetImage(header_img, zoom=0.35)
     ab = AnnotationBbox(header_img, (0.3, 1.1), xycoords='axes fraction', frameon=False)
     ax.add_artist(ab)
 
