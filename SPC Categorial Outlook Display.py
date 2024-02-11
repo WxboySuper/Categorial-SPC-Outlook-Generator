@@ -45,8 +45,8 @@ def display_spc_outlook(outlook_data):
     current_directory = os.path.dirname(os.path.abspath(__file__))
     states_shapefile = os.path.join(current_directory, 's_11au16.shp')  
     states = gpd.read_file(states_shapefile)  
-    states.plot(ax=ax, edgecolor='white', lw=0.5)
-    ax.set_facecolor("black")
+    states.plot(ax=ax, edgecolor='white', lw=0.5) #CHANGED: Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
+    ax.set_facecolor("black") #NEW: Background of the CONUS Shapefile will be Black
 
     # Read and plot the U.S. interstate highways shapefile
     highways_shapefile = os.path.join(current_directory, 'USA_Freeway_System.shp')
@@ -61,7 +61,7 @@ def display_spc_outlook(outlook_data):
 
     # Set the x and y limits for CONUS
     # Base x & y: x (-125, -66) y (23, 50)
-    ax.set_xlim([-125, -55])
+    ax.set_xlim([-125, -66])
     ax.set_ylim([23, 50])
 
     # Remove the box around the plot
@@ -74,9 +74,9 @@ def display_spc_outlook(outlook_data):
     plt.title('')
 
     # Add the header image
-    #header_img = plt.imread(os.path.join(current_directory, 'WTUS_SPC_Banner_nobg.png'))  
-    header_img = plt.imread(os.path.join(current_directory, 'SPC_Outlook-full.png'))
-    header_img = OffsetImage(header_img, zoom=0.35)
+    header_img = plt.imread(os.path.join(current_directory, 'WTUS_SPC_Banner_nobg.png'))
+    #header_img = plt.imread(os.path.join(current_directory, 'SPC_Outlook-full.png'))  
+    header_img = OffsetImage(header_img, zoom=0.4)
     ab = AnnotationBbox(header_img, (0.3, 1.1), xycoords='axes fraction', frameon=False)
     ax.add_artist(ab)
 
