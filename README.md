@@ -9,6 +9,8 @@ Instructions:
        It is recommended you create a Desktop Shortcut or another form of shortcut to access the file. The output folder is in the AppData folder of the user installing the program (WINDOWS)
 3. Run the programs .exe file and Enjoy!
 
+If you want to run the python file itself you will need the file dependancies found in the release preview branch of the repository.
+
 **These are Official Outlooks from the NOAA NWS Storm Prediction Center drawn and exported on an Image.**
 
 If you have any issues let me know on Discord @WeatherboySuper
