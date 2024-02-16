@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import geopandas as gpd
 import tkinter as tk # New Module: Handles the GUI Popup
+import contextily as ctx
 
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 
@@ -24,7 +25,7 @@ def fetch_spc_outlook():
 
 # Function to display the SPC outlook
 def display_spc_outlook(outlook_data):
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(12, 10)) #UPDATED: Make the window larger (prev. 10,8)
 
     # Set the background
     fig.patch.set_facecolor('black')
@@ -55,7 +56,9 @@ def display_spc_outlook(outlook_data):
         if not outlook_available: #NEW: show a popup is a outlook is not available
             show_popup("There is no outlook available at this time") #NEW: Popup message to be shown
             return #NEW: Exit the function if a outlook is not available
-
+    
+    ctx.add_basemap(ax, url=ctx.providers.OpenStreetMap.Mapnik)  #NEW: Add OpenStreetMap as a basemap
+    
     # Overlay US state outlines
     current_directory = os.path.dirname(os.path.abspath(__file__))
     states_shapefile = os.path.join(current_directory, 's_11au16.shp')  
