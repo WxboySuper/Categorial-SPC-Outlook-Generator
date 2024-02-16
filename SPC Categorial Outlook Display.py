@@ -3,6 +3,8 @@ import requests
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import geopandas as gpd
+import tkinter as tk # New Module: Handles the GUI Popup
+
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 
 # Function to create the output directory
@@ -27,19 +29,32 @@ def display_spc_outlook(outlook_data):
     # Set the background
     fig.patch.set_facecolor('black')
 
-    # Plotting the outlook polygons
+    outlook_available = False #NEW: Variable to track if the outlook is available
+
+    # Plotting the outlook
     for feature in outlook_data['features']:
-        outlook_type = feature['properties']['LABEL']
-        outlook_polygon = feature['geometry']['coordinates']
-        if feature['geometry']['type'] == 'Polygon':
-            outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-        for polygon in outlook_polygon:
-            x = []
-            y = []
-            for point in polygon[0]:
-                x.append(point[0])
-                y.append(point[1])
-            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=get_outlook_color(outlook_type)))
+        if 'LABEL' in feature['properties']: #NEW: Check is there is a LABEL from the Source
+            outlook_type = feature['properties']['LABEL']
+            if 'geometry' in feature and 'coordinates' in feature['geometry']: #NEW: Check if there is coordinates in the geometry portion of the feature from the source
+                outlook_available = True #NEW: Make the outlook_available variable true because there is a outlook
+                outlook_polygon = feature['geometry']['coordinates']
+                if feature['geometry']['type'] == 'polygon':
+                    outlook_polygon = [outlook_polygon] #Convert single polygon to a list for consistancy
+                for polygon in outlook_polygon:
+                    x = []
+                    y = []
+                    for point in polygon[0]:
+                        x.append(point[0])
+                        y.append(point[1])
+                    ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ex='k', lw=1, fc=get_outlook_color(outlook_type)))
+            else:
+                outlook_available = False #NEW: Make the outlook_available variable false because there is no outlook
+        else:
+            outlook_available = False #NEW: Make the outlook_available variable false because there is no outlook
+        
+        if not outlook_available: #NEW: show a popup is a outlook is not available
+            show_popup("There is no outlook available at this time") #NEW: Popup message to be shown
+            return #NEW: Exit the function if a outlook is not available
 
     # Overlay US state outlines
     current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -88,6 +103,12 @@ def display_spc_outlook(outlook_data):
 
     # Show the plot
     plt.show()
+
+#NEW: Function to display the popup message
+def show_popup(message):
+    root = tk.Tk()
+    root.withdraw() #NEW: Hide the root window
+    tk.messagebox.showinfo("No Outlook", message) #NEW: Display the Popup Message
 
 # Function to determine the color for each outlook category
 def get_outlook_color(outlook_type):
