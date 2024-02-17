@@ -33,10 +33,10 @@ def display_spc_outlook(outlook_data):
 
 # Plotting the outlook polygons
     for feature in outlook_data['features']:
-        if 'LABEL' in feature['properties']:
+        if 'LABEL' in feature['properties']: #NEW: Check is there is a LABEL from the Source
             outlook_type = feature['properties']['LABEL']
-            if 'geometry' in feature and 'coordinates' in feature['geometry']:
-                outlook_available = True
+            if 'geometry' in feature and 'coordinates' in feature['geometry']: #NEW: Check if there is coordinates in the geometry portion of the feature from the source
+                outlook_available = True #NEW: Make the outlook_available variable true because there is a outlook
                 outlook_polygon = feature['geometry']['coordinates']
                 if feature['geometry']['type'] == 'Polygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
