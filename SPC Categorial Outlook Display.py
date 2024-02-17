@@ -31,22 +31,22 @@ def display_spc_outlook(outlook_data):
 
     outlook_available = False #NEW: Variable to track if the outlook is available
 
-    # Plotting the outlook
+# Plotting the outlook polygons
     for feature in outlook_data['features']:
         if 'LABEL' in feature['properties']: #NEW: Check is there is a LABEL from the Source
             outlook_type = feature['properties']['LABEL']
             if 'geometry' in feature and 'coordinates' in feature['geometry']: #NEW: Check if there is coordinates in the geometry portion of the feature from the source
                 outlook_available = True #NEW: Make the outlook_available variable true because there is a outlook
                 outlook_polygon = feature['geometry']['coordinates']
-                if feature['geometry']['type'] == 'polygon':
-                    outlook_polygon = [outlook_polygon] #Convert single polygon to a list for consistancy
+                if feature['geometry']['type'] == 'Polygon':
+                    outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for polygon in outlook_polygon:
                     x = []
                     y = []
                     for point in polygon[0]:
                         x.append(point[0])
                         y.append(point[1])
-                    ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ex='k', lw=1, fc=get_outlook_color(outlook_type)))
+                    ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=get_outlook_color(outlook_type)))
             else:
                 outlook_available = False #NEW: Make the outlook_available variable false because there is no outlook
         else:
@@ -58,13 +58,13 @@ def display_spc_outlook(outlook_data):
 
     # Overlay US state outlines
     current_directory = os.path.dirname(os.path.abspath(__file__))
-    states_shapefile = os.path.join(current_directory, 's_11au16.shp')  
+    states_shapefile = os.path.join(current_directory, 'map_files', 's_11au16.shp')  
     states = gpd.read_file(states_shapefile)  
     states.plot(ax=ax, edgecolor='white', lw=0.5) #CHANGED: Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
     ax.set_facecolor("black") #NEW: Background of the CONUS Shapefile will be Black
 
     # Read and plot the U.S. interstate highways shapefile
-    highways_shapefile = os.path.join(current_directory, 'USA_Freeway_System.shp')
+    highways_shapefile = os.path.join(current_directory, 'map_files', 'USA_Freeway_System.shp')
     highways_gdf = gpd.read_file(highways_shapefile)
     highways_gdf.plot(ax=ax, color='red', linewidth=0.6)
 
@@ -89,7 +89,7 @@ def display_spc_outlook(outlook_data):
     plt.title('')
 
     # Add the header image
-    header_img = plt.imread(os.path.join(current_directory, 'WTUS_SPC_Banner_nobg.png'))
+    header_img = plt.imread(os.path.join(current_directory, 'headers', 'WTUS_SPC_Banner_nobg.png'))
     #header_img = plt.imread(os.path.join(current_directory, 'SPC_Outlook-full.png'))  
     header_img = OffsetImage(header_img, zoom=0.4)
     ab = AnnotationBbox(header_img, (0.3, 1.1), xycoords='axes fraction', frameon=False)
