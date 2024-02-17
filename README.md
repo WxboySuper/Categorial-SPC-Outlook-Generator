@@ -11,6 +11,8 @@ Instructions:
 
 Included is an example of an automatically outputted image in the output folder.
 
+Source Code files are used to run the .py file. The .exe in the Releases section is standalone and does not require the file dependencies as the .py does.
+
 **These are Official Outlooks from the NOAA NWS Storm Prediction Center drawn and exported on an Image.**
 
 If you have any issues let me know on Discord @WeatherboySuper
