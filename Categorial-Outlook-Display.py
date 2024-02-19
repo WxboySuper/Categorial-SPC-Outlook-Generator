@@ -154,7 +154,10 @@ def display_outlook(current_directory, outlook_data):
 def show_popup(title, message):
     root = tk.Tk()
     root.withdraw() # Hide the root window
+    root.attributes('-topmost', True) # Make the window appear on top
+    root.lift() # Bring the window to the front
     messagebox.showinfo(title, message) # Display the Popup Message
+    root.destroy() # Destroy the root window after the messagebox is closed
 
 # Function to determine the color for each outlook category
 def get_outlook_color(outlook_type):
