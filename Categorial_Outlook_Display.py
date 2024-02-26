@@ -222,8 +222,7 @@ def display_d1_cat_outlook(current_directory, outlook_data):
 
     def close_figure():
         plt.close(fig)
-        root.destroy()
-        root.quit()
+        root.withdraw()
         start_gui()
 
     close_button = tk.Button(toolbar, text='Close', command=close_figure)
