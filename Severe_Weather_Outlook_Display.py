@@ -78,6 +78,15 @@ def fetch_d2_cat_outlook():
     outlook_data = response.json()
     return outlook_data
 
+# Day 3 Categorial
+def fetch_d3_cat_outlook():
+    log.info('Fetching D2 Cat Outlook')
+    url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_cat.nolyr.geojson'
+    response = requests.get(url)
+    response.raise_for_status()
+    outlook_data = response.json()
+    return outlook_data
+
 
 ### Functions to Set Up the Program ###
 
@@ -277,24 +286,24 @@ def start_gui():
     # Initialize a window
     log.info('GUI - Initializing window')
     window = ctk.CTk()
-    window.geometry('900x400')
+    window.geometry('1500x600')
     window.title('Severe Weather Outlook Display')
 
     # Configure Layout
-    window.grid_columnconfigure(5, weight=1)
+    window.grid_columnconfigure(3, weight=1)
     window.grid_rowconfigure(7, weight=1)
 
     # Fonts
-    Title_Font = ctk.CTkFont(family='Montserrat', size=40, weight='bold')
-    Description_Font = ctk.CTkFont(family='karla', size=18)
+    Title_Font = ctk.CTkFont(family='Montserrat', size=50, weight='bold')
+    Description_Font = ctk.CTkFont(family='karla', size=21)
 
     # Title Label
     Title_Label = ctk.CTkLabel(window, text='Severe Weather Outlook Display', font=Title_Font)
-    Title_Label.grid(columnspan=7)
+    Title_Label.grid(columnspan=7, row=0)
 
     # Welcome Label
     Welcome_Label = ctk.CTkLabel(window, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', font=Description_Font)
-    Welcome_Label.grid(columnspan=7)
+    Welcome_Label.grid(columnspan=7, row=1)
 
     def D1_C_and_R():
         log.info('GUI - running the close_and_run_program function')
@@ -305,6 +314,11 @@ def start_gui():
         log.info('GUI - running the close_and_run_program function')
         window.withdraw()
         run_d2_cat()
+
+    def D3_C_and_R():
+        log.info('GUI - running the close_and_run_program function')
+        window.withdraw()
+        run_d3_cat()
 
     def Test_C_and_R():
         log.info('GUI - running the close_and_run_program function')
@@ -319,20 +333,24 @@ def start_gui():
     window.protocol("WM_DELETE_WINDOW", close_program)
 
     # Day 1 Categorial Button
-    D1_Cat_Button = ctk.CTkButton(window, text='Day 1 Categorial', width=150, font=Description_Font, command=D1_C_and_R)
-    D1_Cat_Button.grid(row=5, column=0, columnspan=1, padx=25, sticky='ew')
+    D1_Cat_Button = ctk.CTkButton(window, text='Day 1 Categorial', width=300, font=Description_Font, command=D1_C_and_R)
+    D1_Cat_Button.grid(row=2, column=0, columnspan=1, padx=45, pady=50, sticky='ew')
 
     # Day 2 Categorial Button
-    D2_Cat_Button = ctk.CTkButton(window, text='Day 2 Categorial', width=150, font=Description_Font, command=D2_C_and_R)
-    D2_Cat_Button.grid(row=5, column=1, columnspan=1, padx=25, sticky='ew')
+    D2_Cat_Button = ctk.CTkButton(window, text='Day 2 Categorial', width=300, font=Description_Font, command=D2_C_and_R)
+    D2_Cat_Button.grid(row=2, column=1, columnspan=1, padx=25, pady=50, sticky='ew')
+
+    # Day 3 Categorial Button
+    D3_Cat_Button = ctk.CTkButton(window, text='Day 3 Categorial', width=300, font=Description_Font, command=D3_C_and_R)
+    D3_Cat_Button.grid(row=2, column=2, columnspan=1, padx=25, pady=50, sticky='ew')
 
     # Test Categorial Button
-    Test_Button = ctk.CTkButton(window, text='Test Categorial', width=150, font=Description_Font, command=Test_C_and_R)
-    Test_Button.grid(row=5, column=2, columnspan=1, padx=25, sticky='ew')
+    Test_Button = ctk.CTkButton(window, text='Test Categorial', width=300, font=Description_Font, command=Test_C_and_R)
+    Test_Button.grid(row=2, column=3, columnspan=1, padx=45, pady=50, sticky='ew')
 
     # Close Button
-    Close_Button=ctk.CTkButton(window, text='Close', font=Description_Font, width=50, command=close_program)
-    Close_Button.grid(row=0, column=5, sticky='e')
+    Close_Button=ctk.CTkButton(window, text='Close', font=Description_Font, width=100, command=close_program)
+    Close_Button.grid(row=0, column=3, sticky='e')
 
     log.info('GUI - Created widgets')
 
@@ -358,6 +376,12 @@ def run_d2_cat():
     log.info('Running Test Categorial')
     show_popup('program is running', 'Program is now running and may take some time to run. Click "ok" or Close to continue')
     outlook_data = fetch_d2_cat_outlook()
+    display_cat_outlook(current_directory, outlook_data)
+
+def run_d3_cat():
+    log.info('Running Test Categorial')
+    show_popup('program is running', 'Program is now running and may take some time to run. Click "ok" or Close to continue')
+    outlook_data = fetch_d3_cat_outlook()
     display_cat_outlook(current_directory, outlook_data)
 
 start_gui()
