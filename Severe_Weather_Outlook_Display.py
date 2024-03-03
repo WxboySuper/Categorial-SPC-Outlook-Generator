@@ -5,6 +5,7 @@ import matplotlib.patches as mpatches
 import geopandas as gpd
 import tkinter as tk # New Module: Handles the GUI Popup
 
+from tkinter import messagebox
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 
 # Function to create the output directory
@@ -108,7 +109,7 @@ def display_spc_outlook(outlook_data):
 def show_popup(message):
     root = tk.Tk()
     root.withdraw() #NEW: Hide the root window
-    tk.messagebox.showinfo("No Outlook", message) #NEW: Display the Popup Message
+    messagebox.showinfo("No Outlook", message) #NEW: Display the Popup Message
 
 # Function to determine the color for each outlook category
 def get_outlook_color(outlook_type):
