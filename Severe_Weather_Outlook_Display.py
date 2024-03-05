@@ -92,7 +92,7 @@ def fetch_d3_cat_outlook():
 
 # Function to create the output directory
 def create_output_directory(current_directory):
-    log.info('running create_output_directory')
+    log.info('Creating the Output Directory')
     output_directory = os.path.join(current_directory, 'output') # Creates a folder named "output"
     os.makedirs(output_directory, exist_ok=True)
     return output_directory # Returns where the output directory is
@@ -112,7 +112,7 @@ def set_plot_limits(ax):
 
 # Function to remove all labels and axes
 def remove_axes_labels_boxes_title(ax):
-    log.info('running remove_axes_labels_boxes_title')
+    log.info('Remvoing extra stuff from the plot')
     # Remove the Axes
     ax.set_xticks([])
     ax.set_yticks([])
@@ -135,7 +135,7 @@ def remove_axes_labels_boxes_title(ax):
     
 # Function to control the CONUS State Outlines
 def overlay_us_state_outline(ax, current_directory):
-    log.info('running overlay_us_state_outline')
+    log.info('Reading and plotting the state shapefile')
     states_shapefile = os.path.join(current_directory, 's_11au16.shp')  
     states = gpd.read_file(states_shapefile)  
     states.plot(ax=ax, edgecolor='black', lw=0.75, alpha=0.75) # Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
@@ -143,20 +143,20 @@ def overlay_us_state_outline(ax, current_directory):
 
 # Function to control the US Interstate Lines
 def overlay_us_interstate_lines(ax, current_directory):
-    log.info('running overlay_us_interstate_lines')
+    log.info('Reading and plotting the interstate shapefile')
     highways_shapefile = os.path.join(current_directory, 'USA_Freeway_System.shp')
     highways_gdf = gpd.read_file(highways_shapefile)
     highways_gdf.plot(ax=ax, color='red', linewidth=0.6, alpha=0.75)
 
 # Function to control the basemap
 def add_basemap(ax):
-    log.info('running add_basemap')
+    log.info('Getting and displaying the basemap')
     ctx.add_basemap(ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368') # type: ignore
-    log.info('basemap loaded')
+    log.info('basemap is loaded')
 
 # Function to control the header
 def add_header_image(ax, current_directory):
-    log.info('running add_header_image')
+    log.info('Reading and plotting the header image')
     header_img = plt.imread(os.path.join(current_directory, 'WTUS_SPC_Banner_nobg.png'))  
     header_img = OffsetImage(header_img, zoom=0.4)
     ab = AnnotationBbox(header_img, (0.3, 1.1), xycoords='axes fraction', frameon=False)
@@ -167,7 +167,7 @@ def add_header_image(ax, current_directory):
 
 # Function to check if there is a outlook to display
 def check_outlook_availability(outlook_data):
-    log.info('running check_outlook_availability')
+    log.info('Checking if there is an outlook')
     for feature in outlook_data['features']:
         # Check is there is a LABEL if there is coordinates in the geometry portion of the feature from the Source
         if 'LABEL' in feature['properties'] and 'geometry' in feature and 'coordinates' in feature ['geometry']: 
@@ -251,7 +251,6 @@ def display_cat_outlook(current_directory, outlook_data):
 
     log.info('Showing the plot')
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
-
 
 
 ### Other Functions ###
