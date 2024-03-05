@@ -2,17 +2,26 @@
 
 import os
 import requests
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import geopandas as gpd
-import tkinter as tk # Handles the GUI Popup
+import tkinter as tk 
+import ttkbootstrap as ttk
+import customtkinter as ctk
 import contextily as ctx
 import sys
 import logging as log
 
 # Import specific functions from modules
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+from matplotlib.widgets import Button
+from matplotlib.backends._backend_tk import NavigationToolbar2Tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import messagebox
+from tkinter import TclError
+
+matplotlib.use('TkAgg')
 
 # Set up important program wide variables
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +39,54 @@ log.basicConfig(
     filemode='w'
 )
 
+def global_exception_handler(exc_type, exc_value, exc_traceback):
+    log.error('uncaught exception', exc_info=(exc_type, exc_value, exc_traceback))
+
+# Set the global exception handler
+sys.excepthook = global_exception_handler
+
+# Create a Tkinter root window
+root = tk.Tk()
+root.withdraw()
+
+
+### Fetch Functions ###
+
+#def fetch_test_cat_outlook():
+   #log.info('running fetch_test_cat_outlook function (March 31st, 2023)')
+   #url = 'https://www.spc.noaa.gov/products/outlook/archive/2023/day1otlk_20230331_1630_cat.lyr.geojson'
+    #response = requests.get(url) # Requests the data from the GeoJSON URL
+    #response.raise_for_status()
+    #outlook_data = response.json()
+    #return outlook_data # Returns the data from the GeoJSON URL
+
+# Day 1 Categorial
+def fetch_d1_cat_outlook():
+    log.info('running fetch_d1_cat_outlook function')
+    url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_cat.nolyr.geojson'
+    response = requests.get(url) # Requests the data from the GeoJSON URL
+    response.raise_for_status()
+    outlook_data = response.json()
+    return outlook_data # Returns the data from the GeoJSON URL
+
+# Day 2 Categorial
+def fetch_d2_cat_outlook():
+    log.info('Fetching D2 Cat Outlook')
+    url = 'https://www.spc.noaa.gov/products/outlook/day2otlk_cat.nolyr.geojson'
+    response = requests.get(url)
+    response.raise_for_status()
+    outlook_data = response.json()
+    return outlook_data
+
+# Day 3 Categorial
+def fetch_d3_cat_outlook():
+    log.info('Fetching D2 Cat Outlook')
+    url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_cat.nolyr.geojson'
+    response = requests.get(url)
+    response.raise_for_status()
+    outlook_data = response.json()
+    return outlook_data
+
 
 ### Functions to Set Up the Program ###
 
@@ -40,17 +97,8 @@ def create_output_directory(current_directory):
     os.makedirs(output_directory, exist_ok=True)
     return output_directory # Returns where the output directory is
 
-# Function to fetch the SPC outlook from the GeoJSON URL
-def fetch_spc_outlook():
-    log.info('Fetching the Day 1 Categorial Outlook')
-    url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_cat.nolyr.geojson'
-    response = requests.get(url) # Requests the data from the GeoJSON URL
-    response.raise_for_status()
-    outlook_data = response.json()
-    return outlook_data # Returns the data from the GeoJSON URL
-
 def setup_plot():
-    log.info('Running setup_plot')
+    log.info('running setup_plot')
     fig, ax = plt.subplots(figsize=(10,8)) # Set the size of the plot
     fig.patch.set_facecolor('black') # Set the background color of the plot
     ax.set_aspect('equal', adjustable='box')
@@ -58,7 +106,7 @@ def setup_plot():
 
 # Function to set the limits of the plot
 def set_plot_limits(ax):
-    log.info('Running set_plot_limits')
+    log.info('running set_plot_limits')
     ax.set_xlim([-125, -66]) # Base for x: (-125, -66)
     ax.set_ylim([20, 50]) # Base for y: (23, 50)
 
@@ -125,12 +173,11 @@ def check_outlook_availability(outlook_data):
         if 'LABEL' in feature['properties'] and 'geometry' in feature and 'coordinates' in feature ['geometry']: 
             log.info('There is an outlook')
             return True
-    log.info('There is no outlook')
     return False
 
 # Function to plot the polygons
-def plot_outlook_polygons(ax, outlook_data):
-    log.info('Plotting the outlook polygons')
+def plot_cat_outlook_polygons(ax, outlook_data):
+    log.info('running plot_outlook_polygons')
     for feature in outlook_data['features']: 
         outlook_type = feature['properties']['LABEL']
         outlook_polygon = feature['geometry']['coordinates']
@@ -138,24 +185,29 @@ def plot_outlook_polygons(ax, outlook_data):
             outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
         for polygon in outlook_polygon: # Find the properties of each polygon
             x, y = zip(*polygon[0])
-            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=get_outlook_color(outlook_type))) 
+            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=get_cat_outlook_color(outlook_type))) 
 
 # Function to display a popup and end the program if no outlook is available
 def no_outlook_available():
+    log.info('There is no outlook available')
     show_popup('No Outlook', "There is no outlook available at this time")
     return # Ends Program
 
 
 ### Functions to Plot and Save the Outlook Image
 
-# Functino to save and show the figure
-def save_and_show_plot(fix, ax, output_path):
-    plt.savefig(output_path, dpi=96, bbox_inches='tight')
-    plt.show()
-
 # Function to display the outlook
-def display_outlook(current_directory, outlook_data):
+def display_cat_outlook(current_directory, outlook_data):
+    log.info('running display_outlook')
     fig, ax = setup_plot()
+
+    # Clear the figure and axes before displaying a new outlook
+    fig.clear()
+    ax = fig.add_subplot(111)
+
+    if not check_outlook_availability(outlook_data):
+        no_outlook_available()
+        sys.exit(0)
 
     overlay_us_state_outline(ax, current_directory)
     overlay_us_interstate_lines(ax, current_directory)
@@ -165,24 +217,47 @@ def display_outlook(current_directory, outlook_data):
     remove_axes_labels_boxes_title(ax)
     add_header_image(ax, current_directory)
 
-    if not check_outlook_availability(outlook_data):
-        no_outlook_available()
-        return
-
-    plot_outlook_polygons(ax, outlook_data)
+    plot_cat_outlook_polygons(ax, outlook_data)
 
     output_directory = create_output_directory(current_directory)
     output_filename = 'spc_cat_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
-    
-    save_and_show_plot(fig, ax, output_path)
+
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    # Create a canvas and add it to the root window
+    canvas = FigureCanvasTkAgg(fig, master=root)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+    # Create a custom toolbar with a close button
+    toolbar = NavigationToolbar2Tk(canvas, root)
+    toolbar.update()
+
+    def close_figure():
+        plt.close(fig)
+        root.withdraw()
+        start_gui()
+
+    close_button = tk.Button(toolbar, text='Close', command=close_figure)
+    close_button.pack(side=tk.RIGHT)
+
+    root.protocol("WM_DELETE_WINDOW", close_figure)
+
+    # Show the Tkinter root window with the canvas and toolbar
+    root.deiconify()
+    root.mainloop()
+
+    log.info('Showing the plot')
+    plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
 
 ### Other Functions ###
 
 # Function to display the popup message
 def show_popup(title, message):
-    log.info(f'Showing a popup about {title}')
+    log.info(f'Showing a popup titled "{title}"')
     root = tk.Tk()
     root.withdraw() # Hide the root window
     root.attributes('-topmost', True) # Make the window appear on top
@@ -191,7 +266,7 @@ def show_popup(title, message):
     root.destroy() # Destroy the root window after the messagebox is closed
 
 # Function to determine the color for each outlook category
-def get_outlook_color(outlook_type):
+def get_cat_outlook_color(outlook_type):
     colors = {
         'TSTM': 'lightgreen',
         'MRGL': 'green',
@@ -203,11 +278,109 @@ def get_outlook_color(outlook_type):
     return colors.get(outlook_type, 'blue')  # Default to white color for unknown types
 
 
-### Function to Run the Program ###
-def run_program():
-    log.info('Running the Program')
-    show_popup('Program is Running', "Program is now running and may take some time to run. Click 'OK' or Close to Continue")
-    outlook_data = fetch_spc_outlook()
-    display_outlook(current_directory, outlook_data)
+### GUI Functions ###
 
-run_program()
+# Start the GUI
+def start_gui():
+    # Initialize a window
+    log.info('GUI - Initializing window')
+    window = ctk.CTk()
+    window.geometry('1500x600')
+    window.title('Severe Weather Outlook Display')
+
+    # Configure Layout
+    window.grid_columnconfigure(3, weight=1)
+    window.grid_rowconfigure(7, weight=1)
+
+    # Fonts
+    Title_Font = ctk.CTkFont(family='Montserrat', size=50, weight='bold')
+    Description_Font = ctk.CTkFont(family='karla', size=21)
+
+    # Title Label
+    Title_Label = ctk.CTkLabel(window, text='Severe Weather Outlook Display', font=Title_Font)
+    Title_Label.grid(columnspan=7, row=0)
+
+    # Welcome Label
+    Welcome_Label = ctk.CTkLabel(window, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', font=Description_Font)
+    Welcome_Label.grid(columnspan=7, row=1)
+
+    def D1_C_and_R():
+        log.info('GUI - running the close_and_run_program function')
+        window.withdraw()
+        run_d1_cat()
+
+    def D2_C_and_R():
+        log.info('GUI - running the close_and_run_program function')
+        window.withdraw()
+        run_d2_cat()
+
+    def D3_C_and_R():
+        log.info('GUI - running the close_and_run_program function')
+        window.withdraw()
+        run_d3_cat()
+
+    #def Test_C_and_R():
+        #log.info('GUI - running the close_and_run_program function')
+        #window.withdraw()
+        #run_test_cat()
+    
+    def close_program():
+        log.info('GUI - Now Closing Program')
+        window.withdraw() 
+        sys.exit(0)
+
+    window.protocol("WM_DELETE_WINDOW", close_program)
+
+    # Day 1 Categorial Button
+    D1_Cat_Button = ctk.CTkButton(window, text='Day 1 Categorial', width=400, font=Description_Font, command=D1_C_and_R)
+    D1_Cat_Button.grid(row=2, column=0, columnspan=1, padx=50, pady=50, sticky='ew')
+
+    # Day 2 Categorial Button
+    D2_Cat_Button = ctk.CTkButton(window, text='Day 2 Categorial', width=400, font=Description_Font, command=D2_C_and_R)
+    D2_Cat_Button.grid(row=2, column=1, columnspan=1, padx=50, pady=50, sticky='ew')
+
+    # Day 3 Categorial Button
+    D3_Cat_Button = ctk.CTkButton(window, text='Day 3 Categorial', width=400, font=Description_Font, command=D3_C_and_R)
+    D3_Cat_Button.grid(row=2, column=2, columnspan=1, padx=50, pady=50, sticky='ew')
+
+    # Test Categorial Button
+    #Test_Button = ctk.CTkButton(window, text='Test Categorial', width=300, font=Description_Font, command=Test_C_and_R)
+    #Test_Button.grid(row=2, column=3, columnspan=1, padx=45, pady=50, sticky='ew')
+
+    # Close Button
+    Close_Button=ctk.CTkButton(window, text='Close', font=Description_Font, width=100, command=close_program)
+    Close_Button.grid(row=0, column=3, sticky='e')
+
+    log.info('GUI - Created widgets')
+
+    # Run the Window
+    log.info('GUI - Running window')
+    window.mainloop()
+
+
+### Function to Run the Program ###
+def run_d1_cat():
+    log.info('Running Day 1 Categorial Function')
+    show_popup('program is Running', 'Program is now running and may take some time to run. Click "ok" or Close to continue')
+    outlook_data = fetch_d1_cat_outlook()
+    display_cat_outlook(current_directory, outlook_data)
+
+#def run_test_cat():
+    #log.info('Running Test Categorial')
+    #show_popup('program is running', 'Program is now running and may take some time to run. Click "ok" or Close to continue')
+    #outlook_data = fetch_test_cat_outlook()
+    #display_cat_outlook(current_directory, outlook_data)
+
+def run_d2_cat():
+    log.info('Running Test Categorial')
+    show_popup('program is running', 'Program is now running and may take some time to run. Click "ok" or Close to continue')
+    outlook_data = fetch_d2_cat_outlook()
+    display_cat_outlook(current_directory, outlook_data)
+
+def run_d3_cat():
+    log.info('Running Test Categorial')
+    show_popup('program is running', 'Program is now running and may take some time to run. Click "ok" or Close to continue')
+    outlook_data = fetch_d3_cat_outlook()
+    display_cat_outlook(current_directory, outlook_data)
+
+start_gui()
