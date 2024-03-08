@@ -285,7 +285,7 @@ def start_gui():
     # Initialize a window
     log.info('GUI - Initializing window')
     window = ctk.CTk()
-    window.geometry('1500x600')
+    window.geometry('1600x600')
     window.title('Severe Weather Outlook Display')
 
     # Configure Layout
