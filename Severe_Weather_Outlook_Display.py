@@ -21,6 +21,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import messagebox
 from tkinter import TclError
 
+from CTkMessagebox import CTkMessagebox
+
 matplotlib.use('TkAgg')
 
 
@@ -63,8 +65,8 @@ def fetch_cat_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2023/day1otlk_20230331_1630_cat.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}')
-        show_popup('Invalid Day', "An error has occured where the day wasn't read correctly.")
+        log.error(f'Invalid Date. Day = {day}. Error on Line 68')
+        show_error_popup('Invalid Day', "An error has occured where the day wasn't read correctly.")
     response = requests.get(url) # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
@@ -79,8 +81,8 @@ def fetch_tor_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210317_1630_torn.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}')
-        show_popup('Invalid Day', "An error has occured where the day wasn't read correctly.")
+        log.error(f'Invalid Date. Day = {day}. Error on line 84')
+        show_error_popup('Invalid Day', "An error has occured where the day wasn't read correctly.")
     response = requests.get(url) # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
@@ -108,7 +110,7 @@ def set_plot_limits(ax):
 
 # Function to remove all labels and axes
 def remove_axes_labels_boxes_title(ax):
-    log.info('Remvoing extra stuff from the plot')
+    log.info('running remove_axes_labels_boxes_title')
     # Remove the Axes
     ax.set_xticks([])
     ax.set_yticks([])
@@ -140,7 +142,6 @@ def add_overlays(ax, current_directory, type):
     highways_shapefile = os.path.join(current_directory, 'USA_Freeway_System.shp')
     highways_gdf = gpd.read_file(highways_shapefile)
     highways_gdf.plot(ax=ax, color='red', linewidth=0.6, alpha=0.75)
-
 
     # Header Image
     if type == 'cat':
@@ -205,7 +206,7 @@ def plot_outlook_polygons(ax, outlook_data, type):
 # Function to display a popup and end the program if no outlook is available
 def no_outlook_available():
     log.info('There is no outlook available')
-    show_popup('No Outlook', "There is no outlook available at this time")
+    show_warning_popup('No Outlook', "There is no outlook available at this time")
     return # Ends Program
 
 # Function to display the outlook
@@ -229,7 +230,7 @@ def display_cat_outlook(day, outlook_data):
     plot_outlook_polygons(ax, outlook_data, 'cat')
 
     output_directory = create_output_directory(current_directory)
-    output_filename = f'spc_day_{day}_cat_outlook.png'
+    output_filename = f'spc_day_{day}cat_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
     for widget in root.winfo_children():
@@ -314,14 +315,33 @@ def display_tor_outlook(day, outlook_data):
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
 # Function to display the popup message
-def show_popup(title, message):
+def show_info_popup(title, message):
     log.info(f'Showing a popup titled "{title}"')
-    root = tk.Tk()
+    root = ctk.CTk()
     root.withdraw() # Hide the root window
     root.attributes('-topmost', True) # Make the window appear on top
     root.lift() # Bring the window to the front
-    messagebox.showinfo(title, message) # Display the Popup Message
+    CTkMessagebox(title=title, message=message) # Display the Popup Message
     root.destroy() # Destroy the root window after the messagebox is closed
+
+def show_error_popup(title, message):
+    log.info(f'Showing Error a popup titles "{title}" with the following message "{message}"')
+    root = ctk.CTk()
+    root.withdraw() # Hide the root window
+    root.attributes('-topmost', True) # Make the window appear on top
+    root.lift() # Bring the window to the front of the screen
+    CTkMessagebox(icon='cancel', title=title, message=message) # Display the Popup Message
+    root.destroy() # Destroy the root window after the messagebox is closed
+
+def show_warning_popup(title, message):
+    log.info(f'Showing a Warning popup titled "{title}" with the following message "{message}"')
+    root.ctk.CTk()
+    root.withdraw() # Hide the root window
+    root.attributes("-topmost", True) # Make the window appear on top
+    root.lift() # Bring the window to the front of the screen
+    CTkMessagebo(icon='warning', title=title, message=message) # Display the popup message
+    root.destory() # Destroy the root window after the messagebox is closed
+
 
 # Function to determine the color for each outlook category
 def get_outlook_color(type, outlook_type):
@@ -365,13 +385,51 @@ def start_gui():
     Title_Font = ctk.CTkFont(family='Montserrat', size=50, weight='bold')
     Description_Font = ctk.CTkFont(family='karla', size=21)
 
-    # Title Label
-    Title_Label = ctk.CTkLabel(window, text='Severe Weather Outlook Display', font=Title_Font)
-    Title_Label.grid(columnspan=7, row=0)
+    # Frames
+    sidebar_frame = ctk.CTkFrame(window, fg_color='grey')
+    sidebar_frame.grid(row=1, column=0, padx=10, pady=10, sticky='nsw')
 
-    # Welcome Label
-    Welcome_Label = ctk.CTkLabel(window, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', font=Description_Font)
-    Welcome_Label.grid(columnspan=7, row=1)
+    main_frame = ctk.CTkFrame(window, fg_color='darkblue')
+    main_frame.grid(row=0, column=1, padx=10, pady=10)
+
+    def buttons(day):
+        if day == 1:
+            # Day 1 Categorial Button
+            D1_Cat_Button = ctk.CTkButton(main_frame, text='Day 1 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 1))
+            D1_Cat_Button.grid(row=2, column=0, columnspan=1, padx=45, pady=50, sticky='ew')
+
+            # Day 1 Tornado Button
+            D1_Tor_Button = ctk.CTkButton(main_frame, text='Day 1 Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 1))
+            D1_Tor_Button.grid(row=3, column=0, columnspan=1, padx=45, pady=50, sticky='ew')
+        elif day == 2:
+            # Day 2 Categorial Button
+            D2_Cat_Button = ctk.CTkButton(main_frame, text='Day 2 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 2))
+            D2_Cat_Button.grid(row=2, column=1, columnspan=1, padx=25, pady=50, sticky='ew')
+
+            # Day 2 Tornado Button
+            D2_Tor_Button = ctk.CTkButton(main_frame, text='Day 2 Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 2))
+            D2_Tor_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=50, sticky='ew')
+        elif day == 3:
+            # Day 3 Categorial Button
+            D3_Cat_Button = ctk.CTkButton(main_frame, text='Day 3 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 3))
+            D3_Cat_Button.grid(row=2, column=2, columnspan=1, padx=25, pady=50, sticky='ew')
+        elif day == 'test':
+            # Test Categorial Button
+            Test_Button = ctk.CTkButton(main_frame, text='(Test) March 31st, 2023', width=300, font=Description_Font, command=lambda: button_run('cat', 'test'))
+            Test_Button.grid(row=2, column=3, columnspan=1, padx=25, pady=50, sticky='ew')
+        
+            # Test Tornado Button
+            Test_Tor_Button = ctk.CTkButton(main_frame, text='(Test) March 17th, 2021', width = 300, font=Description_Font, command=lambda: button_run('tor', 'test'))
+            Test_Tor_Button.grid(row=3, column=3, columnspan=1, padx=25, pady=50, sticky='ew')
+        else:
+            log.error(f'Invalid Button. Day = {day}. Error on line 436')
+            show_error_popup('Invalid Button', "An error has occured where the button isn't programmed correctly.")
+        
+    def frame_change(day):
+        for widget in main_frame.winfo_children():
+            widget.destroy()
+        
+        buttons(day)
 
     def button_run(type, day):
         log.info(f'GUI - {type} {day} button has been pressed. Running Day {day} {type} outlook')
@@ -385,37 +443,31 @@ def start_gui():
 
     window.protocol("WM_DELETE_WINDOW", close_program)
 
-    # Day 1 Categorial Button
-    D1_Cat_Button = ctk.CTkButton(window, text='Day 1 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 1))
-    D1_Cat_Button.grid(row=2, column=0, columnspan=1, padx=45, pady=50, sticky='ew')
-    
-    # Day 2 Categorial Button
-    D2_Cat_Button = ctk.CTkButton(window, text='Day 2 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 2))
-    D2_Cat_Button.grid(row=2, column=1, columnspan=1, padx=25, pady=50, sticky='ew')
-    
-    # Day 3 Categorial Button
-    D3_Cat_Button = ctk.CTkButton(window, text='Day 3 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 3))
-    D3_Cat_Button.grid(row=2, column=2, columnspan=1, padx=25, pady=50, sticky='ew')
-    
-    # Test Categorial Button
-    Test_Button = ctk.CTkButton(window, text='Test Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 'test'))
-    Test_Button.grid(row=2, column=3, columnspan=1, padx=25, pady=50, sticky='ew')
-    
-    # Day 1 Tornado Button
-    D1_Tor_Button = ctk.CTkButton(window, text='Day 1 Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 1))
-    D1_Tor_Button.grid(row=3, column=0, columnspan=1, padx=45, pady=50, sticky='ew')
-    
-    # Day 2 Tornado Button
-    D2_Tor_Button = ctk.CTkButton(window, text='Day 2 Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 2))
-    D2_Tor_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=50, sticky='ew')
-    
-    # Test Tornado Button
-    Test_Tor_Button = ctk.CTkButton(window, text='Test Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 'test'))
-    Test_Tor_Button.grid(row=3, column=3, columnspan=1, padx=25, pady=50, sticky='ew')
+    ## Mainscreen Setup ##
+    # Title Label
+    Title_Label = ctk.CTkLabel(main_frame, text='Severe Weather Outlook Display', font=Title_Font)
+    Title_Label.grid(columnspan=7, row=0)
 
-    # Close Button
-    Close_Button=ctk.CTkButton(window, text='Close', font=Description_Font, width=100, command=close_program)
-    Close_Button.grid(row=0, column=3, sticky='e')
+    # Welcome Label
+    Welcome_Label = ctk.CTkLabel(main_frame, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', font=Description_Font)
+    Welcome_Label.grid(columnspan=7, row=1)
+
+    ## Sidebar Buttons ##
+    # Day 1 Button
+    D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1', width=200, height=50, font=Description_Font, command=lambda: frame_change(1))
+    D1_Side_Button.grid(row=0, column=0, columnspan=1, padx=5, pady=10)
+
+    # Day 2 Button
+    D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2', width=200, height=50, font=Description_Font, command=lambda: frame_change(2))
+    D2_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
+
+    # Day 3 Button
+    D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3', width=200, height=50, font=Description_Font, command=lambda: frame_change(3))
+    D3_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
+
+    # Day Test Button
+    Test_Side_Button = ctk.CTkButton(sidebar_frame, text='Day Test', width=200, height=50, font=Description_Font, command=lambda: frame_change('test'))
+    Test_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
 
     log.info('GUI - Created widgets')
 
@@ -426,7 +478,7 @@ def start_gui():
 ### Function to Run the Program ###
 def run(type, day):
     log.info(f'Running the Program under day {day}')
-    show_popup('Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+    show_info_popup('Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
     if type == 'cat':
         outlook_data = fetch_cat_outlooks(day)
         display_cat_outlook(day, outlook_data)
