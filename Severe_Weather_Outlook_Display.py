@@ -108,7 +108,7 @@ def set_plot_limits(ax):
 
 # Function to remove all labels and axes
 def remove_axes_labels_boxes_title(ax):
-    log.info('running remove_axes_labels_boxes_title')
+    log.info('Remvoing extra stuff from the plot')
     # Remove the Axes
     ax.set_xticks([])
     ax.set_yticks([])
@@ -140,6 +140,7 @@ def add_overlays(ax, current_directory, type):
     highways_shapefile = os.path.join(current_directory, 'USA_Freeway_System.shp')
     highways_gdf = gpd.read_file(highways_shapefile)
     highways_gdf.plot(ax=ax, color='red', linewidth=0.6, alpha=0.75)
+
 
     # Header Image
     if type == 'cat':
@@ -228,7 +229,7 @@ def display_cat_outlook(day, outlook_data):
     plot_outlook_polygons(ax, outlook_data, 'cat')
 
     output_directory = create_output_directory(current_directory)
-    output_filename = f'spc_day_{day}cat_outlook.png'
+    output_filename = f'spc_day_{day}_cat_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
     for widget in root.winfo_children():
