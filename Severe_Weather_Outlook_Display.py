@@ -343,13 +343,9 @@ def start_gui():
     D3_Cat_Button = ctk.CTkButton(window, text='Day 3 Categorial', width=400, font=Description_Font, command=D3_C_and_R)
     D3_Cat_Button.grid(row=2, column=2, columnspan=1, padx=50, pady=50, sticky='ew')
 
-    # Test Categorial Button
-    #Test_Button = ctk.CTkButton(window, text='Test Categorial', width=300, font=Description_Font, command=Test_C_and_R)
-    #Test_Button.grid(row=2, column=3, columnspan=1, padx=45, pady=50, sticky='ew')
-
     # Close Button
     Close_Button=ctk.CTkButton(window, text='Close', font=Description_Font, width=100, command=close_program)
-    Close_Button.grid(row=0, column=3, sticky='e')
+    Close_Button.grid(row=0, column=2, padx=15, sticky='e')
 
     log.info('GUI - Created widgets')
 
@@ -364,12 +360,6 @@ def run_d1_cat():
     show_popup('program is Running', 'Program is now running and may take some time to run. Click "ok" or Close to continue')
     outlook_data = fetch_d1_cat_outlook()
     display_cat_outlook(current_directory, outlook_data)
-
-#def run_test_cat():
-    #log.info('Running Test Categorial')
-    #show_popup('program is running', 'Program is now running and may take some time to run. Click "ok" or Close to continue')
-    #outlook_data = fetch_test_cat_outlook()
-    #display_cat_outlook(current_directory, outlook_data)
 
 def run_d2_cat():
     log.info('Running Test Categorial')
