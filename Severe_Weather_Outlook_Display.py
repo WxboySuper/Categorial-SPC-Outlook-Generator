@@ -388,49 +388,141 @@ def start_gui():
     window.title('Severe Weather Outlook Display')
 
     # Configure Layout
-    window.grid_columnconfigure(3, weight=1)
-    window.grid_rowconfigure(7, weight=1)
+    window.grid_rowconfigure(0, weight=1)
+    window.grid_columnconfigure(2, weight=1)
 
     # Fonts
     Title_Font = ctk.CTkFont(family='Montserrat', size=50, weight='bold')
     Description_Font = ctk.CTkFont(family='karla', size=21)
 
     # Frames
-    sidebar_frame = ctk.CTkFrame(window, fg_color='grey')
-    sidebar_frame.grid(row=1, column=0, padx=10, pady=10, sticky='nsw')
+    sidebar_frame = ctk.CTkFrame(window, height=550, fg_color='grey')
+    sidebar_frame.grid(row=0, column=0, padx=10, pady=10, sticky='ns')
 
     main_frame = ctk.CTkFrame(window, fg_color='darkblue')
-    main_frame.grid(row=0, column=1, padx=10, pady=10)
+    main_frame.grid(row=0, column=1, columnspan=2, padx=10, pady=0, sticky='nsew')
 
     def buttons(day):
-        if day == 1:
+        if day == 'home':
+            # Close Button
+            Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
+            Close_Button.place(x=1035, y=15)
+
+            # Title Label
+            Title_Label = ctk.CTkLabel(main_frame, text='Severe Weather Outlook Display', font=Title_Font)
+            Title_Label.place(x=220, y=225)
+
+            # Welcome Label
+            Welcome_Label = ctk.CTkLabel(main_frame, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', font=Description_Font)
+            Welcome_Label.place(x=180, y=300)
+        elif day == 1:
+            # Close Button
+            Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
+            Close_Button.grid(row=1, column=1, padx=20, pady=15, sticky='e')
+
+            # Day 1 Heading Label
+            D1_Label = ctk.CTkLabel(main_frame, text='Day 1 Outlooks', font=Title_Font)
+            D1_Label.grid(row=2, column=1, columnspan=1, padx=435, pady=50, sticky='nsew')
+
             # Day 1 Categorial Button
             D1_Cat_Button = ctk.CTkButton(main_frame, text='Day 1 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 1))
-            D1_Cat_Button.grid(row=2, column=0, columnspan=1, padx=45, pady=50, sticky='ew')
+            D1_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 1 Tornado Button
             D1_Tor_Button = ctk.CTkButton(main_frame, text='Day 1 Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 1))
-            D1_Tor_Button.grid(row=3, column=0, columnspan=1, padx=45, pady=50, sticky='ew')
+            D1_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Day 1 Wind Outlook
+            D1_Wind_Button = ctk.CTkButton(main_frame, text='Day 1 Wind', width=300, font=Description_Font, command=lambda: button_run('wind', 1))
+            D1_Wind_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Day 1 Hail Outlook
+            D1_Hail_Button = ctk.CTkButton(main_frame, text='Day 1 Hail', width=300, font=Description_Font, command=lambda: button_run('hail', 1))
+            D1_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
         elif day == 2:
+            # Close Button
+            Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
+            Close_Button.grid(row=1, column=1, padx=30, pady=15, sticky='e')
+
+            # Day 2 Heading Label
+            D2_Label = ctk.CTkLabel(main_frame, text='Day 2 Outlooks', font=Title_Font)
+            D2_Label.grid(row=2, column=1, columnspan=1, padx=435, pady=50, sticky='nsew')
+
             # Day 2 Categorial Button
             D2_Cat_Button = ctk.CTkButton(main_frame, text='Day 2 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 2))
-            D2_Cat_Button.grid(row=2, column=1, columnspan=1, padx=25, pady=50, sticky='ew')
+            D2_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 2 Tornado Button
             D2_Tor_Button = ctk.CTkButton(main_frame, text='Day 2 Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 2))
-            D2_Tor_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=50, sticky='ew')
+            D2_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Day 2 Wind Outlook
+            D1_Wind_Button = ctk.CTkButton(main_frame, text='Day 2 Wind', width=300, font=Description_Font, command=lambda: button_run('wind', 2))
+            D1_Wind_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Day 2 Hail Outlook
+            D2_Hail_Button = ctk.CTkButton(main_frame, text='Day 2 Hail', width=300, font=Description_Font, command=lambda: button_run('hail', 2))
+            D2_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
         elif day == 3:
+            # Close Button
+            Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
+            Close_Button.grid(row=1, column=1, padx=30, pady=15, sticky='e')
+
+            # Day 3 Heading Label
+            D3_Label = ctk.CTkLabel(main_frame, text='Day 3 Outlooks', font=Title_Font)
+            D3_Label.grid(row=2, column=1, columnspan=1, padx=435, pady=50, sticky='nsew')
+
             # Day 3 Categorial Button
             D3_Cat_Button = ctk.CTkButton(main_frame, text='Day 3 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 3))
-            D3_Cat_Button.grid(row=2, column=2, columnspan=1, padx=25, pady=50, sticky='ew')
+            D3_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Day 3 Probabilistic Outlook
+            D3_Prob_Button = ctk.CTkButton(main_frame, text='Day 3 Probabilistic', width=300, font=Description_Font, command=lambda: button_run('prob', 3))
+            D3_Prob_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+        elif day == 'd4-8':
+            # Close Button
+            Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
+            Close_Button.grid(row=1, column=1, padx=15, pady=15, sticky='e')
+
+            # Day 4-8 Heading Label
+            D48_Label = ctk.CTkLabel(main_frame, text='Day 4-8 Outlooks', font=Title_Font)
+            D48_Label.grid(row=2, column=1, columnspan=1, padx=400, pady=50, sticky='nsew')
+
+            # Day 4 Button
+            D4_Cat_Button = ctk.CTkButton(main_frame, text='Day 4 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 4))
+            D4_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
+
+            # Day 5 Button
+            D5_Cat_Button = ctk.CTkButton(main_frame, text='Day 5 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 5))
+            D5_Cat_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
+
+            # Day 6 Button
+            D6_Cat_Button = ctk.CTkButton(main_frame, text='Day 6 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 6))
+            D6_Cat_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
+
+            # Day 7 Button
+            D7_Cat_Button = ctk.CTkButton(main_frame, text='Day 7 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 7))
+            D7_Cat_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
+
+            # Day 8 Button
+            D8_Cat_Button = ctk.CTkButton(main_frame, text='Day 8 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 8))
+            D8_Cat_Button.grid(row=7, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
         elif day == 'test':
+            # Close Button
+            Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
+            Close_Button.grid(row=1, column=1, padx=25, pady=15, sticky='e')
+
+            # Heading Label
+            Test_Label = ctk.CTkLabel(main_frame, text='Outlook Tests', font=Title_Font)
+            Test_Label.grid(row=2, column=1, columnspan=1, padx=450, pady=50, sticky='nsew')
+
             # Test Categorial Button
             Test_Button = ctk.CTkButton(main_frame, text='(Test) March 31st, 2023', width=300, font=Description_Font, command=lambda: button_run('cat', 'test'))
-            Test_Button.grid(row=2, column=3, columnspan=1, padx=25, pady=50, sticky='ew')
+            Test_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
         
             # Test Tornado Button
             Test_Tor_Button = ctk.CTkButton(main_frame, text='(Test) March 17th, 2021', width = 300, font=Description_Font, command=lambda: button_run('tor', 'test'))
-            Test_Tor_Button.grid(row=3, column=3, columnspan=1, padx=25, pady=50, sticky='ew')
+            Test_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
         else:
             log.error(f'Invalid Button. Day = {day}. Error on line 436')
             popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly.")
@@ -454,30 +546,42 @@ def start_gui():
     window.protocol("WM_DELETE_WINDOW", close_program)
 
     ## Mainscreen Setup ##
+    # Close Button
+    Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
+    Close_Button.place(x=1035, y=15)
+
     # Title Label
-    Title_Label = ctk.CTkLabel(main_frame, text='Severe Weather Outlook Display', font=Title_Font)
-    Title_Label.grid(columnspan=7, row=0)
+    Title_Label = ctk.CTkLabel(main_frame, text='Severe Weather Outlook Display', font=Title_Font, width=1200)
+    Title_Label.place(x=50, y=225)
 
     # Welcome Label
     Welcome_Label = ctk.CTkLabel(main_frame, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', font=Description_Font)
-    Welcome_Label.grid(columnspan=7, row=1)
+    Welcome_Label.place(x=180, y=300)
 
     ## Sidebar Buttons ##
+    # Home Button
+    Home_Side_Button = ctk.CTkButton(sidebar_frame, text='Home',width=200, height=50,  font=Description_Font, command=lambda: frame_change('home'))
+    Home_Side_Button.grid(row=0, column=0, columnspan=1, padx=5, pady=10)
+
     # Day 1 Button
-    D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1', width=200, height=50, font=Description_Font, command=lambda: frame_change(1))
-    D1_Side_Button.grid(row=0, column=0, columnspan=1, padx=5, pady=10)
+    D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1',width=200, height=50,  font=Description_Font, command=lambda: frame_change(1))
+    D1_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
 
     # Day 2 Button
-    D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2', width=200, height=50, font=Description_Font, command=lambda: frame_change(2))
-    D2_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
+    D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2',width=200, height=50, font=Description_Font, command=lambda: frame_change(2))
+    D2_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
 
     # Day 3 Button
-    D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3', width=200, height=50, font=Description_Font, command=lambda: frame_change(3))
-    D3_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
+    D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3',width=200, height=50, font=Description_Font, command=lambda: frame_change(3))
+    D3_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
+
+    # Day 4-8 Button
+    D48_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 4-8',width=200, height=50, font=Description_Font, command=lambda: frame_change('d4-8'))
+    D48_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
 
     # Day Test Button
-    Test_Side_Button = ctk.CTkButton(sidebar_frame, text='Day Test', width=200, height=50, font=Description_Font, command=lambda: frame_change('test'))
-    Test_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
+    Test_Side_Button = ctk.CTkButton(sidebar_frame, text='Test',width=200, height=50, font=Description_Font, command=lambda: frame_change('test'))
+    Test_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
 
     log.info('GUI - Created widgets')
 
@@ -488,13 +592,18 @@ def start_gui():
 ### Function to Run the Program ###
 def run(type, day):
     log.info(f'Running the Program under day {day}')
-    popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
     if type == 'cat':
         outlook_data = fetch_cat_outlooks(day)
+        popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
         display_cat_outlook(day, outlook_data)
     elif type == 'tor':
         outlook_data = fetch_tor_outlooks(day)
+        popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
         display_tor_outlook(day, outlook_data)
+    elif type == 'wind' or type == 'hail' or type == 'prob' or type == 'd4-8':
+        log.info(f'Future Outlook Detected (Day {day} {type})')
+        popup('info', 'Coming Soon', 'This feature is not ready yet. Keep an eye out for new updates!')
+        start_gui()
     else:
         log.error(f'Invalid Outlook Type. Outlook Type = {type}')
         popup('error', 'Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly.")
