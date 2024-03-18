@@ -52,14 +52,6 @@ root.withdraw()
 
 ### Fetch Functions ###
 
-#def fetch_test_cat_outlook():
-   #log.info('running fetch_test_cat_outlook function (March 31st, 2023)')
-   #url = 'https://www.spc.noaa.gov/products/outlook/archive/2023/day1otlk_20230331_1630_cat.lyr.geojson'
-    #response = requests.get(url) # Requests the data from the GeoJSON URL
-    #response.raise_for_status()
-    #outlook_data = response.json()
-    #return outlook_data # Returns the data from the GeoJSON URL
-
 # Day 1 Categorial
 def fetch_d1_cat_outlook():
     log.info('running fetch_d1_cat_outlook function')
@@ -318,11 +310,6 @@ def start_gui():
         log.info('GUI - running the close_and_run_program function')
         window.withdraw()
         run_d3_cat()
-
-    #def Test_C_and_R():
-        #log.info('GUI - running the close_and_run_program function')
-        #window.withdraw()
-        #run_test_cat()
     
     def close_program():
         log.info('GUI - Now Closing Program')
