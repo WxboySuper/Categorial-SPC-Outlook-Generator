@@ -1,5 +1,11 @@
-# Import all necessary modules
+# Severe Weather Outlook Display
+# Created by WeatherboySuper under the WeatherTrackUS Group
+'''Purpose of this program as of 3/18/2024 is to display the Severe Weather Outlook from the 
+Storm Prediction Center (SPC) under the National Weather Service (NWS) in a graphically friendly way
+for WeatherTrackUS and other users'''
 
+
+# Import all necessary modules
 import os
 import requests
 import matplotlib
@@ -339,24 +345,20 @@ def color(type, outlook_type):
             'sig': 'black'
         }
         return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
-    elif type == 'wind':
+    elif type == 'wind' or type == 'hail' or type == 'prob':
         colors = {
-            # Wind colors go here
-        }
-        return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
-    elif type == 'hail':
-        colors = {
-            # Hail colors go here
-        }
-        return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
-    elif type == 'prob':
-        colors = {
-            # Probablistic Colors go here
+            '0.05': 'saddlebrown',
+            '0.15': 'gold',
+            '0.30': 'red',
+            '0.45': 'fuchsia',
+            '0.60': 'blueviolet',
+            'sig': 'black'
         }
         return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
     elif type == 'd4-8':
         colors = {
-            # D4-8 colors go here
+            '0.15': 'gold',
+            '0.30': 'sandybrown'
         }
         return colors.get(outlook_type, 'blue') # Returns the color, blue if not found
     else:
