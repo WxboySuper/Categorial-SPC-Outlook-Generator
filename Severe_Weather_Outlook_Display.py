@@ -66,7 +66,7 @@ def fetch_cat_outlooks(day):
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2023/day1otlk_20230331_1630_cat.lyr.geojson'
     else:
         log.error(f'Invalid Date. Day = {day}. Error on Line 68')
-        show_error_popup('Invalid Day', "An error has occured where the day wasn't read correctly.")
+        popup('warning', 'Invalid Day', "An error has occured where the day wasn't read correctly.")
     response = requests.get(url) # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
@@ -82,7 +82,7 @@ def fetch_tor_outlooks(day):
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210317_1630_torn.lyr.geojson'
     else:
         log.error(f'Invalid Date. Day = {day}. Error on line 84')
-        show_error_popup('Invalid Day', "An error has occured where the day wasn't read correctly.")
+        popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly.")
     response = requests.get(url) # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
@@ -179,7 +179,7 @@ def plot_outlook_polygons(ax, outlook_data, type):
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
             for polygon in outlook_polygon: # Find the properties of each polygon
                 x, y = zip(*polygon[0])
-                ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=get_outlook_color('cat', outlook_type)))
+                ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('cat', outlook_type)))
 
     elif type == 'tor':
         for feature in outlook_data['features']:
@@ -190,23 +190,23 @@ def plot_outlook_polygons(ax, outlook_data, type):
                 for polygon in outlook_polygon: # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_type == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=get_outlook_color('tor', outlook_type), edgecolor='black', hatch='x'))
+                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_type), edgecolor='black', hatch='x'))
                     else:
-                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=get_outlook_color('tor', outlook_type)))
+                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('tor', outlook_type)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon: # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_type == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=get_outlook_color('tor', outlook_type), edgecolor='black', hatch='x'))
+                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_type), edgecolor='black', hatch='x'))
                         else:
-                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=get_outlook_color('tor', outlook_type)))
+                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('tor', outlook_type)))
 
 # Function to display a popup and end the program if no outlook is available
 def no_outlook_available():
     log.info('There is no outlook available')
-    show_warning_popup('No Outlook', "There is no outlook available at this time")
+    popup('warning', 'No Outlook', "There is no outlook available at this time")
     return # Ends Program
 
 # Function to display the outlook
@@ -314,37 +314,8 @@ def display_tor_outlook(day, outlook_data):
     log.info('Showing the plot')
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
-# Function to display the popup message
-def show_info_popup(title, message):
-    log.info(f'Showing a popup titled "{title}"')
-    root = ctk.CTk()
-    root.withdraw() # Hide the root window
-    root.attributes('-topmost', True) # Make the window appear on top
-    root.lift() # Bring the window to the front
-    CTkMessagebox(title=title, message=message) # Display the Popup Message
-    root.destroy() # Destroy the root window after the messagebox is closed
-
-def show_error_popup(title, message):
-    log.info(f'Showing Error a popup titles "{title}" with the following message "{message}"')
-    root = ctk.CTk()
-    root.withdraw() # Hide the root window
-    root.attributes('-topmost', True) # Make the window appear on top
-    root.lift() # Bring the window to the front of the screen
-    CTkMessagebox(icon='cancel', title=title, message=message) # Display the Popup Message
-    root.destroy() # Destroy the root window after the messagebox is closed
-
-def show_warning_popup(title, message):
-    log.info(f'Showing a Warning popup titled "{title}" with the following message "{message}"')
-    root.ctk.CTk()
-    root.withdraw() # Hide the root window
-    root.attributes("-topmost", True) # Make the window appear on top
-    root.lift() # Bring the window to the front of the screen
-    CTkMessagebo(icon='warning', title=title, message=message) # Display the popup message
-    root.destory() # Destroy the root window after the messagebox is closed
-
-
-# Function to determine the color for each outlook category
-def get_outlook_color(type, outlook_type):
+# Colors for Display
+def color(type, outlook_type):
     log.info(f'Getting {outlook_type} for {type} outlook')
     if type == 'cat':
         colors = {
@@ -355,7 +326,7 @@ def get_outlook_color(type, outlook_type):
         'MDT': 'red',
         'HIGH': 'magenta'
         }
-        return colors.get(outlook_type, 'blue') # Returns the Outlook Color
+        return colors.get(outlook_type, 'blue') # Returns the Color, Blue if not found
     elif type == 'tor':
         colors = {
             '0.02': 'green',
@@ -367,7 +338,43 @@ def get_outlook_color(type, outlook_type):
             '0.60': 'blue',
             'sig': 'black'
         }
-        return colors.get(outlook_type, 'blue') # Returns the outlook color
+        return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
+    elif type == 'wind':
+        colors = {
+            # Wind colors go here
+        }
+        return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
+    elif type == 'hail':
+        colors = {
+            # Hail colors go here
+        }
+        return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
+    elif type == 'prob':
+        colors = {
+            # Probablistic Colors go here
+        }
+        return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
+    elif type == 'd4-8':
+        colors = {
+            # D4-8 colors go here
+        }
+        return colors.get(outlook_type, 'blue') # Returns the color, blue if not found
+    else:
+        popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors')
+
+# Displaying Popups
+def popup(type, title, message):
+    log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
+    if type == 'info':
+        messagebox.showinfo(title, message)
+    elif type == 'error':
+        messagebox.showerror(title, message)
+    elif type == 'warning':
+        messagebox.showwarning(title, message)
+    elif type == 'question':
+        messagebox.askquestion(title, message, **option)
+    else:
+        messagebox.error('Invalid Popup', 'There was an error when trying to display a popup')
 
 # Start the GUI
 def start_gui():
@@ -423,7 +430,7 @@ def start_gui():
             Test_Tor_Button.grid(row=3, column=3, columnspan=1, padx=25, pady=50, sticky='ew')
         else:
             log.error(f'Invalid Button. Day = {day}. Error on line 436')
-            show_error_popup('Invalid Button', "An error has occured where the button isn't programmed correctly.")
+            popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly.")
         
     def frame_change(day):
         for widget in main_frame.winfo_children():
@@ -478,7 +485,7 @@ def start_gui():
 ### Function to Run the Program ###
 def run(type, day):
     log.info(f'Running the Program under day {day}')
-    show_info_popup('Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+    popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
     if type == 'cat':
         outlook_data = fetch_cat_outlooks(day)
         display_cat_outlook(day, outlook_data)
@@ -487,7 +494,7 @@ def run(type, day):
         display_tor_outlook(day, outlook_data)
     else:
         log.error(f'Invalid Outlook Type. Outlook Type = {type}')
-        show_popup('Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly.")
+        popup('error', 'Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly.")
 
 setup()
 start_gui()
