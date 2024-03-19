@@ -72,8 +72,9 @@ def fetch_cat_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2023/day1otlk_20230331_1630_cat.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on Line 68')
+        log.error(f'Invalid Date. Day = {day}. Error on Line 75')
         popup('warning', 'Invalid Day', "An error has occured where the day wasn't read correctly.")
+        sys.exit(0)
     response = requests.get(url) # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
@@ -88,12 +89,47 @@ def fetch_tor_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210317_1630_torn.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on line 84')
+        log.error(f'Invalid Date. Day = {day}. Error on line 91')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly.")
+        sys.exit(0)
     response = requests.get(url) # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
     return outlook_data # Returns the data from the Outlook
+
+def fetch_wind_outlooks(day):
+    log.info('Fetching a Wind Outlook')
+    if day == 1:
+        url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_wind.nolyr.geojson'
+    if day == 2:
+        url = 'https://www.spc.noaa.gov/products/outlook/day2otlk_wind.nolyr.geojson'
+    if day == 'test':
+        url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210325_1630_wind.lyr.geojson'
+    else: 
+        log.error(f'Invalid Date. Day = {day}. Error on line 107')
+        popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly.")
+        sys.exit(0)
+    response = requests.get(url) # Requests the data from the GeoJSON URL
+    response.raise_for_status()
+    outlook_data = response.json()
+    return outlook_data # Returns the data from the outlook
+
+def fetch_hail_outlooks(day):
+    log.info('Fetching a Hail Outlook')
+    if day == 1:
+        url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_hail.nolyr.geojson'
+    if day == 2:
+        url = 'https://www.spc.noaa.gov/products/outlook/day2otlk_hail.nolyr.geojson'
+    if day == 'test':
+        url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210526_1630_hail.lyr.geojson'
+    else: 
+        log.error(f'Invalid Date. Day = {day}. Error on line 123')
+        popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly.")
+        sys.exit(0)
+    response = requests.get(url)
+    response.raise_for_status()
+    outlook_data = response.json()
+    return outlook_data # Returns the data from the outlook
 
 # Function to create the output directory
 def create_output_directory(current_directory):
@@ -106,14 +142,14 @@ def setup_plot():
     log.info('running setup_plot')
     fig, ax = plt.subplots(figsize=(10,8)) # Set the size of the plot
     fig.patch.set_facecolor('black') # Set the background color of the plot
-    ax.set_aspect('equal', adjustable='box')
+    ax.set_aspect('auto', adjustable='box')
     return fig, ax # Return the variables holding the data about the plot
 
 # Function to set the limits of the plot
 def set_plot_limits(ax):
     log.info('running set_plot_limits')
     ax.set_xlim([-125, -66]) # Base for x: (-125, -66)
-    ax.set_ylim([20, 50]) # Base for y: (23, 50)
+    ax.set_ylim([20,60]) # Base for y: (23, 50)
 
 # Function to remove all labels and axes
 def remove_axes_labels_boxes_title(ax):
@@ -155,8 +191,15 @@ def add_overlays(ax, current_directory, type):
         header_img = plt.imread(os.path.join(current_directory, 'wtus_cat_header.png'))  
     elif type == 'tor':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_tor_header.png'))
-    header_img = OffsetImage(header_img, zoom=0.4)
-    ab = AnnotationBbox(header_img, (0.3, 1.1), xycoords='axes fraction', frameon=False)
+    elif type == 'wind':
+        header_img = plt.imread(os.path.join(current_directory, 'wtus_wind_header.png'))
+    elif type == 'hail':
+        header_img = plt.imread(os.path.join(current_directory, 'wtus_hail_header.png'))
+    else:
+        log.error(f"There was an error getting the {type} header. Error on line 199.")
+        popup('error', 'Header Error', 'An error has occured getting the header image.')
+    header_img = OffsetImage(header_img, zoom=0.35)
+    ab = AnnotationBbox(header_img, (0.3, 0.95), xycoords='axes fraction', frameon=False)
     ax.add_artist(ab)
 
 # Function to control the basemap
@@ -170,7 +213,7 @@ def check_outlook_availability(outlook_data):
     log.info('running check_outlook_availability')
     for feature in outlook_data['features']:
         # Check is there is a LABEL if there is coordinates in the geometry portion of the feature from the Source
-        if 'LABEL' in feature['properties'] and 'geometry' in feature and 'coordinates' in feature ['geometry']: 
+        if 'coordinates' in feature['geometry']: 
             log.info('There is an outlook')
             return True
     return False
@@ -187,7 +230,6 @@ def plot_outlook_polygons(ax, outlook_data, type):
             for polygon in outlook_polygon: # Find the properties of each polygon
                 x, y = zip(*polygon[0])
                 ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('cat', outlook_type)))
-
     elif type == 'tor':
         for feature in outlook_data['features']:
             outlook_type = feature['properties']['LABEL']
@@ -209,6 +251,49 @@ def plot_outlook_polygons(ax, outlook_data, type):
                             ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_type), edgecolor='black', hatch='x'))
                         else:
                             ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('tor', outlook_type)))
+    elif type == 'wind':
+        for feature in outlook_data['features']:
+            outlook_type = feature['properties']['LABEL']
+            outlook_polygon = feature['geometry']['coordinates']
+            if feature['geometry']['type'] == 'Polygon':
+                outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
+                for polygon in outlook_polygon: # Find the properties of each polygon
+                    x, y = zip(*polygon[0])
+                    if outlook_type == 'SIGN':  # Add hatching for 'SIGN' outlook type
+                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_type), edgecolor='black', hatch='x'))
+                    else:
+                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('wind', outlook_type)))
+            elif feature['geometry']['type'] == 'MultiPolygon':
+                outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
+                for multipolygon in outlook_polygon: # Find the properties of each polygon
+                    for polygon in multipolygon:
+                        x, y = zip(*polygon[0])
+                        if outlook_type == 'SIGN':  # Add hatching for 'SIGN' outlook type
+                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_type), edgecolor='black', hatch='x'))
+                        else:
+                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('wind', outlook_type)))
+    elif type == 'hail':
+        for feature in outlook_data['features']:
+            outlook_type = feature['properties']['LABEL']
+            outlook_polygon = feature['geometry']['coordinates']
+            if feature['geometry']['type'] == 'Polygon':
+                outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
+                for polygon in outlook_polygon: # Find the properties of each polygon
+                    x, y = zip(*polygon[0])
+                    if outlook_type == 'SIGN':  # Add hatching for 'SIGN' outlook type
+                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_type), edgecolor='black', hatch='x'))
+                    else:
+                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('hail', outlook_type)))
+            elif feature['geometry']['type'] == 'MultiPolygon':
+                outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
+                for multipolygon in outlook_polygon: # Find the properties of each polygon
+                    for polygon in multipolygon:
+                        x, y = zip(*polygon[0])
+                        if outlook_type == 'SIGN':  # Add hatching for 'SIGN' outlook type
+                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_type), edgecolor='black', hatch='x'))
+                        else:
+                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('hail', outlook_type)))
+    
 
 # Function to display a popup and end the program if no outlook is available
 def no_outlook_available():
@@ -277,10 +362,6 @@ def display_tor_outlook(day, outlook_data):
     fig.clear()
     ax = fig.add_subplot(111)
 
-    if not check_outlook_availability(outlook_data):
-        no_outlook_available()
-        start_gui()
-
     add_overlays(ax, current_directory, 'tor')
     set_plot_limits(ax)
     add_basemap(ax)
@@ -290,6 +371,102 @@ def display_tor_outlook(day, outlook_data):
 
     output_directory = create_output_directory(current_directory)
     output_filename = f'spc_day_{day}_tor_outlook.png'
+    output_path = os.path.join(output_directory, output_filename)
+
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    # Create a canvas and add it to the root window
+    canvas = FigureCanvasTkAgg(fig, master=root)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+    # Create a custom toolbar with a close button
+    toolbar = NavigationToolbar2Tk(canvas, root)
+    toolbar.update()
+
+    def close_figure():
+        plt.close(fig)
+        root.withdraw()
+        start_gui()
+
+    close_button = tk.Button(toolbar, text='Close', command=close_figure)
+    close_button.pack(side=tk.RIGHT)
+
+    root.protocol("WM_DELETE_WINDOW", close_figure)
+
+    # Show the Tkinter root window with the canvas and toolbar
+    root.deiconify()
+    root.mainloop()
+
+    log.info('Showing the plot')
+    plt.savefig(output_path, dpi=96, bbox_inches='tight')
+
+def display_wind_outlook(day, outlook_data):
+    log.info('Displaying Wind Outlook')
+    fig, ax = setup_plot()
+
+    # Clear the figure and axes before displaying a new outlook
+    fig.clear()
+    ax = fig.add_subplot(111)
+
+    add_overlays(ax, current_directory, 'wind')
+    set_plot_limits(ax)
+    add_basemap(ax)
+    remove_axes_labels_boxes_title(ax)
+
+    plot_outlook_polygons(ax, outlook_data, 'wind')
+
+    output_directory = create_output_directory(current_directory)
+    output_filename = f'spc_day_{day}_wind_outlook.png'
+    output_path = os.path.join(output_directory, output_filename)
+
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    # Create a canvas and add it to the root window
+    canvas = FigureCanvasTkAgg(fig, master=root)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+    # Create a custom toolbar with a close button
+    toolbar = NavigationToolbar2Tk(canvas, root)
+    toolbar.update()
+
+    def close_figure():
+        plt.close(fig)
+        root.withdraw()
+        start_gui()
+
+    close_button = tk.Button(toolbar, text='Close', command=close_figure)
+    close_button.pack(side=tk.RIGHT)
+
+    root.protocol("WM_DELETE_WINDOW", close_figure)
+
+    # Show the Tkinter root window with the canvas and toolbar
+    root.deiconify()
+    root.mainloop()
+
+    log.info('Showing the plot')
+    plt.savefig(output_path, dpi=96, bbox_inches='tight')
+
+def display_hail_outlook(day, outlook_data):
+    log.info('Displaying Hail Outlook')
+    fig, ax = setup_plot()
+
+    # Clear the figure and axes before displaying a new outlook
+    fig.clear()
+    ax = fig.add_subplot(111)
+
+    add_overlays(ax, current_directory, 'hail')
+    set_plot_limits(ax)
+    add_basemap(ax)
+    remove_axes_labels_boxes_title(ax)
+
+    plot_outlook_polygons(ax, outlook_data, 'hail')
+
+    output_directory = create_output_directory(current_directory)
+    output_filename = f'spc_day_{day}_hail_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
     for widget in root.winfo_children():
@@ -363,7 +540,9 @@ def color(type, outlook_type):
         }
         return colors.get(outlook_type, 'blue') # Returns the color, blue if not found
     else:
+        log.error(f"There was an error accessing colors. Error on line 533")
         popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors')
+        sys.exit(0)
 
 # Displaying Popups
 def popup(type, title, message):
@@ -378,6 +557,7 @@ def popup(type, title, message):
         messagebox.askquestion(title, message)
     else:
         messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup')
+        sys.exit(0)
 
 # Start the GUI
 def start_gui():
@@ -400,7 +580,7 @@ def start_gui():
     sidebar_frame.grid(row=0, column=0, padx=10, pady=10, sticky='ns')
 
     main_frame = ctk.CTkFrame(window, fg_color='darkblue')
-    main_frame.grid(row=0, column=1, columnspan=2, padx=10, pady=0, sticky='nsew')
+    main_frame.grid(row=0, column=1, columnspan=2, padx=10, pady=10, sticky='nsew')
 
     def buttons(day):
         if day == 'home':
@@ -523,9 +703,18 @@ def start_gui():
             # Test Tornado Button
             Test_Tor_Button = ctk.CTkButton(main_frame, text='(Test) March 17th, 2021', width = 300, font=Description_Font, command=lambda: button_run('tor', 'test'))
             Test_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Test Wind Button
+            Test_Wind_Button = ctk.CTkButton(main_frame, text='(Test) March 25th, 2021', width = 300, font=Description_Font, command=lambda: button_run('wind', 'test'))
+            Test_Wind_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Test Hail Button
+            Test_Hail_Button = ctk.CTkButton(main_frame, text='(Test) May 26th, 2021', width = 300, font=Description_Font, command=lambda: button_run('hail', 'test'))
+            Test_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
         else:
             log.error(f'Invalid Button. Day = {day}. Error on line 436')
             popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly.")
+            sys.exit(0)
         
     def frame_change(day):
         for widget in main_frame.winfo_children():
@@ -594,19 +783,40 @@ def run(type, day):
     log.info(f'Running the Program under day {day}')
     if type == 'cat':
         outlook_data = fetch_cat_outlooks(day)
+        if not check_outlook_availability(outlook_data):
+            no_outlook_available()
+            start_gui()
         popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
         display_cat_outlook(day, outlook_data)
     elif type == 'tor':
         outlook_data = fetch_tor_outlooks(day)
+        if not check_outlook_availability(outlook_data):
+            no_outlook_available()
+            start_gui()
         popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
         display_tor_outlook(day, outlook_data)
-    elif type == 'wind' or type == 'hail' or type == 'prob' or type == 'd4-8':
+    elif type == 'wind':
+        outlook_data = fetch_wind_outlooks(day)
+        if not check_outlook_availability(outlook_data):
+            no_outlook_available()
+            start_gui()
+        popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the window to Continue')
+        display_wind_outlook(day, outlook_data)
+    elif type == 'hail':
+        outlook_data = fetch_hail_outlooks(day)
+        if not check_outlook_availability(outlook_data):
+            no_outlook_available()
+            start_gui()
+        popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the window to Continue')
+        display_hail_outlook(day, outlook_data)
+    elif type == 'prob' or type == 'd4-8':
         log.info(f'Future Outlook Detected (Day {day} {type})')
         popup('info', 'Coming Soon', 'This feature is not ready yet. Keep an eye out for new updates!')
         start_gui()
     else:
         log.error(f'Invalid Outlook Type. Outlook Type = {type}')
         popup('error', 'Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly.")
+        sys.exit(0)
 
 setup()
 start_gui()
