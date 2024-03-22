@@ -153,6 +153,19 @@ def fetch_d48_outlooks(day):
     outlook_data = response.json()
     return outlook_data # Returns the data from the outlook
 
+def fetch_prob_outlooks(day):
+    log.info('Fetching a Probabilistic Outlook')
+    if day == 3:
+        url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.lyr.geojson'
+    else: 
+        log.error(f'Invalid Date. Day = {day}. Error on line 123')
+        popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
+        sys.exit(0)
+    response = requests.get(url)
+    response.raise_for_status()
+    outlook_data = response.json()
+    return outlook_data # Returns the data from the outlook
+
 # Function to create the output directory
 def create_output_directory(current_directory):
     log.info('running create_output_directory')
@@ -219,6 +232,8 @@ def add_overlays(ax, current_directory, type):
         header_img = plt.imread(os.path.join(current_directory, 'wtus_hail_header.png'))
     elif type == 'd4-8':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_d48_header.png'))
+    elif type == 'prob':
+        header_img = plt.imread(os.path.join(current_directory, 'wtus_prob_header.png'))
     else:
         log.error(f"There was an error getting the {type} header. Error on line 199.")
         popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
@@ -327,6 +342,27 @@ def plot_outlook_polygons(ax, outlook_data, type):
             for polygon in outlook_polygon: # Find the properties of each polygon
                 x, y = zip(*polygon[0])
                 ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('d4-8', outlook_type)))
+    elif type == 'prob':
+        for feature in outlook_data['features']:
+            outlook_type = feature['properties']['LABEL']
+            outlook_polygon = feature['geometry']['coordinates']
+            if feature['geometry']['type'] == 'Polygon':
+                outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
+                for polygon in outlook_polygon: # Find the properties of each polygon
+                    x, y = zip(*polygon[0])
+                    if outlook_type == 'SIGN':  # Add hatching for 'SIGN' outlook type
+                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_type), edgecolor='black', hatch='x'))
+                    else:
+                        ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_type)))
+            elif feature['geometry']['type'] == 'MultiPolygon':
+                outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
+                for multipolygon in outlook_polygon: # Find the properties of each polygon
+                    for polygon in multipolygon:
+                        x, y = zip(*polygon[0])
+                        if outlook_type == 'SIGN':  # Add hatching for 'SIGN' outlook type
+                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_type), edgecolor='black', hatch='x'))
+                        else:
+                            ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_type)))
     else:
         log.error(f"There was an error plotting the {type} outlook. Error on line 331.")
         popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
@@ -553,6 +589,54 @@ def display_d48_outlook(day, outlook_data):
 
     output_directory = create_output_directory(current_directory)
     output_filename = f'spc_day_{day}_outlook.png'
+    output_path = os.path.join(output_directory, output_filename)
+
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    # Create a canvas and add it to the root window
+    canvas = FigureCanvasTkAgg(fig, master=root)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+    # Create a custom toolbar with a close button
+    toolbar = NavigationToolbar2Tk(canvas, root)
+    toolbar.update()
+
+    def close_figure():
+        plt.close(fig)
+        root.withdraw()
+        start_gui()
+
+    close_button = tk.Button(toolbar, text='Close', command=close_figure)
+    close_button.pack(side=tk.RIGHT)
+
+    root.protocol("WM_DELETE_WINDOW", close_figure)
+
+    # Show the Tkinter root window with the canvas and toolbar
+    root.deiconify()
+    root.mainloop()
+
+    log.info('Showing the plot')
+    plt.savefig(output_path, dpi=96, bbox_inches='tight')
+
+def display_prob_outlook(day, outlook_data):
+    log.info('Displaying Probabilistic Outlook')
+    fig, ax = setup_plot()
+
+    # Clear the figure and axes before displaying a new outlook
+    fig.clear()
+    ax = fig.add_subplot(111)
+
+    add_overlays(ax, current_directory, 'prob')
+    set_plot_limits(ax)
+    add_basemap(ax)
+    remove_axes_labels_boxes_title(ax)
+
+    plot_outlook_polygons(ax, outlook_data, 'prob')
+
+    output_directory = create_output_directory(current_directory)
+    output_filename = f'spc_day_{day}_prob_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
     for widget in root.winfo_children():
@@ -904,10 +988,6 @@ def run(type, day):
             popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
             instance = 1
         display_hail_outlook(day, outlook_data)
-    elif type == 'prob':
-        log.info(f'Future Outlook Detected (Day {day} {type})')
-        popup('info', 'Coming Soon', 'This feature is not ready yet. Keep an eye out for new updates!')
-        start_gui()
     elif type == 'd4-8':
         outlook_data = fetch_d48_outlooks(day)
         if not check_outlook_availability(outlook_data):
@@ -917,6 +997,15 @@ def run(type, day):
             popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
             instance = 1
         display_d48_outlook(day, outlook_data)
+    elif type == 'prob':
+        outlook_data = fetch_prob_outlooks(day)
+        if not check_outlook_availability(outlook_data):
+            no_outlook_available()
+            start_gui()
+        if instance == 0:
+            popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+            instance = 1
+        display_prob_outlook(day, outlook_data)
     else:
         log.error(f'Invalid Outlook Type. Outlook Type = {type}')
         popup('error', 'Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly. The program will now quit.")
