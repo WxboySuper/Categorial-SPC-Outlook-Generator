@@ -27,11 +27,21 @@ from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import messagebox
 from tkinter import TclError
+from PIL import Image, ImageTk
+from customtkinter import CTkImage
 
 from CTkMessagebox import CTkMessagebox
 
 matplotlib.use('TkAgg')
 
+root = tk.Tk()
+root.withdraw()
+
+# Icons
+tornado_icon = ctk.CTkImage(dark_image=Image.open('Tornado.png'), light_image=Image.open('Tornado.png'), size=(50,40))
+home_icon = ctk.CTkImage(dark_image=Image.open('Home.png'), light_image=Image.open('Home.png'), size=(50,40))
+lightning_icon = ctk.CTkImage(dark_image=Image.open('Lightning.png'), light_image=Image.open('Lightning.png'), size=(50,40))
+logo_icon = ctk.CTkImage(dark_image=Image.open('My_project.png'), light_image=Image.open('My_project.png'), size=(120,120))
 
 # Variables
 log_directory = 'C:\\log'
@@ -731,10 +741,14 @@ def popup(type, title, message):
 
 # Start the GUI
 def start_gui():
+    global home_icon
+    global lightning_icon
+    global tornado_icon 
+
     # Initialize a window
     log.info('GUI - Initializing window')
-    window = ctk.CTk()
-    window.geometry('1500x600')
+    window = ctk.CTkToplevel()
+    window.geometry('1700x900')
     window.title('Severe Weather Outlook Display')
 
     # Configure Layout
@@ -746,121 +760,473 @@ def start_gui():
     Description_Font = ctk.CTkFont(family='karla', size=21)
 
     # Frames
-    sidebar_frame = ctk.CTkFrame(window, height=550, fg_color='grey')
-    sidebar_frame.grid(row=0, column=0, padx=10, pady=10, sticky='ns')
+    sidebar_frame = ctk.CTkFrame(window, height=550, fg_color='#103157')
+    sidebar_frame.grid(row=0, column=0, sticky='ns')
 
-    main_frame = ctk.CTkFrame(window, fg_color='darkblue')
-    main_frame.grid(row=0, column=1, columnspan=2, padx=10, pady=10, sticky='nsew')
+    main_frame = ctk.CTkFrame(window)
+    main_frame.grid(row=0, column=1, columnspan=2, sticky='nsew')
 
-    def buttons(day):
+    def side_bar():
+        ## Sidebar Buttons ##
+        # Logo
+        logo_Button = ctk.CTkButton(sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent', 
+                                    state='disabled', image=logo_icon, compound='top')
+        logo_Button.grid(row=0, column=0, columnspan=1, padx=5, pady=10)
+        
+        # Home Button
+        Home_Side_Button = ctk.CTkButton(sidebar_frame, text='Home', width=200, corner_radius=10, fg_color='transparent',
+                                        font=('karla', 26), command=lambda: frame_change('home'),
+                                        hover_color='#2191aa', image=home_icon, compound='top')
+        Home_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
+
+        # Day 1 Button
+        D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1',width=200, corner_radius=12, fg_color='transparent',
+                                    font=('karla', 26), command=lambda: frame_change(1),
+                                    hover_color='#2191aa', image=tornado_icon)
+        D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
+
+        # Day 2 Button
+        D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2',width=200, corner_radius=12, fg_color='transparent',
+                                    font=('karla', 26), command=lambda: frame_change(2),
+                                    hover_color='#2191aa', image=tornado_icon)
+        D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
+
+        # Day 3 Button
+        D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3',width=200, corner_radius=12, fg_color='transparent', 
+                                    font=('karla', 26), command=lambda: frame_change(3),
+                                    hover_color='#2191aa', image=lightning_icon)
+        D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
+
+        # Day 4-8 Button
+        D48_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 4-8',width=200, corner_radius=12, fg_color='transparent', 
+                                        font=Description_Font, command=lambda: frame_change('d4-8'),
+                                        hover_color='#2191aa', image=lightning_icon)
+        D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
+
+        # Day Test Button
+        Test_Side_Button = ctk.CTkButton(sidebar_frame, text='Test',width=200, height=50, font=Description_Font, command=lambda: frame_change('test'))
+        #Test_Side_Button.grid(row=6, column=0, columnspan=1, padx=5, pady=10)
+
+    risk_level_mapping_cat = {
+        'TSTM': 1, # Thunderstorm
+        'MRGL': 2, # Marginal
+        'SLGT': 3, # Slight
+        'ENH': 4,   # Enhanced
+        'MDT': 5,   # Moderate
+        'HIGH': 6   # High
+    }
+
+    risk_level_mapping_tor = {
+        '0.02': 1,
+        '0.05': 2,
+        '0.10': 3,
+        '0.15': 4,
+        '0.30': 5,
+        '0.45': 6,
+        '0.60': 7
+    }
+
+    risk_level_mapping_prob = {
+        '0.05': 1,
+        '0.15': 2,
+        '0.30': 3,
+        '0.45': 4,
+        '0.60': 5,
+    }
+
+    risk_level_mapping_d48 = {
+        '0.15': 1,
+        '0.30': 2
+    }
+
+    def determine_highest_risk_level_cat(outlook_data):
+        highest_risk_level = 0
+        for feature in outlook_data['features']:
+            risk_level_label = feature['properties'].get('LABEL')
+            if risk_level_label:
+                risk_level = risk_level_mapping_cat.get(risk_level_label)
+                if risk_level is not None and (highest_risk_level is None or risk_level > highest_risk_level):
+                    highest_risk_level = risk_level
+        if highest_risk_level == 0:
+            highest_risk_level = 'None'
+        elif highest_risk_level == 1:
+            highest_risk_level = 'Thunderstorm'
+        elif highest_risk_level == 2:
+            highest_risk_level = 'Marginal'
+        elif highest_risk_level == 3:
+            highest_risk_level = 'Slight'
+        elif highest_risk_level == 4:
+            highest_risk_level = 'Enhanced'
+        elif highest_risk_level == 5:
+            highest_risk_level = 'Moderate'
+        elif highest_risk_level == 6: 
+            highest_risk_level = 'High'
+        return highest_risk_level
+
+    def determine_highest_risk_level_tor(outlook_data):
+        highest_tor_risk_level = 0
+        for feature in outlook_data['features']:
+            tor_risk_level_label = feature['properties'].get('LABEL')
+            if tor_risk_level_label:
+                risk_level = risk_level_mapping_tor.get(tor_risk_level_label)
+                if risk_level is not None and (highest_tor_risk_level is None or risk_level > highest_tor_risk_level):
+                    highest_tor_risk_level = risk_level
+        if highest_tor_risk_level == 0:
+            highest_tor_risk_level = 'None'
+        elif highest_tor_risk_level == 1:
+            highest_tor_risk_level = '2%'
+        elif highest_tor_risk_level == 2:
+            highest_tor_risk_level = '5%'
+        elif highest_tor_risk_level == 3:
+            highest_tor_risk_level = '10%'
+        elif highest_tor_risk_level == 4:
+            highest_tor_risk_level = '15%'
+        elif highest_tor_risk_level == 5:
+            highest_tor_risk_level = '30%'
+        elif highest_tor_risk_level == 6:
+            highest_tor_risk_level = '45%'
+        elif highest_tor_risk_level == 7: 
+            highest_tor_risk_level = '60%'
+        return highest_tor_risk_level
+
+    def determine_highest_risk_level_wind(outlook_data):
+        highest_wind_risk_level = 0
+        for feature in outlook_data['features']:
+            wind_risk_level_label = feature['properties'].get('LABEL')
+            if wind_risk_level_label:
+                risk_level = risk_level_mapping_prob.get(wind_risk_level_label)
+                if risk_level is not None and (highest_wind_risk_level is None or risk_level > highest_wind_risk_level):
+                    highest_wind_risk_level = risk_level
+        if highest_wind_risk_level == 0:
+            highest_wind_risk_level = 'None'
+        elif highest_wind_risk_level == 1:
+            highest_wind_risk_level = '5%'
+        elif highest_wind_risk_level == 2:
+            highest_wind_risk_level = '15%'
+        elif highest_wind_risk_level == 3:
+            highest_wind_risk_level = '30%'
+        elif highest_wind_risk_level == 4:
+            highest_wind_risk_level = '45%'
+        elif highest_wind_risk_level == 5: 
+            highest_wind_risk_level = '60%'
+        return highest_wind_risk_level
+
+    def determine_highest_risk_level_hail(outlook_data):
+        highest_hail_risk_level = 0
+        for feature in outlook_data['features']:
+            hail_risk_level_label = feature['properties'].get('LABEL')
+            if hail_risk_level_label:
+                risk_level = risk_level_mapping_prob.get(hail_risk_level_label)
+                if risk_level is not None and (highest_hail_risk_level is None or risk_level > highest_hail_risk_level):
+                    highest_hail_risk_level = risk_level
+        if highest_hail_risk_level == 0:
+            highest_hail_risk_level = 'None'
+        elif highest_hail_risk_level == 1:
+            highest_hail_risk_level = '5%'
+        elif highest_hail_risk_level == 2:
+            highest_hail_risk_level = '15%'
+        elif highest_hail_risk_level == 3:
+            highest_hail_risk_level = '30%'
+        elif highest_hail_risk_level == 4:
+            highest_hail_risk_level = '45%'
+        elif highest_hail_risk_level == 5: 
+            highest_hail_risk_level = '60%'
+        return highest_hail_risk_level
+
+    def determine_highest_risk_level_prob(outlook_data):
+        highest_prob_risk_level = 0
+        for feature in outlook_data['features']:
+            prob_risk_level_label = feature['properties'].get('LABEL')
+            if prob_risk_level_label:
+                risk_level = risk_level_mapping_prob.get(prob_risk_level_label)
+                if risk_level is not None and (highest_prob_risk_level is None or risk_level > highest_prob_risk_level):
+                    highest_prob_risk_level = risk_level
+        if highest_prob_risk_level == 0:
+            highest_prob_risk_level = 'None'
+        elif highest_prob_risk_level == 1:
+            highest_prob_risk_level = '5%'
+        elif highest_prob_risk_level == 2:
+            highest_prob_risk_level = '15%'
+        elif highest_prob_risk_level == 3:
+            highest_prob_risk_level = '30%'
+        elif highest_prob_risk_level == 4:
+            highest_prob_risk_level = '45%'
+        elif highest_prob_risk_level == 1:
+            highest_prob_risk_level = '60%'
+        return highest_prob_risk_level
+
+    def determine_highest_risk_level_d48(outlook_data):
+        highest_d48_risk_level = 0
+        for feature in outlook_data['features']:
+            d48_risk_level_label = feature['properties'].get('LABEL')
+            if d48_risk_level_label:
+                risk_level = risk_level_mapping_d48.get(d48_risk_level_label)
+                if risk_level is not None and (highest_d48_risk_level is None or risk_level > highest_d48_risk_level):
+                    highest_d48_risk_level = risk_level
+        if highest_d48_risk_level == 0:
+            highest_d48_risk_level = 'None'
+        elif highest_d48_risk_level == 1:
+            highest_d48_risk_level = '15%'
+        elif highest_d48_risk_level == 2:
+            highest_d48_risk_level = '30%'
+        return highest_d48_risk_level
+
+    def frames(day):
         if day == 'home':
+            side_bar()
+            
+            # Home Button
+            Home_Side_Button = ctk.CTkButton(sidebar_frame, text='Home', width=200, corner_radius=10, fg_color='transparent',
+                                     font=('karla', 26), command=lambda: frame_change('home'),
+                                     state='disabled', image=home_icon, compound='top')
+            Home_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
+
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
-            Close_Button.place(x=1035, y=15)
+            Close_Button.place(x=1285, y=15)
 
             # Title Label
-            Title_Label = ctk.CTkLabel(main_frame, text='Severe Weather Outlook Display', font=Title_Font)
-            Title_Label.place(x=220, y=225)
+            Title_Label = ctk.CTkLabel(main_frame, text='Severe Weather Outlook Display', 
+                                       font=('Montserrat', 72, 'bold'), width=1200)
+            Title_Label.place(x=150, y=350)
 
             # Welcome Label
-            Welcome_Label = ctk.CTkLabel(main_frame, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', font=Description_Font)
-            Welcome_Label.place(x=180, y=300)
+            Welcome_Label = ctk.CTkLabel(main_frame, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', 
+                                        font=('karla', 25))
+            Welcome_Label.place(x=200, y=450)
         elif day == 1:
+            outlook_data_cat_day_1 = fetch_cat_outlooks(1)
+            highest_risk_level_cat_day_1 = determine_highest_risk_level_cat(outlook_data_cat_day_1)
+            
+            outlook_data_tor_day_1 = fetch_tor_outlooks(1)
+            highest_risk_level_tor_day_1 = determine_highest_risk_level_tor(outlook_data_tor_day_1)
+
+            outlook_data_wind_day_1 = fetch_wind_outlooks(1)
+            highest_risk_level_wind_day_1 = determine_highest_risk_level_wind(outlook_data_wind_day_1)
+
+            outlook_data_hail_day_1 = fetch_hail_outlooks(1)
+            highest_risk_level_hail_day_1 = determine_highest_risk_level_hail(outlook_data_hail_day_1)
+
+            side_bar()
+            
+            # Day 1 Button
+            D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1',width=200, corner_radius=12, fg_color='transparent',
+                                   font=('karla', 26), command=lambda: frame_change(1),
+                                   state='disabled', image=tornado_icon)
+            D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
+
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
-            Close_Button.grid(row=1, column=1, padx=20, pady=15, sticky='e')
+            Close_Button.grid(row=1, column=3, padx=20, pady=15, sticky='e')
 
             # Day 1 Heading Label
             D1_Label = ctk.CTkLabel(main_frame, text='Day 1 Outlooks', font=Title_Font)
-            D1_Label.grid(row=2, column=1, columnspan=1, padx=435, pady=50, sticky='nsew')
+            D1_Label.grid(row=2, column=1, columnspan=2, padx=435, pady=50, sticky='nsew')
 
-            # Day 1 Categorial Button
-            D1_Cat_Button = ctk.CTkButton(main_frame, text='Day 1 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 1))
+            # Day 1 Categorical Button
+            D1_Cat_Button = ctk.CTkButton(main_frame, text='Day 1 Categorical', width=150, height=50, font=('karla', 28), command=lambda: button_run('cat', 1))
             D1_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
+            # Day 1 Categorial Risk Label
+            highest_risk_label_cat_day_1 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_cat_day_1}', font=('karla', 25))
+            highest_risk_label_cat_day_1.grid(row=3, column=2, columnspan=1, sticky='nsew')
+
             # Day 1 Tornado Button
-            D1_Tor_Button = ctk.CTkButton(main_frame, text='Day 1 Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 1))
+            D1_Tor_Button = ctk.CTkButton(main_frame, text='Day 1 Tornado', width = 150, height=50, font=('karla', 28), command=lambda: button_run('tor', 1))
             D1_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
+            # Day 1 Tornado Risk Label
+            highest_risk_label_tor_day_1 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_tor_day_1}', font=('karla', 25))
+            highest_risk_label_tor_day_1.grid(row=4, column=2, columnspan=1, sticky='nsew')
+
             # Day 1 Wind Outlook
-            D1_Wind_Button = ctk.CTkButton(main_frame, text='Day 1 Wind', width=300, font=Description_Font, command=lambda: button_run('wind', 1))
+            D1_Wind_Button = ctk.CTkButton(main_frame, text='Day 1 Wind', width=150, height=50, font=('karla', 28), command=lambda: button_run('wind', 1))
             D1_Wind_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
+            # Day 1 Wind Risk Label
+            highest_risk_label_wind_day_1 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_wind_day_1}', font=('karla', 25))
+            highest_risk_label_wind_day_1.grid(row=5, column=2, columnspan=1, sticky='nsew')
+
             # Day 1 Hail Outlook
-            D1_Hail_Button = ctk.CTkButton(main_frame, text='Day 1 Hail', width=300, font=Description_Font, command=lambda: button_run('hail', 1))
+            D1_Hail_Button = ctk.CTkButton(main_frame, text='Day 1 Hail', width=150, height=50, font=('karla', 28), command=lambda: button_run('hail', 1))
             D1_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Day 1 Hail Risk Label
+            highest_risk_label_hail_day_1 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_hail_day_1}', font=('karla', 25))
+            highest_risk_label_hail_day_1.grid(row=6, column=2, columnspan=1, sticky='nsew')
         elif day == 2:
+            outlook_data_cat_day_2 = fetch_cat_outlooks(2)
+            highest_risk_level_cat_day_2 = determine_highest_risk_level_cat(outlook_data_cat_day_2)
+            
+            outlook_data_tor_day_2 = fetch_tor_outlooks(2)
+            highest_risk_level_tor_day_2 = determine_highest_risk_level_tor(outlook_data_tor_day_2)
+
+            outlook_data_wind_day_2 = fetch_wind_outlooks(2)
+            highest_risk_level_wind_day_2 = determine_highest_risk_level_wind(outlook_data_wind_day_2)
+
+            outlook_data_hail_day_2 = fetch_hail_outlooks(2)
+            highest_risk_level_hail_day_2 = determine_highest_risk_level_hail(outlook_data_hail_day_2)
+
+            side_bar()
+            
+            # Day 2 Button
+            D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2',width=200, corner_radius=12, fg_color='transparent',
+                                   font=('karla', 26), command=lambda: frame_change(2),
+                                   state='disabled', image=tornado_icon)
+            D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
+            
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
-            Close_Button.grid(row=1, column=1, padx=30, pady=15, sticky='e')
+            Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
 
             # Day 2 Heading Label
             D2_Label = ctk.CTkLabel(main_frame, text='Day 2 Outlooks', font=Title_Font)
-            D2_Label.grid(row=2, column=1, columnspan=1, padx=435, pady=50, sticky='nsew')
+            D2_Label.grid(row=2, column=1, columnspan=2, padx=435, pady=50, sticky='nsew')
 
-            # Day 2 Categorial Button
-            D2_Cat_Button = ctk.CTkButton(main_frame, text='Day 2 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 2))
+            # Day 2 Categorical Button
+            D2_Cat_Button = ctk.CTkButton(main_frame, text='Day 2 Categorical', width=150, height=50, font=('karla', 28), command=lambda: button_run('cat', 2))
             D2_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
+            # Day 2 Categorial Risk Label
+            highest_risk_label_cat_day_2 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_cat_day_2}', font=('karla', 25))
+            highest_risk_label_cat_day_2.grid(row=3, column=2, columnspan=1, sticky='nsew')
+
             # Day 2 Tornado Button
-            D2_Tor_Button = ctk.CTkButton(main_frame, text='Day 2 Tornado', width = 300, font=Description_Font, command=lambda: button_run('tor', 2))
+            D2_Tor_Button = ctk.CTkButton(main_frame, text='Day 2 Tornado', width = 150, height=50, font=('karla', 28), command=lambda: button_run('tor', 2))
             D2_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
+            # Day 2 Tornado Risk Label
+            highest_risk_label_tor_day_2 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_tor_day_2}', font=('karla', 25))
+            highest_risk_label_tor_day_2.grid(row=4, column=2, columnspan=1, sticky='nsew')
+
             # Day 2 Wind Outlook
-            D1_Wind_Button = ctk.CTkButton(main_frame, text='Day 2 Wind', width=300, font=Description_Font, command=lambda: button_run('wind', 2))
+            D1_Wind_Button = ctk.CTkButton(main_frame, text='Day 2 Wind', width=150, height=50, font=('karla', 28), command=lambda: button_run('wind', 2))
             D1_Wind_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
+            # Day 1 Wind Risk Label
+            highest_risk_label_wind_day_2 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_wind_day_2}', font=('karla', 25))
+            highest_risk_label_wind_day_2.grid(row=5, column=2, columnspan=1, sticky='nsew')
+
             # Day 2 Hail Outlook
-            D2_Hail_Button = ctk.CTkButton(main_frame, text='Day 2 Hail', width=300, font=Description_Font, command=lambda: button_run('hail', 2))
+            D2_Hail_Button = ctk.CTkButton(main_frame, text='Day 2 Hail', width=150, height=50, font=('karla', 28), command=lambda: button_run('hail', 2))
             D2_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Day 2 Hail Risk Label
+            highest_risk_label_hail_day_2 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_hail_day_2}', font=('karla', 25))
+            highest_risk_label_hail_day_2.grid(row=6, column=2, columnspan=1, sticky='nsew')
         elif day == 3:
+            outlook_data_cat_day_3 = fetch_cat_outlooks(3)
+            highest_risk_level_cat_day_3 = determine_highest_risk_level_cat(outlook_data_cat_day_3)
+
+            outlook_data_prob_day_3 = fetch_prob_outlooks(3)
+            highest_risk_level_prob_day_3 = determine_highest_risk_level_prob(outlook_data_prob_day_3)
+            
+            side_bar()
+
+            #Day 3 Button
+            D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3',width=200, corner_radius=12, fg_color='transparent', 
+                                   font=('karla', 26), command=lambda: frame_change(3),
+                                   state='disabled', image=lightning_icon)
+            D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
+            
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
-            Close_Button.grid(row=1, column=1, padx=30, pady=15, sticky='e')
+            Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
 
             # Day 3 Heading Label
             D3_Label = ctk.CTkLabel(main_frame, text='Day 3 Outlooks', font=Title_Font)
-            D3_Label.grid(row=2, column=1, columnspan=1, padx=435, pady=50, sticky='nsew')
+            D3_Label.grid(row=2, column=1, columnspan=2, padx=435, pady=50, sticky='nsew')
 
-            # Day 3 Categorial Button
-            D3_Cat_Button = ctk.CTkButton(main_frame, text='Day 3 Categorial', width=300, font=Description_Font, command=lambda: button_run('cat', 3))
+            # Day 3 Categorical Button
+            D3_Cat_Button = ctk.CTkButton(main_frame, text='Day 3 Categorical', width=150, height=50, font=('karla', 28), command=lambda: button_run('cat', 3))
             D3_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
+            # Day 3 Categorial Risk Label
+            highest_risk_label_cat_day_3 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_cat_day_3}', font=('karla', 25))
+            highest_risk_label_cat_day_3.grid(row=3, column=2, columnspan=1, sticky='nsew')
+
             # Day 3 Probabilistic Outlook
-            D3_Prob_Button = ctk.CTkButton(main_frame, text='Day 3 Probabilistic', width=300, font=Description_Font, command=lambda: button_run('prob', 3))
+            D3_Prob_Button = ctk.CTkButton(main_frame, text='Day 3 Probabilistic', width=150, height=50, font=('karla', 28), command=lambda: button_run('prob', 3))
             D3_Prob_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
+
+            # Day 3 Probabilistic Risk Label
+            highest_risk_label_prob_day_3 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_prob_day_3}', font=('karla', 25))
+            highest_risk_label_prob_day_3.grid(row=4, column=2, columnspan=1, sticky='nsew')
         elif day == 'd4-8':
+            outlook_data_d48_day_4 = fetch_d48_outlooks(4)
+            highest_risk_level_d48_day_4 = determine_highest_risk_level_d48(outlook_data_d48_day_4)
+            
+            outlook_data_d48_day_5 = fetch_d48_outlooks(5)
+            highest_risk_level_d48_day_5 = determine_highest_risk_level_d48(outlook_data_d48_day_5)
+
+            outlook_data_d48_day_6 = fetch_d48_outlooks(6)
+            highest_risk_level_d48_day_6 = determine_highest_risk_level_d48(outlook_data_d48_day_6)
+
+            outlook_data_d48_day_7 = fetch_d48_outlooks(7)
+            highest_risk_level_d48_day_7 = determine_highest_risk_level_d48(outlook_data_d48_day_7)
+
+            outlook_data_d48_day_8 = fetch_d48_outlooks(8)
+            highest_risk_level_d48_day_8 = determine_highest_risk_level_d48(outlook_data_d48_day_8)
+
+            side_bar()
+            
+            # Day 4-8 Button
+            D48_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent', 
+                                    font=Description_Font, command=lambda: frame_change('d4-8'),
+                                    state='disabled', image=lightning_icon)
+            D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
+            
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
-            Close_Button.grid(row=1, column=1, padx=15, pady=15, sticky='e')
+            Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
 
             # Day 4-8 Heading Label
             D48_Label = ctk.CTkLabel(main_frame, text='Day 4-8 Outlooks', font=Title_Font)
-            D48_Label.grid(row=2, column=1, columnspan=1, padx=400, pady=50, sticky='nsew')
+            D48_Label.grid(row=2, column=1, columnspan=2, padx=400, pady=50, sticky='nsew')
 
             # Day 4 Button
-            D4_Cat_Button = ctk.CTkButton(main_frame, text='Day 4 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 4))
+            D4_Cat_Button = ctk.CTkButton(main_frame, text='Day 4 Outlook', font=('karla', 28), height=50, command=lambda: button_run('d4-8', 4))
             D4_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
+            # Day 4 Probabilistic Risk Label
+            highest_risk_label_d48_day_4 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_d48_day_4}', font=('karla', 25))
+            highest_risk_label_d48_day_4.grid(row=3, column=2, columnspan=1, sticky='nsew')
+
             # Day 5 Button
-            D5_Cat_Button = ctk.CTkButton(main_frame, text='Day 5 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 5))
+            D5_Cat_Button = ctk.CTkButton(main_frame, text='Day 5 Outlook', font=('karla', 28), width=150, height=50, command=lambda: button_run('d4-8', 5))
             D5_Cat_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
+            # Day 5 Probabilistic Risk Label
+            highest_risk_label_d48_day_5 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_d48_day_5}', font=('karla', 25))
+            highest_risk_label_d48_day_5.grid(row=4, column=2, columnspan=1, sticky='nsew')
+
             # Day 6 Button
-            D6_Cat_Button = ctk.CTkButton(main_frame, text='Day 6 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 6))
+            D6_Cat_Button = ctk.CTkButton(main_frame, text='Day 6 Outlook', font=('karla', 28), width=150, height=50, command=lambda: button_run('d4-8', 6))
             D6_Cat_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
+            # Day 6 Probabilistic Risk Label
+            highest_risk_label_d48_day_6 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_d48_day_6}', font=('karla', 25))
+            highest_risk_label_d48_day_6.grid(row=5, column=2, columnspan=1, sticky='nsew')
+
             # Day 7 Button
-            D7_Cat_Button = ctk.CTkButton(main_frame, text='Day 7 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 7))
+            D7_Cat_Button = ctk.CTkButton(main_frame, text='Day 7 Outlook', font=('karla', 28), width=150, height=50, command=lambda: button_run('d4-8', 7))
             D7_Cat_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
+            # Day 7 Probabilistic Risk Label
+            highest_risk_label_d48_day_7 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_d48_day_7}', font=('karla', 25))
+            highest_risk_label_d48_day_7.grid(row=6, column=2, columnspan=1, sticky='nsew')
+
             # Day 8 Button
-            D8_Cat_Button = ctk.CTkButton(main_frame, text='Day 8 Outlook', font=Description_Font, command=lambda: button_run('d4-8', 8))
+            D8_Cat_Button = ctk.CTkButton(main_frame, text='Day 8 Outlook', font=('karla', 28), width=150, height=50, command=lambda: button_run('d4-8', 8))
             D8_Cat_Button.grid(row=7, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
+
+            # Day 8 Probabilistic Risk Label
+            highest_risk_label_d48_day_8 = ctk.CTkLabel(main_frame, text=f'Highest Risk: {highest_risk_level_d48_day_8}', font=('karla', 25))
+            highest_risk_label_d48_day_8.grid(row=7, column=2, columnspan=1, sticky='nsew')
         elif day == 'test':
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
-            Close_Button.grid(row=1, column=1, padx=25, pady=15, sticky='e')
+            Close_Button.grid(row=1, column=2, padx=25, pady=15, sticky='e')
 
             # Heading Label
             Test_Label = ctk.CTkLabel(main_frame, text='Outlook Tests', font=Title_Font)
@@ -890,7 +1256,7 @@ def start_gui():
         for widget in main_frame.winfo_children():
             widget.destroy()
         
-        buttons(day)
+        frames(day)
 
     def button_run(type, day):
         log.info(f'GUI - {type} {day} button has been pressed. Running Day {day} {type} outlook')
@@ -904,43 +1270,8 @@ def start_gui():
 
     window.protocol("WM_DELETE_WINDOW", close_program)
 
-    ## Mainscreen Setup ##
-    # Close Button
-    Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
-    Close_Button.place(x=1035, y=15)
-
-    # Title Label
-    Title_Label = ctk.CTkLabel(main_frame, text='Severe Weather Outlook Display', font=Title_Font, width=1200)
-    Title_Label.place(x=50, y=225)
-
-    # Welcome Label
-    Welcome_Label = ctk.CTkLabel(main_frame, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', font=Description_Font)
-    Welcome_Label.place(x=180, y=300)
-
-    ## Sidebar Buttons ##
-    # Home Button
-    Home_Side_Button = ctk.CTkButton(sidebar_frame, text='Home',width=200, height=50,  font=Description_Font, command=lambda: frame_change('home'))
-    Home_Side_Button.grid(row=0, column=0, columnspan=1, padx=5, pady=10)
-
-    # Day 1 Button
-    D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1',width=200, height=50,  font=Description_Font, command=lambda: frame_change(1))
-    D1_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
-
-    # Day 2 Button
-    D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2',width=200, height=50, font=Description_Font, command=lambda: frame_change(2))
-    D2_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
-
-    # Day 3 Button
-    D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3',width=200, height=50, font=Description_Font, command=lambda: frame_change(3))
-    D3_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
-
-    # Day 4-8 Button
-    D48_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 4-8',width=200, height=50, font=Description_Font, command=lambda: frame_change('d4-8'))
-    D48_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
-
-    # Day Test Button
-    Test_Side_Button = ctk.CTkButton(sidebar_frame, text='Test',width=200, height=50, font=Description_Font, command=lambda: frame_change('test'))
-    Test_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
+    side_bar()
+    frames('home')
 
     log.info('GUI - Created widgets')
 
