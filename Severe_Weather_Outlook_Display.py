@@ -19,6 +19,7 @@ import customtkinter as ctk
 import contextily as ctx
 import sys
 import logging as log
+import pystray
 
 # Import specific functions from modules
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
@@ -985,6 +986,10 @@ def start_gui():
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
             Close_Button.place(x=1285, y=15)
 
+            # Hide Button
+            Hide_Button = ctk.CTkButton(main_frame, text='Hide', width=200, font=Description_Font, command=hide_to_system_tray)
+            Hide_Button.place(x=1075, y=15)
+
             # Title Label
             Title_Label = ctk.CTkLabel(main_frame, text='Severe Weather Outlook Display', 
                                        font=('Montserrat', 72, 'bold'), width=1200)
@@ -1018,6 +1023,10 @@ def start_gui():
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
             Close_Button.grid(row=1, column=3, padx=20, pady=15, sticky='e')
+
+            # Hide_Button
+            Hide_Button = ctk.CTkButton(main_frame, text='Hide', width=200, font=Description_Font, command=hide_to_system_tray)
+            Hide_Button.grid(row=1, column=2, padx=25, pady=15, sticky='e')
 
             # Day 1 Heading Label
             D1_Label = ctk.CTkLabel(main_frame, text='Day 1 Outlooks', font=Title_Font)
@@ -1079,6 +1088,10 @@ def start_gui():
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
             Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
 
+            # Hide_Button
+            Hide_Button = ctk.CTkButton(main_frame, text='Hide', width=200, font=Description_Font, command=hide_to_system_tray)
+            Hide_Button.grid(row=1, column=2, padx=25, pady=15, sticky='e')
+
             # Day 2 Heading Label
             D2_Label = ctk.CTkLabel(main_frame, text='Day 2 Outlooks', font=Title_Font)
             D2_Label.grid(row=2, column=1, columnspan=2, padx=435, pady=50, sticky='nsew')
@@ -1133,6 +1146,10 @@ def start_gui():
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
             Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
 
+            # Hide_Button
+            Hide_Button = ctk.CTkButton(main_frame, text='Hide', width=200, font=Description_Font, command=hide_to_system_tray)
+            Hide_Button.grid(row=1, column=2, padx=25, pady=15, sticky='e')
+
             # Day 3 Heading Label
             D3_Label = ctk.CTkLabel(main_frame, text='Day 3 Outlooks', font=Title_Font)
             D3_Label.grid(row=2, column=1, columnspan=2, padx=435, pady=50, sticky='nsew')
@@ -1179,6 +1196,10 @@ def start_gui():
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
             Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
+
+            # Hide_Button
+            Hide_Button = ctk.CTkButton(main_frame, text='Hide', width=200, font=Description_Font, command=hide_to_system_tray)
+            Hide_Button.grid(row=1, column=2, padx=25, pady=15, sticky='e')
 
             # Day 4-8 Heading Label
             D48_Label = ctk.CTkLabel(main_frame, text='Day 4-8 Outlooks', font=Title_Font)
@@ -1228,6 +1249,10 @@ def start_gui():
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font, command=close_program)
             Close_Button.grid(row=1, column=2, padx=25, pady=15, sticky='e')
 
+            # Hide_Button
+            Hide_Button = ctk.CTkButton(main_frame, text='Hide', width=200, font=Description_Font, command=hide_to_system_tray)
+            Hide_Button.grid(row=1, column=2, padx=25, pady=15, sticky='e')
+
             # Heading Label
             Test_Label = ctk.CTkLabel(main_frame, text='Outlook Tests', font=Title_Font)
             Test_Label.grid(row=2, column=1, columnspan=1, padx=450, pady=50, sticky='nsew')
@@ -1262,11 +1287,25 @@ def start_gui():
         log.info(f'GUI - {type} {day} button has been pressed. Running Day {day} {type} outlook')
         window.withdraw()
         run(type, day)
-    
+
+    def hide_to_system_tray():
+        global icon
+        window.withdraw()
+        image = Image.open('My_project.png')
+        menu = (pystray.MenuItem("Show", show_from_system_tray), pystray.MenuItem("Exit", close_program))
+        icon = pystray.Icon("name", image, "My System Tray Icon", menu)
+        icon.run()
+
     def close_program():
         log.info('GUI - Now Closing Program')
+        if 'icon' in globals() and icon is not None:
+            icon.stop() 
         window.withdraw() 
-        sys.exit(0)
+        os._exit(0)
+
+    def show_from_system_tray(icon, item):
+        icon.stop()
+        window.deiconify()
 
     window.protocol("WM_DELETE_WINDOW", close_program)
 
