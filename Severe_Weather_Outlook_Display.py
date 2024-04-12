@@ -20,6 +20,9 @@ import contextily as ctx
 import sys
 import logging as log
 import pystray
+import feedparser
+import time
+import threading
 
 # Import specific functions from modules
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
@@ -30,6 +33,7 @@ from tkinter import messagebox
 from tkinter import TclError
 from PIL import Image, ImageTk
 from customtkinter import CTkImage
+from plyer import notification
 
 from CTkMessagebox import CTkMessagebox
 
@@ -48,22 +52,45 @@ logo_icon = ctk.CTkImage(dark_image=Image.open('My_project.png'), light_image=Im
 log_directory = 'C:\\log'
 current_directory = os.path.dirname(os.path.abspath(__file__))
 instance = 0
+rss_url = 'https://www.spc.noaa.gov/products/spcacrss.xml'
+check_interval = 60
+refresh_interval = 15 # Refresh the list every 15 seconds
+notified_titles = [] # List to store notified titles
+first_message_title = None # Title of the first message encountered
 
 # Create a Tkinter root window
 root = tk.Tk()
 root.withdraw()
 
-# Setup Function
-def setup():
-    if not os.path.exists(log_directory):
-        os.makedirs(log_directory)
-    
-    log.basicConfig(
-        level = log.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        filename='C:\\log\\cod.log',
-        filemode='w'
-    )
+def check_rss_feed(url, interval, refresh_interval):
+    last_refresh_time = time.time() # Time of the last refresh
+
+    while True:
+        current_time = time.time()
+        if current_time - last_refresh_time >= refresh_interval:
+            # Refresh the list every refresh_interval seconds
+            last_refresh_time = current_time
+
+        feed = feedparser.parse(url)
+        if feed.entries:
+            for entry in feed.entries:
+                # Check if the message is new
+                if entry.title not in notified_titles:
+                    # Process the message here
+                    # For example, send a notification
+                    truncated_title = entry.title[:256]
+                    log.info(f'RSS - New RSS Notification. {entry.title}')
+                    notification.notify( # type: ignore
+                        title="New RSS Feed Update",
+                        message=(f'{truncated_title}. Check it out in the App!'),
+                        timeout=10
+                    )
+                    # Add the title to the notified_titles list
+                    notified_titles.append(entry.title)
+        log.info(f'RSS - {notified_titles}')
+        time.sleep(interval)
+        log.info('RSS - Interval Passed')
+
 
 # Set the global exception handler
 def global_exception_handler(exc_type, exc_value, exc_traceback):
@@ -249,7 +276,7 @@ def add_overlays(ax, current_directory, type):
         log.error(f"There was an error getting the {type} header. Error on line 199.")
         popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
         sys.exit(0)
-    header_img = OffsetImage(header_img, zoom=0.35)
+    header_img = OffsetImage(header_img, zoom=0.4)
     ab = AnnotationBbox(header_img, (0.3, 0.95), xycoords='axes fraction', frameon=False)
     ax.add_artist(ab)
 
@@ -727,6 +754,7 @@ def color(type, outlook_type):
 
 # Displaying Popups
 def popup(type, title, message):
+    global question
     log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
     if type == 'info':
         messagebox.showinfo(title, message)
@@ -735,7 +763,8 @@ def popup(type, title, message):
     elif type == 'warning':
         messagebox.showwarning(title, message)
     elif type == 'question':
-        messagebox.askquestion(title, message)
+        question = messagebox.askquestion(title, message)
+        return question
     else:
         messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup. The program will now quit.')
         sys.exit(0)
@@ -1297,11 +1326,18 @@ def start_gui():
         icon.run()
 
     def close_program():
+        global question # Declare question as a global variable
         log.info('GUI - Now Closing Program')
-        if 'icon' in globals() and icon is not None:
-            icon.stop() 
-        window.withdraw() 
-        os._exit(0)
+        popup('question', 
+              'Close Program?', 
+              'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')
+        if question == 'yes':
+            if 'icon' in globals() and icon is not None:
+                icon.stop() 
+            window.withdraw() 
+            os._exit(0)
+        else:
+            return
 
     def show_from_system_tray(icon, item):
         icon.stop()
@@ -1381,5 +1417,21 @@ def run(type, day):
         popup('error', 'Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly. The program will now quit.")
         sys.exit(0)
 
-setup()
+# Startup Function
+def startup():
+    if not os.path.exists(log_directory):
+        os.makedirs(log_directory)
+    
+    log.basicConfig(
+        level = log.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        filename='C:\\log\\cod.log',
+        filemode='w'
+    )
+
+    rss_feed_thread = threading.Thread(target=check_rss_feed, args=(rss_url, check_interval, refresh_interval))
+    rss_feed_thread.daemon = True
+    rss_feed_thread.start()
+
+startup()
 start_gui()
