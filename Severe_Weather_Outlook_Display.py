@@ -111,7 +111,7 @@ def fetch_cat_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2023/day1otlk_20230331_1630_cat.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on Line 75')
+        log.error(f'Invalid Date. Day = {day}. Error on Line 114')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url) # Requests the data from the GeoJSON URL
@@ -128,7 +128,7 @@ def fetch_tor_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210317_1630_torn.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on line 91')
+        log.error(f'Invalid Date. Day = {day}. Error on line 131')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url) # Requests the data from the GeoJSON URL
@@ -145,7 +145,7 @@ def fetch_wind_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210325_1630_wind.lyr.geojson'
     else: 
-        log.error(f'Invalid Date. Day = {day}. Error on line 107')
+        log.error(f'Invalid Date. Day = {day}. Error on line 148')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url) # Requests the data from the GeoJSON URL
@@ -162,7 +162,7 @@ def fetch_hail_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210526_1630_hail.lyr.geojson'
     else: 
-        log.error(f'Invalid Date. Day = {day}. Error on line 123')
+        log.error(f'Invalid Date. Day = {day}. Error on line 165')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url)
@@ -183,7 +183,7 @@ def fetch_d48_outlooks(day):
     elif day == 8:
         url = 'https://www.spc.noaa.gov/products/exper/day4-8/day8prob.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on line 148')
+        log.error(f'Invalid Date. Day = {day}. Error on line 186')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url)
@@ -196,7 +196,7 @@ def fetch_prob_outlooks(day):
     if day == 3:
         url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.lyr.geojson'
     else: 
-        log.error(f'Invalid Date. Day = {day}. Error on line 123')
+        log.error(f'Invalid Date. Day = {day}. Error on line 199')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url)
@@ -273,7 +273,7 @@ def add_overlays(ax, current_directory, type):
     elif type == 'prob':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_prob_header.png'))
     else:
-        log.error(f"There was an error getting the {type} header. Error on line 199.")
+        log.error(f"There was an error getting the {type} header. Error on line 276.")
         popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
         sys.exit(0)
     header_img = OffsetImage(header_img, zoom=0.4)
@@ -402,7 +402,7 @@ def plot_outlook_polygons(ax, outlook_data, type):
                         else:
                             ax.add_patch(mpatches.Polygon(list(zip(x, y)), alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_type)))
     else:
-        log.error(f"There was an error plotting the {type} outlook. Error on line 331.")
+        log.error(f"There was an error plotting the {type} outlook. Error on line 405.")
         popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
         sys.exit(0)
     
@@ -748,7 +748,7 @@ def color(type, outlook_type):
         }
         return colors.get(outlook_type, 'blue') # Returns the color, blue if not found
     else:
-        log.error(f"There was an error accessing colors. Error on line 533")
+        log.error(f"There was an error accessing colors. Error on line 751")
         popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors. The program will now quit.')
         sys.exit(0)
 
@@ -1302,7 +1302,7 @@ def start_gui():
             Test_Hail_Button = ctk.CTkButton(main_frame, text='(Test) May 26th, 2021', width = 300, font=Description_Font, command=lambda: button_run('hail', 'test'))
             Test_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
         else:
-            log.error(f'Invalid Button. Day = {day}. Error on line 436')
+            log.error(f'Invalid Button. Day = {day}. Error on line 1305')
             popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly. The program will now quit.")
             sys.exit(0)
         
