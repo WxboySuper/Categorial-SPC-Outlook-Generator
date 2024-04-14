@@ -42,12 +42,6 @@ matplotlib.use('TkAgg')
 root = tk.Tk()
 root.withdraw()
 
-# Icons
-tornado_icon = ctk.CTkImage(dark_image=Image.open('Tornado.png'), light_image=Image.open('Tornado.png'), size=(50,40))
-home_icon = ctk.CTkImage(dark_image=Image.open('Home.png'), light_image=Image.open('Home.png'), size=(50,40))
-lightning_icon = ctk.CTkImage(dark_image=Image.open('Lightning.png'), light_image=Image.open('Lightning.png'), size=(50,40))
-logo_icon = ctk.CTkImage(dark_image=Image.open('My_project.png'), light_image=Image.open('My_project.png'), size=(120,120))
-
 # Variables
 log_directory = 'C:\\log'
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -57,6 +51,12 @@ check_interval = 60
 refresh_interval = 15 # Refresh the list every 15 seconds
 notified_titles = [] # List to store notified titles
 first_message_title = None # Title of the first message encountered
+
+# Icons
+tornado_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Tornado.png')), light_image=Image.open(os.path.join(current_directory, 'Tornado.png')), size=(50,40))
+home_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Home.png')), light_image=Image.open(os.path.join(current_directory, 'Home.png')), size=(50,40))
+lightning_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Lightning.png')), light_image=Image.open(os.path.join(current_directory, 'Lightning.png')), size=(50,40))
+logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'My_project.png')), light_image=Image.open(os.path.join(current_directory, 'My_project.png')), size=(120,120))
 
 # Create a Tkinter root window
 root = tk.Tk()
