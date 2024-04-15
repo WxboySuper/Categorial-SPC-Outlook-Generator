@@ -1,18 +1,16 @@
-# Categorial-SPC-Outlook-Display
+# Severe Weather Outlook Display
 
-Please read the License attached to this permissions to use this program.
+## Notice 
+This program is only compatible with Windows 10/11
 
-Instructions:
+## Licensing
+Please read the license attached to this permission to use this program.
+
+## Instructions:
 1. Download the Installer File
        Your Browser and/ or Windows may mark it as a Security Risk, this file has been tested by multiple individuals and is safe.
 2. Complete the Installation Process
-       It is recommended you create a Desktop Shortcut or another form of shortcut to access the file. The output folder is in the AppData folder of the user installing the program (WINDOWS)
 3. Run the programs .exe file and Enjoy!
 
-Included is an example of an automatically outputted image in the output folder.
 
-Source Code files are used to run the .py file. The .exe in the Releases section is standalone and does not require the file dependencies as the .py does.
-
-**These are Official Outlooks from the NOAA NWS Storm Prediction Center drawn and exported on an Image.**
-
-If you have any issues let me know on Discord @WeatherboySuper
+If you have any issues let me know on Twitter/Discord @WeatherboySuper.
