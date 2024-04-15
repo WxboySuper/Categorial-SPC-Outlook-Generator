@@ -1,7 +1,8 @@
 # Severe Weather Outlook Display
 
 ## Notice 
-This program is only compatible with Windows 10/11
+- This program is only compatible with Windows 10/11
+- The header is with WTUS. Later Versions (v3.1) will include a custom header for the program. If you would like your header you can do so with the source code.
 
 ## Licensing
 Please read the license attached to this permission to use this program.
