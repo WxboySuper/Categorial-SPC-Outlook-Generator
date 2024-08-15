@@ -1858,9 +1858,9 @@ def start_gui():
             None
         """
         log.info('GUI - Now Closing Program')
-        question = popup('question',
-                         'Close Program?',
-                         'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
+        popup('question',
+              'Close Program?',
+              'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
         if question == 'yes':
             if 'icon' in globals() and logo_icon_tray is not None:
                 logo_icon_tray.stop()
@@ -1869,7 +1869,7 @@ def start_gui():
         else:
             return
 
-    def show_from_system_tray(logo_icon_tray, item):  # skipcq: PYL-W0613
+    def show_from_system_tray(logo_icon_tray_1, item):  # skipcq: PYL-W0613
         """
         Shows the application window from the system tray.
 
@@ -1880,7 +1880,7 @@ def start_gui():
         Returns:
             None
         """
-        logo_icon_tray.stop()
+        logo_icon_tray_1.stop()
         window.deiconify()
 
     window.protocol("WM_DELETE_WINDOW", close_program)

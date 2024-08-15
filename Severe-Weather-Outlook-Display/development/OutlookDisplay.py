@@ -227,7 +227,7 @@ class GUI:
         self.window.withdraw()
         run.run_program(outlook_type, day, self.window)
 
-    def show_from_system_tray(self, logo_icon_tray, item):
+    def show_from_system_tray(self, logo_icon_tray_1, item):
         """
         Shows the application window from the system tray.
 
@@ -239,7 +239,7 @@ class GUI:
         Returns:
             None
         """
-        logo_icon_tray.stop()
+        logo_icon_tray_1.stop()
         self.window.deiconify()
 
     def hide_to_system_tray(self):
@@ -274,8 +274,8 @@ class GUI:
             None
         """
         log.info('GUI - Now Closing Program')
-        self.question = self.popup('question', 'Close Program?',
-                                   'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
+        self.popup('question', 'Close Program?',
+                   'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
         if self.question == 'yes':
             if 'icon' in globals() and logo_icon_tray is not None:
                 logo_icon_tray.stop()
