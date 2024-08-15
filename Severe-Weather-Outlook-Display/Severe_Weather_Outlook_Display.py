@@ -1789,7 +1789,7 @@ def start_gui():
         else:
             return
 
-    def show_from_system_tray(icon, item):
+    def show_from_system_tray(logo_icon, item):
         """
         Shows the application window from the system tray.
 
@@ -1800,7 +1800,7 @@ def start_gui():
         Returns:
             None
         """
-        icon.stop()
+        logo_icon.stop()
         window.deiconify()
 
     window.protocol("WM_DELETE_WINDOW", close_program)

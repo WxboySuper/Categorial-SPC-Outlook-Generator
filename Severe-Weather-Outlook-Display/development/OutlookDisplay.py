@@ -208,7 +208,7 @@ class GUI:
         self.window.withdraw()
         run.run_program(outlook_type, day, self.window)
 
-    def show_from_system_tray(self,icon, item):
+    def show_from_system_tray(self, logo_icon, item):
         """
         Shows the application window from the system tray.
 
@@ -220,7 +220,7 @@ class GUI:
         Returns:
             None
         """
-        icon.stop()
+        logo_icon.stop()
         self.window.deiconify()
 
     def hide_to_system_tray(self):
@@ -811,6 +811,7 @@ class GUI:
             self.popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly. The program will now quit.")
             sys.exit(0)
 gui = GUI()
+
 
 class RUN:
     def __init__(self):
