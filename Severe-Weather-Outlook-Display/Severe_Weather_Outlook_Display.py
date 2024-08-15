@@ -369,7 +369,7 @@ def remove_axes_labels_boxes_title(ax):
     plt.title('')
     
 # Function to control the CONUS State Outlines  
-def add_overlays(ax, type):
+def add_overlays(ax, outlook_type):
     """
     Adds overlays and shapefiles to a plot.
 
@@ -395,20 +395,20 @@ def add_overlays(ax, type):
     highways_gdf.plot(ax=ax, color='red', linewidth=0.6, alpha=0.75)
 
     # Header Image
-    if type == 'cat':
+    if outlook_type == 'cat':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_cat_header.png'))  
-    elif type == 'tor':
+    elif outlook_type == 'tor':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_tor_header.png'))
-    elif type == 'wind':
+    elif outlook_type == 'wind':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_wind_header.png'))
-    elif type == 'hail':
+    elif outlook_type == 'hail':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_hail_header.png'))
-    elif type == 'd4-8':
+    elif outlook_type == 'd4-8':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_d48_header.png'))
-    elif type == 'prob':
+    elif outlook_type == 'prob':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_prob_header.png'))
     else:
-        log.error(f"There was an error getting the {type} header. Error on line 276.")
+        log.error(f"There was an error getting the {outlook_type} header. Error on line 276.")
         popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
         sys.exit(0)
     header_img = OffsetImage(header_img, zoom=0.4)
@@ -1790,7 +1790,7 @@ def start_gui():
         else:
             return
 
-    def show_from_system_tray(logo_icon, item):
+    def show_from_system_tray(logo_icon_tray, item): #skipcq: PYL-W0613
         """
         Shows the application window from the system tray.
 
@@ -1801,7 +1801,7 @@ def start_gui():
         Returns:
             None
         """
-        logo_icon.stop()
+        logo_icon_tray.stop()
         window.deiconify()
 
     window.protocol("WM_DELETE_WINDOW", close_program)
@@ -1914,7 +1914,8 @@ def startup():
         filemode='w'
     )
 
-    rss_feed_thread = threading.Thread(target=check_rss_feed, args=(rss_url, check_interval))
+    rss_feed_thread = threading.Thread(target=check_rss_feed, 
+                                        args=(rss_url, check_interval))
     rss_feed_thread.daemon = True
     rss_feed_thread.start()
 
