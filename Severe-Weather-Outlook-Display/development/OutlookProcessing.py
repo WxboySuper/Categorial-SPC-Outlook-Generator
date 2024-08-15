@@ -59,7 +59,7 @@ class plot:
         self.current_directory = os.path.dirname(os.path.realpath(__file__))
         self.fig, self.ax = plt.subplots(figsize=(10, 8))
 
-    def popup(self, type, title, message):
+    def popup(self, type, title, message):  # skipcq: PYL-R1710
         """
         The `popup` function displays different types of popups based on the input parameters such as
         info, error, warning, or question.

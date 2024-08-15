@@ -49,11 +49,15 @@ class GUI:
         """
         Initializes a new instance of the GUI class.
 
-        This method initializes the GUI class and sets up various attributes and icons. It sets the current directory to the directory of the current file using `os.path.dirname(os.path.abspath(__file__))`. It then sets the paths for the icons using `os.path.join` and loads the images using `Image.open`. The images are then used to create `CTkImage` objects with the specified size.
+        This method initializes the GUI class and sets up various attributes and icons. 
+        It sets the current directory to the directory of the current file using `os.path.dirname(os.path.abspath(__file__))`. 
+        It then sets the paths for the icons using `os.path.join` and loads the images using `Image.open`. 
+        The images are then used to create `CTkImage` objects with the specified size.
 
         The method also sets up several dictionaries for mapping risk levels to integers. These dictionaries map different values to corresponding integer values.
 
-        If the instance of the GUI class does not exist, a new instance is created and assigned to `GUI._instance`. Otherwise, the existing instance is assigned to `self`.
+        If the instance of the GUI class does not exist, a new instance is created and assigned to `GUI._instance`. 
+        Otherwise, the existing instance is assigned to `self`.
 
         Parameters:
             None
@@ -117,7 +121,7 @@ class GUI:
         else:
             self = GUI._instance
 
-    def popup(self, type, title, message):
+    def popup(self, type, title, message):  # skipcq: PYL-R1710
         """
         The `popup` function displays different types of popups based on the input parameters such as
         info, error, warning, or question.
@@ -141,7 +145,7 @@ class GUI:
             messagebox.showwarning(title, message)
         elif type == 'question':
             self.question = messagebox.askquestion(title, message)
-            return self.question  # skipcq: PYL-R1710
+            return self.question
         else:
             messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup. The program will now quit.')
             sys.exit(0)
@@ -881,7 +885,7 @@ class RUN:
         self.instance = 0
         self.log_directory = 'C:\\log'
 
-    def popup(self, type, title, message):
+    def popup(self, type, title, message):  # skipcq: PYL-R1710
         """
         The `popup` function displays different types of popups based on the input parameters such as
         info, error, warning, or question.

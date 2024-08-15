@@ -1093,7 +1093,7 @@ def color(outlook_type, outlook_level):
 
 
 # Displaying Popups
-def popup(type, title, message):
+def popup(type, title, message):  # skipcq: PYL-R1710
     """
     The `popup` function displays different types of popups based on the input parameters such as
     info, error, warning, or question.

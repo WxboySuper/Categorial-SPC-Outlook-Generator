@@ -135,7 +135,7 @@ class fetch:
         self.question = None
         self.outlook_data = None
 
-    def popup(self, type, title, message):
+    def popup(self, type, title, message):  # skipcq: PYL-R1710
         """
         Displays a popup message box of the specified type with the given title and message.
 
