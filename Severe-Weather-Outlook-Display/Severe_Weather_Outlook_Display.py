@@ -1116,7 +1116,7 @@ def popup(popup_type, title, message):  # skipcq: PYL-R1710
     elif popup_type == 'warning':
         messagebox.showwarning(title, message)
     elif popup_type == 'question':
-        global question
+        global question  # skipcq: PYL-W0603
         question = messagebox.askquestion(title, message)
         return question  # skipcq: PYL-R1710
     else:
