@@ -580,6 +580,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
         popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
         sys.exit(0)
 
+
 # Function to display a popup and end the program if no outlook is available
 def no_outlook_available():
     """
