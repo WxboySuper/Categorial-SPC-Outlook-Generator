@@ -191,9 +191,10 @@ class fetch:
         self.popup('error', 'No Outlook Available', 'There is no outlook available for the selected day. The outlook will not be displayed.')
         gui_callback()
 
-    def check_outlook_availability(self, outlook_data, gui_callback):
+    def check_outlook_availability(self, outlook_data):
         for feature in outlook_data['features']:
             if 'coordinates' in feature['geometry']:
                 log.info('There is an outlook')
+                return True
             else:
-                self.no_outlook_available(gui_callback)
+                return False

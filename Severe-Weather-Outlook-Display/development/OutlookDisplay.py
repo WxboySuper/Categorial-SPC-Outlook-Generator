@@ -26,22 +26,24 @@ fetch = OutlookMonitoring.fetch()
 display = OutlookProcessing.display()
 
 class GUI:
+    _instance = None
+
     def __init__(self):
         self.current_directory = os.path.dirname(os.path.abspath(__file__))
 
-        self.tornado_icon_path = os.path.join(self.current_directory, 'files/icons/Tornado.png')
+        self.tornado_icon_path = os.path.join(self.current_directory, '../files/icons/Tornado.png')
         self.tornado_icon = ctk.CTkImage(dark_image=Image.open(self.tornado_icon_path), 
                                          light_image=Image.open(self.tornado_icon_path), 
                                          size=(50,40))
-        self.home_icon_path = os.path.join(self.current_directory, 'files/icons/Home.png')
+        self.home_icon_path = os.path.join(self.current_directory, '../files/icons/Home.png')
         self.home_icon = ctk.CTkImage(dark_image=Image.open(self.home_icon_path), 
                                       light_image=Image.open(self.home_icon_path), 
                                       size=(50,40))
-        self.lightning_icon_path = os.path.join(self.current_directory, 'files/icons/Lightning.png')
+        self.lightning_icon_path = os.path.join(self.current_directory, '../files/icons/Lightning.png')
         self.lightning_icon = ctk.CTkImage(dark_image=Image.open(self.lightning_icon_path), 
                                            light_image=Image.open(self.lightning_icon_path), 
                                            size=(50,40))
-        self.logo_icon_path = os.path.join(self.current_directory, 'files/icons/My_project.png')
+        self.logo_icon_path = os.path.join(self.current_directory, '../files/icons/My_project.png')
         self.logo_icon = ctk.CTkImage(dark_image=Image.open(self.logo_icon_path), 
                                       light_image=Image.open(self.logo_icon_path), 
                                       size=(120,120))
@@ -77,6 +79,34 @@ class GUI:
             '0.15': 1,
             '0.30': 2
         }
+
+        if not GUI._instance:
+            GUI._instance = self
+            #self.create_window()
+        else:
+            self = GUI._instance
+
+    '''def create_window(self):
+        # Initialize a window
+        log.info('GUI - Initializing window')
+        self.window = ctk.CTkToplevel()
+        self.window.geometry('1700x900+50+50')
+        self.window.title('Severe Weather Outlook Display')
+
+        # Configure Layout
+        self.window.grid_rowconfigure(0, weight=1)
+        self.window.grid_columnconfigure(2, weight=1)
+
+        # Fonts
+        self.Title_Font = ctk.CTkFont(family='Montserrat', size=50, weight='bold')
+        self.Description_Font = ctk.CTkFont(family='karla', size=21)
+
+        # Frames
+        self.sidebar_frame = ctk.CTkFrame(self.window, height=550, fg_color='#103157')
+        self.sidebar_frame.grid(row=0, column=0, sticky='ns')
+
+        self.main_frame = ctk.CTkFrame(self.window)
+        self.main_frame.grid(row=0, column=1, columnspan=2, sticky='nsew')'''
 
     def popup(self, type, title, message):
         log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
@@ -132,7 +162,7 @@ class GUI:
     def button_run(self, outlook_type, day):
         log.info(f'GUI - {type} {day} button has been pressed. Running Day {day} {type} outlook')
         self.window.withdraw()
-        run.run_program(outlook_type, day)
+        run.run_program(outlook_type, day, self.window)
 
     def show_from_system_tray(self,icon, item):
         icon.stop()
@@ -141,7 +171,7 @@ class GUI:
     def hide_to_system_tray(self):
         global icon
         self.window.withdraw()
-        image = Image.open('files/icons/My_project.png')
+        image = Image.open('../files/icons/My_project.png')
         menu = (pystray.MenuItem("Show", self.show_from_system_tray), pystray.MenuItem("Exit", self.close_program))
         icon = pystray.Icon("name", image, "My System Tray Icon", menu)
         icon.run()
@@ -624,53 +654,25 @@ class RUN:
             messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup. The program will now quit.')
             sys.exit(0)
 
-    def run_program(self, outlook_type, day):
+    def run_program(self, outlook_type, day, window):
         log.info(f'Running outlook {outlook_type} for day {day}')
-        if outlook_type == 'cat':
-            outlook_data = fetch.cat(day)
-            fetch.check_outlook_availability(outlook_data, gui.frame_change('home'))
+
+        outlook_data = getattr(fetch, outlook_type)(day)
+        
+        if fetch.check_outlook_availability(outlook_data):
             if self.instance == 0:
-                self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+                self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be patient. Click "Ok" or Close the Window to Continue')
                 self.instance = 1
-            display.cat(day, gui.frame_change('home'), outlook_data)
-        elif outlook_type == 'tor':
-            outlook_data = fetch.tor(day)
-            fetch.check_outlook_availability(outlook_data, gui.frame_change('home'))
-            if self.instance == 0:
-                self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
-                self.instance = 1
-            display.tor(day, gui.frame_change('home'), outlook_data)
-        elif outlook_type == 'wind':
-            outlook_data = fetch.wind(day)
-            fetch.check_outlook_availability(outlook_data, gui.frame_change('home'))
-            if self.instance == 0:
-                self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
-                self.instance = 1
-            display.wind(day, gui.frame_change('home'), outlook_data)
-        elif outlook_type == 'hail':
-            outlook_data = fetch.hail(day)
-            fetch.check_outlook_availability(outlook_data, gui.frame_change('home'))
-            if self.instance == 0:
-                self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
-                self.instance = 1
-            display.hail(day, gui.frame_change('home'), outlook_data)
-        elif outlook_type == 'd4-8':
-            outlook_data = fetch.d48(day)
-            fetch.check_outlook_availability(outlook_data, gui.frame_change('home'))
-            if self.instance == 0:
-                self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
-                self.instance = 1
-            display.d48(day, gui.frame_change('home'), outlook_data)
-        elif outlook_type == 'prob':
-            outlook_data = fetch.prob(day)
-            fetch.check_outlook_availability(outlook_data, gui.frame_change('home'))
-            if self.instance == 0:
-                self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
-                self.instance = 1
-            display.prob(day, gui.frame_change('home'), outlook_data)
+            
+            window.withdraw()
+            getattr(display, outlook_type)(day, gui.run_gui, outlook_data)
         else:
+            self.popup('warning', 'No Outlook Available', f'There is no {outlook_type} outlook available for day {day}.')
+            gui.run_gui()
+
+        if outlook_type not in ['cat', 'tor', 'wind', 'hail', 'd4-8', 'prob']:
             log.error(f'Invalid Outlook Type. Outlook Type = {outlook_type}')
-            self.popup('error', 'Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly. The program will now quit.")
+            self.popup('error', 'Invalid Outlook Type', "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
             sys.exit(0)
     
     def startup(self):
