@@ -27,12 +27,30 @@ fetch = OutlookMonitoring.fetch()
 
 class plot:
     def __init__(self):
+        """
+        Initializes the `plot` object with default values for the `question`, `output_directory`, and `current_directory` attributes.
+        Sets up the figure and axes for plotting with a size of (10,8).
+        """
         self.question = None
         self.output_directory = None
         self.current_directory = os.path.dirname(os.path.realpath(__file__))
         self.fig, self.ax = plt.subplots(figsize=(10,8))
 
     def popup(self, type, title, message):
+        """
+        The `popup` function displays different types of popups based on the input parameters such as
+        info, error, warning, or question.
+
+        :param type: The `type` parameter in the `popup` method specifies the type of popup to display.
+        :param title: The `title` parameter in the `popup` function refers to the title of the popup
+        window that will be displayed. It is the text that appears at the top of the popup window to
+        provide context or information about the message being shown to the user.
+        :param message: The `message` parameter in the `popup` function is the text that will be
+        displayed in the popup dialog box. It is the information, error message, warning message, or
+        question that you want to show to the user depending on the type of popup being displayed.
+        :return: The `popup` method returns the value of `self.question` when the `type` parameter is
+        set to 'question'.
+        """
         log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
         if type == 'info':
             messagebox.showinfo(title, message)
@@ -48,11 +66,29 @@ class plot:
             sys.exit(0)
 
     def create_output_directory(self):
+        """
+        Creates an output directory in the current directory named 'output' if it does not already exist.
+        
+        Returns:
+            str: The path of the newly created output directory.
+        """
         self.output_directory = os.path.join(self.current_directory, 'output')
         os.makedirs(self.output_directory, exist_ok = True)
         return self.output_directory
     
     def setup_plot(self):
+        """
+        Sets up the plot by configuring the figure and axes for plotting.
+
+        This function sets the face color of the figure to black and adjusts the aspect ratio of the axes to 'auto'. 
+        It also sets the x-axis and y-axis limits to (-125, -66) and (20, 60) respectively. 
+        The function then removes the x-axis and y-axis ticks and tick labels, hides the top, right, bottom, and left spines, 
+        and sets the title of the plot to an empty string. 
+        Finally, it adds a basemap to the axes using the specified zoom level, coordinate reference system, and source URL.
+
+        Returns:
+            tuple: A tuple containing the figure and axes objects.
+        """
         self.fig.set_facecolor('black')
         self.ax.set_aspect('auto', adjustable='box')
 
@@ -75,6 +111,17 @@ class plot:
         return self.fig, self.ax
     
     def add_overlays(self, outlook_type):
+        """
+        Adds overlays and shapefiles to the plot.
+
+        This function adds state outlines, interstate lines, and a header image to the plot based on the provided outlook type.
+
+        Parameters:
+            outlook_type (str): The type of outlook to display. Can be 'cat', 'tor', 'wind', 'hail', 'd4-8', or 'prob'.
+
+        Returns:
+            None
+        """
         log.info('Adding all Overlays and Shapefiles')
 
         # State Outlines
@@ -110,6 +157,16 @@ class plot:
         self.ax.add_artist(ab)
 
     def color(self, outlook_type, outlook_label):
+        """
+        Returns the color associated with a given outlook type and label.
+
+        Parameters:
+            outlook_type (str): The type of outlook. Can be 'cat', 'tor', 'wind', 'hail', 'd4-8', or 'prob'.
+            outlook_label (str): The label of the outlook.
+
+        Returns:
+            str: The color associated with the outlook type and label. Returns 'blue' if the label is not found.
+        """
         log.info(f'Getting {outlook_type} for {type} outlook')
         if outlook_type == 'cat':
             colors = {
@@ -155,6 +212,16 @@ class plot:
             sys.exit(0)
 
     def plot_outlook_polygons(self, outlook_type, outlook_data):
+        """
+        Plots outlook polygons on a map based on the provided outlook type and data.
+
+        Args:
+            outlook_type (str): The type of outlook to plot (e.g. 'cat', 'tor', 'wind', etc.).
+            outlook_data (dict): The data containing the outlook polygons to plot.
+
+        Returns:
+            None
+        """
         log.info('Plotting Outlook Polygons')
         if outlook_type == 'cat':
             for feature in outlook_data['features']:
@@ -265,11 +332,31 @@ class plot:
 
 class display:
     def __init__(self):
+        """
+        Initializes the display object with default values for the ax, fig, and plotting attributes.
+        
+        Parameters:
+        None
+        
+        Returns:
+        None
+        """
         self.ax = None
         self.fig = None
         self.plotting = plot()
 
     def cat(self, day, start_gui_callback, outlook_data):
+        """
+        Displays a categorial outlook for a given day.
+
+        Parameters:
+            day (int): The day for which the outlook is to be displayed.
+            start_gui_callback (function): A callback function to start the GUI.
+            outlook_data (dict): The data for the outlook to be displayed.
+
+        Returns:
+            None
+        """
         log.info('Displaying Categorial Outlook')
         self.fig, self.ax = self.plotting.setup_plot()
 
@@ -298,6 +385,15 @@ class display:
         toolbar.update()
 
         def close_figure():
+            """
+            Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
+            
+            Parameters:
+                None
+            
+            Returns:
+                None
+            """
             plt.close(self.fig)
             root.withdraw()
             start_gui_callback()
@@ -315,6 +411,17 @@ class display:
         plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
     def tor(self, day, start_gui_callback, outlook_data):
+        """
+        Displays a Tornado Outlook for a given day.
+
+        Parameters:
+            day (int): The day for which the outlook is to be displayed.
+            start_gui_callback (function): A callback function to start the GUI.
+            outlook_data (dict): The data for the outlook to be displayed.
+
+        Returns:
+            None
+        """
         log.info('Displaying Tornado Outlook')
         self.fig, self.ax = self.plotting.setup_plot()
 
@@ -343,6 +450,15 @@ class display:
         toolbar.update()
 
         def close_figure():
+            """
+            Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
+            
+            Parameters:
+                None
+            
+            Returns:
+                None
+            """
             plt.close(self.fig)
             root.withdraw()
             start_gui_callback()
@@ -360,6 +476,17 @@ class display:
         plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
     def wind(self, day, start_gui_callback, outlook_data):
+        """
+        Displays a Wind Outlook for a given day.
+
+        Parameters:
+            day (int): The day for which the outlook is to be displayed.
+            start_gui_callback (function): A callback function to start the GUI.
+            outlook_data (dict): The data for the outlook to be displayed.
+
+        Returns:
+            None
+        """
         log.info('Displaying Wind Outlook')
         self.fig, self.ax = self.plotting.setup_plot()
 
@@ -388,6 +515,15 @@ class display:
         toolbar.update()
 
         def close_figure():
+            """
+            Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
+            
+            Parameters:
+                None
+            
+            Returns:
+                None
+            """
             plt.close(self.fig)
             root.withdraw()
             start_gui_callback()
@@ -405,6 +541,17 @@ class display:
         plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
     def hail(self, day, start_gui_callback, outlook_data):
+        """
+        Displays the hail outlook for a given day.
+
+        Parameters:
+            day (int): The day for which the hail outlook is to be displayed.
+            start_gui_callback (function): A callback function to start the GUI.
+            outlook_data (dict): The data for the hail outlook to be displayed.
+
+        Returns:
+            None
+        """
         log.info('Displaying Hail Outlook')
         self.fig, self.ax = self.plotting.setup_plot()
 
@@ -433,6 +580,15 @@ class display:
         toolbar.update()
 
         def close_figure():
+            """
+            Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
+            
+            Parameters:
+                None
+            
+            Returns:
+                None
+            """
             plt.close(self.fig)
             root.withdraw()
             start_gui_callback()
@@ -450,6 +606,17 @@ class display:
         plt.savefig(output_path, dpi=96, bbox_inches='tight')
     
     def d48(self, day, start_gui_callback, outlook_data):
+        """
+        Displays a Day 4-8 Outlook for a given day.
+
+        Parameters:
+            day (int): The day for which the outlook is to be displayed.
+            start_gui_callback (function): A callback function to start the GUI.
+            outlook_data (dict): The data for the outlook to be displayed.
+
+        Returns:
+            None
+        """
         log.info('Displaying Day 4-8 Outlook')
         self.fig, self.ax = self.plotting.setup_plot()
 
@@ -478,6 +645,15 @@ class display:
         toolbar.update()
 
         def close_figure():
+            """
+            Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
+
+            Parameters:
+                None
+
+            Returns:
+                None
+            """
             plt.close(self.fig)
             root.withdraw()
             start_gui_callback()
@@ -495,6 +671,17 @@ class display:
         plt.savefig(output_path, dpi=96, bbox_inches='tight')
     
     def prob(self, day, start_gui_callback, outlook_data):
+        """
+        Displays a probabilistic outlook for a given day.
+
+        Parameters:
+            day (int): The day for which the outlook is to be displayed.
+            start_gui_callback (function): A callback function to start the GUI.
+            outlook_data (dict): The data for the outlook to be displayed.
+
+        Returns:
+            None
+        """
         log.info('Displaying Probabilistic Outlook')
         self.fig, self.ax = self.plotting.setup_plot()
 
@@ -523,6 +710,15 @@ class display:
         toolbar.update()
 
         def close_figure():
+            """
+            Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
+
+            Parameters:
+                None
+
+            Returns:
+                None
+            """
             plt.close(self.fig)
             root.withdraw()
             start_gui_callback()
