@@ -122,7 +122,7 @@ class GUI:
         else:
             self = GUI._instance
 
-    def popup(self, type, title, message):  # skipcq: PYL-R1710
+    def popup(self, popup_type, title, message):  # skipcq: PYL-R1710
         """
         The `popup` function displays different types of popups based on the input parameters such as
         info, error, warning, or question.
@@ -137,14 +137,14 @@ class GUI:
         :return: The `popup` method returns the value of `self.question` when the `type` parameter is
         set to 'question'.
         """
-        log.info('Showing' + type + 'popup' + 'titled' + title + 'with the following message' + message)
-        if type == 'info':
+        log.info('Showing' + popup_type + 'popup' + 'titled' + title + 'with the following message' + message)
+        if popup_type == 'info':
             messagebox.showinfo(title, message)
-        elif type == 'error':
+        elif popup_type == 'error':
             messagebox.showerror(title, message)
-        elif type == 'warning':
+        elif popup_type == 'warning':
             messagebox.showwarning(title, message)
-        elif type == 'question':
+        elif popup_type == 'question':
             self.question = messagebox.askquestion(title, message)
             return self.question
         else:
@@ -252,10 +252,10 @@ class GUI:
         Returns:
             None
         """
-        global icon
         self.window.withdraw()
         image = Image.open('../files/icons/My_project.png')
         menu = (pystray.MenuItem("Show", self.show_from_system_tray), pystray.MenuItem("Exit", self.close_program))
+        global icon
         icon = pystray.Icon("name", image, "My System Tray Icon", menu)
         icon.run()
 

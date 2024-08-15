@@ -59,7 +59,7 @@ class plot:
         self.current_directory = os.path.dirname(os.path.realpath(__file__))
         self.fig, self.ax = plt.subplots(figsize=(10, 8))
 
-    def popup(self, type, title, message):  # skipcq: PYL-R1710
+    def popup(self, popup_type, title, message):  # skipcq: PYL-R1710
         """
         The `popup` function displays different types of popups based on the input parameters such as
         info, error, warning, or question.
@@ -74,14 +74,14 @@ class plot:
         :return: The `popup` method returns the value of `self.question` when the `type` parameter is
         set to 'question'.
         """
-        log.info('Showing a ' + type + ' popup titled ' + title + ' with the following message: ' + message)
-        if type == 'info':
+        log.info('Showing a ' + popup_type + ' popup titled ' + title + ' with the following message: ' + message)
+        if popup_type == 'info':
             messagebox.showinfo(title, message)
-        elif type == 'error':
+        elif popup_type == 'error':
             messagebox.showerror(title, message)
-        elif type == 'warning':
+        elif popup_type == 'warning':
             messagebox.showwarning(title, message)
-        elif type == 'question':
+        elif popup_type == 'question':
             self.question = messagebox.askquestion(title, message)
             return self.question  # skipcq: PYL-R1710
         else:

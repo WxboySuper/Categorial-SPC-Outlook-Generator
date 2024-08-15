@@ -18,7 +18,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import geopandas as gpd
 import tkinter as tk
-import ttkbootstrap as ttk
 import customtkinter as ctk
 import contextily as ctx
 import sys
@@ -30,13 +29,10 @@ import threading
 
 # Import specific functions from modules
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-from matplotlib.widgets import Button
 from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import messagebox
-from tkinter import TclError
-from PIL import Image, ImageTk
-from customtkinter import CTkImage
+from PIL import Image
 from plyer import notification
 
 matplotlib.use('TkAgg')
@@ -55,12 +51,19 @@ notified_titles = []  # List to store notified titles
 first_message_title = None  # Title of the first message encountered
 
 # Icons
+global tornado_icon
 tornado_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Tornado.png')),
                             light_image=Image.open(os.path.join(current_directory, 'Tornado.png')), size=(50, 40))
+
+global home_icon
 home_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Home.png')),
                          light_image=Image.open(os.path.join(current_directory, 'Home.png')), size=(50, 40))
+
+global lightning_icon
 lightning_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Lightning.png')),
                               light_image=Image.open(os.path.join(current_directory, 'Lightning.png')), size=(50, 40))
+
+global logo_icon
 logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'My_project.png')),
                          light_image=Image.open(os.path.join(current_directory, 'My_project.png')), size=(120, 120))
 
@@ -616,7 +619,7 @@ def no_outlook_available():
     """
     log.info('There is no outlook available')
     popup('warning', 'No Outlook', "There is no outlook available at this time")
-    return  # Ends Program
+    return  # skipcq: PYL-R1711
 
 
 # Function to display the outlook
@@ -1117,6 +1120,7 @@ def popup(popup_type, title, message):  # skipcq: PYL-R1710
     elif popup_type == 'warning':
         messagebox.showwarning(title, message)
     elif popup_type == 'question':
+        global question
         question = messagebox.askquestion(title, message)
         return question  # skipcq: PYL-R1710
     else:
@@ -1131,9 +1135,7 @@ def start_gui():
     It creates the main window, sets up the layout, and defines the behavior for various buttons and events.
     The function does not take any parameters and does not return any values.
     """
-    global home_icon
-    global lightning_icon
-    global tornado_icon
+    
 
     # Initialize a window
     log.info('GUI - Initializing window')
@@ -1841,11 +1843,11 @@ def start_gui():
         Returns:
             None
         """
-        global icon
         window.withdraw()
         image = Image.open('My_project.png')
         menu = (pystray.MenuItem("Show", show_from_system_tray),
                 pystray.MenuItem("Exit", close_program))
+        global icon
         icon = pystray.Icon("name", image, "My System Tray Icon", menu)
         icon.run()
 
@@ -1862,7 +1864,6 @@ def start_gui():
         Returns:
             None
         """
-        global question  # Declare question as a global variable
         log.info('GUI - Now Closing Program')
         popup('question',
               'Close Program?',
