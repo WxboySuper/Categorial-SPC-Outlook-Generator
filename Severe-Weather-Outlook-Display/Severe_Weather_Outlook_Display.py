@@ -369,7 +369,7 @@ def remove_axes_labels_boxes_title(ax):
 
     # Remove the Title
     plt.title('')
-    
+
 # Function to control the CONUS State Outlines  
 def add_overlays(ax, outlook_type):
     """
@@ -384,7 +384,7 @@ def add_overlays(ax, outlook_type):
         None
     """
     log.info('Adding all Overlays and Shapefiles')
-    
+
     # State Outlines
     states_shapefile = os.path.join(current_directory, 's_11au16.shp') 
     states = gpd.read_file(states_shapefile)  
@@ -579,7 +579,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
         log.error(f"There was an error plotting the {outlook_type} outlook. Error on line 405.")
         popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
         sys.exit(0)
-    
 
 # Function to display a popup and end the program if no outlook is available
 def no_outlook_available():
@@ -1152,7 +1151,7 @@ def start_gui():
         logo_Button = ctk.CTkButton(sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent',
                                     state='disabled', image=logo_icon, compound='top')
         logo_Button.grid(row=0, column=0, columnspan=1, padx=5, pady=10)
-        
+
         # Home Button
         Home_Side_Button = ctk.CTkButton(sidebar_frame, text='Home', width=200, corner_radius=10, fg_color='transparent',
                                         font=('karla', 26), command=lambda: frame_change('home'),
@@ -1425,7 +1424,7 @@ def start_gui():
         """
         if day == 'home':
             side_bar()
-            
+
             # Home Button
             Home_Side_Button = ctk.CTkButton(sidebar_frame, text='Home', width=200, corner_radius=10,
                                              fg_color='transparent',
@@ -1455,7 +1454,7 @@ def start_gui():
         elif day == 1:
             outlook_data_cat_day_1 = fetch_cat_outlooks(1)
             highest_risk_level_cat_day_1 = determine_highest_risk_level_cat(outlook_data_cat_day_1)
-            
+
             outlook_data_tor_day_1 = fetch_tor_outlooks(1)
             highest_risk_level_tor_day_1 = determine_highest_risk_level_tor(outlook_data_tor_day_1)
 
@@ -1529,7 +1528,7 @@ def start_gui():
         elif day == 2:
             outlook_data_cat_day_2 = fetch_cat_outlooks(2)
             highest_risk_level_cat_day_2 = determine_highest_risk_level_cat(outlook_data_cat_day_2)
-            
+
             outlook_data_tor_day_2 = fetch_tor_outlooks(2)
             highest_risk_level_tor_day_2 = determine_highest_risk_level_tor(outlook_data_tor_day_2)
 
@@ -1540,14 +1539,14 @@ def start_gui():
             highest_risk_level_hail_day_2 = determine_highest_risk_level_hail(outlook_data_hail_day_2)
 
             side_bar()
-            
+
             # Day 2 Button
             D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2',width=200, corner_radius=12,
                                            fg_color='transparent',
                                    font=('karla', 26), command=lambda: frame_change(2),
                                    state='disabled', image=tornado_icon)
             D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
-            
+
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font,
                                          command=close_program)
@@ -1607,7 +1606,7 @@ def start_gui():
 
             outlook_data_prob_day_3 = fetch_prob_outlooks(3)
             highest_risk_level_prob_day_3 = determine_highest_risk_level_prob(outlook_data_prob_day_3)
-            
+
             side_bar()
 
             #Day 3 Button
@@ -1616,7 +1615,7 @@ def start_gui():
                                    font=('karla', 26), command=lambda: frame_change(3),
                                    state='disabled', image=lightning_icon)
             D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
-            
+
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font,
                                          command=close_program)
@@ -1653,7 +1652,7 @@ def start_gui():
         elif day == 'd4-8':
             outlook_data_d48_day_4 = fetch_d48_outlooks(4)
             highest_risk_level_d48_day_4 = determine_highest_risk_level_d48(outlook_data_d48_day_4)
-            
+
             outlook_data_d48_day_5 = fetch_d48_outlooks(5)
             highest_risk_level_d48_day_5 = determine_highest_risk_level_d48(outlook_data_d48_day_5)
 
@@ -1667,14 +1666,14 @@ def start_gui():
             highest_risk_level_d48_day_8 = determine_highest_risk_level_d48(outlook_data_d48_day_8)
 
             side_bar()
-            
+
             # Day 4-8 Button
             D48_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 4-8', width=200, corner_radius=12,
                                             fg_color='transparent',
                                             font=Description_Font, command=lambda: frame_change('d4-8'),
                                             state='disabled', image=lightning_icon)
             D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
-            
+
             # Close Button
             Close_Button = ctk.CTkButton(main_frame, text='Close', width=200, font=Description_Font,
                                          command=close_program)
@@ -1757,7 +1756,7 @@ def start_gui():
             Test_Button = ctk.CTkButton(main_frame, text='(Test) March 31st, 2023', width=300,
                                         font=Description_Font, command=lambda: button_run('cat', 'test'))
             Test_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
-        
+
             # Test Tornado Button
             Test_Tor_Button = ctk.CTkButton(main_frame, text='(Test) March 17th, 2021', width = 300,
                                             font=Description_Font, command=lambda: button_run('tor', 'test'))
@@ -1776,32 +1775,32 @@ def start_gui():
             log.error(f'Invalid Button. Day = {day}. Error on line 1305')
             popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly. The program will now quit.")
             sys.exit(0)
-        
+
     def frame_change(day):
         """
         This function changes the frame of the GUI based on the provided day.
-        
+
         It destroys all the widgets in the main frame and then calls the frames function to recreate the frame for the specified day.
-        
+
         Parameters:
             day (int): The day for which the frame needs to be changed.
-        
+
         Returns:
             None
         """
         for widget in main_frame.winfo_children():
             widget.destroy()
-        
+
         frames(day)
 
     def button_run(type, day):
         """
         Handles the button press event for running a specific outlook type for a given day.
-        
+
         Parameters:
             type (str): The type of outlook to be run.
             day (int): The day for which the outlook needs to be run.
-        
+
         Returns:
             None
         """
@@ -1968,7 +1967,7 @@ def startup():
     """
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
-    
+
     log.basicConfig(
         level = log.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s',

@@ -149,12 +149,12 @@ class GUI:
     def run_gui(self):
         """
         This function initializes and runs the graphical user interface (GUI) of the Severe Weather Outlook Display application.
-        
+
         It sets up the main window, configures the layout, defines the fonts and frames, and starts the main event loop.
-        
+
         Parameters:
             self (object): A reference to the current instance of the class.
-        
+
         Returns:
             None
         """
@@ -189,32 +189,32 @@ class GUI:
     def frame_change(self, day):
         """
         This function changes the frame of the GUI based on the provided day.
-        
+
         It destroys all the widgets in the main frame and then calls the frames function to recreate the frame for the specified day.
-        
+
         Parameters:
             self (object): A reference to the current instance of the class.
             day (int): The day for which the frame needs to be changed.
-        
+
         Returns:
             None
         """
         for widget in self.main_frame.winfo_children():
             widget.destroy()
-        
+
         self.frames(day)
 
     def button_run(self, outlook_type, day):
         """
         This function handles the button press event for running a specific outlook type for a given day.
-        
+
         It logs the event, hides the current window, and then runs the specified outlook program.
-        
+
         Parameters:
             self (object): A reference to the current instance of the class.
             outlook_type (str): The type of outlook to be run.
             day (int): The day for which the outlook needs to be run.
-        
+
         Returns:
             None
         """
@@ -257,12 +257,12 @@ class GUI:
     def close_program(self):
         """
         This function closes the program after prompting the user for confirmation.
-        
+
         It displays a popup asking the user if they want to close the program, and if the user responds with 'yes', it stops the system tray icon, withdraws the main window, and exits the program.
-        
+
         Parameters:
             self (object): A reference to the current instance of the class.
-        
+
         Returns:
             None
         """
@@ -300,7 +300,7 @@ class GUI:
         logo_Button = ctk.CTkButton(self.sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent', 
                                     state='disabled', image=self.logo_icon, compound='top')
         logo_Button.grid(row=0, column=0, columnspan=1, padx=5, pady=10)
-        
+
         # Home Button
         Home_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Home', width=200, corner_radius=10, fg_color='transparent',
                                         font=('karla', 26), command=lambda: self.frame_change('home'),
@@ -404,7 +404,7 @@ class GUI:
         elif highest_tor_risk_level == 7: 
             highest_tor_risk_level = '60%'
         return highest_tor_risk_level
-    
+
     def determine_highest_risk_level_wind(self, outlook_data):
         """
         Determines the highest risk level for wind from the given outlook data.
@@ -438,7 +438,7 @@ class GUI:
         elif highest_wind_risk_level == 5: 
             highest_wind_risk_level = '60%'
         return highest_wind_risk_level
-    
+
     def determine_highest_risk_level_hail(self, outlook_data):
         """
         Determines the highest risk level for hail from the given outlook data.
@@ -472,7 +472,7 @@ class GUI:
         elif highest_hail_risk_level == 5: 
             highest_hail_risk_level = '60%'
         return highest_hail_risk_level
-    
+
     def determine_highest_risk_level_prob(self, outlook_data):
         """
         Determines the highest risk level for probability from the given outlook data.
@@ -506,7 +506,7 @@ class GUI:
         elif highest_prob_risk_level == 1:
             highest_prob_risk_level = '60%'
         return highest_prob_risk_level
-    
+
     def determine_highest_risk_level_d48(self, outlook_data):
         """
         Determines the highest risk level for a 4-8 day outlook from the given outlook data.
@@ -538,20 +538,20 @@ class GUI:
     def frames(self, day):
         """
         This function handles the creation of frames for different days of severe weather outlooks.
-        
+
         It takes a 'day' parameter which determines which day's outlook to display. The function then creates the necessary buttons and labels for that day's outlook.
-        
+
         The function does not return any values.
-        
+
         Parameters:
         day (str or int): The day of the severe weather outlook to display. Can be 'home', 1, 2, 3, or 'd4-8'.
-        
+
         Returns:
         None
         """
         if day == 'home':
             self.side_bar()
-            
+
             # Home Button
             Home_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Home', width=200, corner_radius=10, fg_color='transparent',
                                      font=('karla', 26), command=lambda: self.frame_change('home'),
@@ -578,7 +578,7 @@ class GUI:
         elif day == 1:
             outlook_data_cat_day_1 = fetch.cat(1)
             highest_risk_level_cat_day_1 = self.determine_highest_risk_level_cat(outlook_data_cat_day_1)
-            
+
             outlook_data_tor_day_1 = fetch.tor(1)
             highest_risk_level_tor_day_1 = self.determine_highest_risk_level_tor(outlook_data_tor_day_1)
 
@@ -589,7 +589,7 @@ class GUI:
             highest_risk_level_hail_day_1 = self.determine_highest_risk_level_hail(outlook_data_hail_day_1)
 
             self.side_bar()
-            
+
             # Day 1 Button
             D1_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 1',width=200, corner_radius=12, fg_color='transparent',
                                    font=('karla', 26), command=lambda: self.frame_change(1),
@@ -642,7 +642,7 @@ class GUI:
         elif day == 2:
             outlook_data_cat_day_2 = fetch.cat(2)
             highest_risk_level_cat_day_2 = self.determine_highest_risk_level_cat(outlook_data_cat_day_2)
-            
+
             outlook_data_tor_day_2 = fetch.tor(2)
             highest_risk_level_tor_day_2 = self.determine_highest_risk_level_tor(outlook_data_tor_day_2)
 
@@ -653,13 +653,13 @@ class GUI:
             highest_risk_level_hail_day_2 = self.determine_highest_risk_level_hail(outlook_data_hail_day_2)
 
             self.side_bar()
-            
+
             # Day 2 Button
             D2_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 2',width=200, corner_radius=12, fg_color='transparent',
                                    font=('karla', 26), command=lambda: self.frame_change(2),
                                    state='disabled', image=self.tornado_icon)
             D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
-            
+
             # Close Button
             Close_Button = ctk.CTkButton(self.main_frame, text='Close', width=200, font=self.Description_Font, command=self.close_program)
             Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
@@ -709,7 +709,7 @@ class GUI:
 
             outlook_data_prob_day_3 = fetch.prob(3)
             highest_risk_level_prob_day_3 = self.determine_highest_risk_level_prob(outlook_data_prob_day_3)
-            
+
             self.side_bar()
 
             #Day 3 Button
@@ -717,7 +717,7 @@ class GUI:
                                    font=('karla', 26), command=lambda: self.frame_change(3),
                                    state='disabled', image=self.lightning_icon)
             D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
-            
+
             # Close Button
             Close_Button = ctk.CTkButton(self.main_frame, text='Close', width=200, font=self.Description_Font, command=self.close_program)
             Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
@@ -748,7 +748,7 @@ class GUI:
         elif day == 'd4-8':
             outlook_data_d48_day_4 = fetch.d48(4)
             highest_risk_level_d48_day_4 = self.determine_highest_risk_level_d48(outlook_data_d48_day_4)
-            
+
             outlook_data_d48_day_5 = fetch.d48(5)
             highest_risk_level_d48_day_5 = self.determine_highest_risk_level_d48(outlook_data_d48_day_5)
 
@@ -762,13 +762,13 @@ class GUI:
             highest_risk_level_d48_day_8 = self.determine_highest_risk_level_d48(outlook_data_d48_day_8)
 
             self.side_bar()
-            
+
             # Day 4-8 Button
             D48_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent', 
                                     font=self.Description_Font, command=lambda: self.frame_change('d4-8'),
                                     state='disabled', image=self.lightning_icon)
             D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
-            
+
             # Close Button
             Close_Button = ctk.CTkButton(self.main_frame, text='Close', width=200, font=self.Description_Font, command=self.close_program)
             Close_Button.grid(row=1, column=3, padx=15, pady=15, sticky='e')
@@ -846,12 +846,12 @@ class RUN:
     def __init__(self):
         """
         Initializes a new instance of the RUN class.
-        
+
         Sets the initial state of the instance and log directory.
-        
+
         Parameters:
         None
-        
+
         Returns:
         None
         """
@@ -906,12 +906,12 @@ class RUN:
         log.info(f'Running outlook {outlook_type} for day {day}')
 
         outlook_data = getattr(fetch, outlook_type)(day)
-        
+
         if fetch.check_outlook_availability(outlook_data):
             if self.instance == 0:
                 self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be patient. Click "Ok" or Close the Window to Continue')
                 self.instance = 1
-            
+
             window.withdraw()
             getattr(display, outlook_type)(day, gui.run_gui, outlook_data)
         else:
@@ -922,7 +922,7 @@ class RUN:
             log.error(f'Invalid Outlook Type. Outlook Type = {outlook_type}')
             self.popup('error', 'Invalid Outlook Type', "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
             sys.exit(0)
-    
+
     def startup(self):
         """
         Initializes the application by setting up the log directory and starting the RSS feed monitoring thread.
@@ -935,7 +935,7 @@ class RUN:
         """
         if not os.path.exists(self.log_directory):
             os.makedirs(self.log_directory)
-    
+
         log.basicConfig(
             level = log.INFO,
             format='%(asctime)s - %(levelname)s - %(message)s',

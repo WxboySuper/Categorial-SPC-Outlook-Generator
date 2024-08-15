@@ -68,7 +68,7 @@ class monitor:
         self.refresh_interval = 15 # Refresh the list every 15 seconds
         self.notified_titles = [] # List to store notified titles
         self.first_message_title = None # Title of the first message encountered
-    
+
     def rss(self):
         """
         Checks the RSS feed at the specified URL for new entries and sends a notification for each new entry.
@@ -80,13 +80,13 @@ class monitor:
             None
         """
         self.last_refresh_time = time.time()
-        
+
         while True:
             self.current_time = time.time()
             if self.current_time - self.last_refresh_time >= self.refresh_interval:
                 # Refresh the list every refresh_interval seconds
                 self.last_refresh_time = self.current_time
-            
+
             feed = feedparser.parse(self.rss_url)
             if feed.entries:
                 for entry in feed.entries:
@@ -102,7 +102,7 @@ class monitor:
             log.info(f'RSS - {self.notified_titles}')
             time.sleep(self.check_interval)
             log.info('RSS - Interval Passed')
-    
+
 class fetch:
     """
     Represents a class for fetching severe weather outlook data.
@@ -190,7 +190,7 @@ class fetch:
         response.raise_for_status()
         self.outlook_data = response.json()
         return self.outlook_data
-    
+
     def tor(self, day):
         """
         Fetches the tornado outlook data for a specified day.
@@ -219,7 +219,7 @@ class fetch:
         response.raise_for_status()
         self.outlook_data = response.json()
         return self.outlook_data
-    
+
     def wind(self, day):
         """
         Fetches the wind outlook data for a specified day.
@@ -248,7 +248,7 @@ class fetch:
         response.raise_for_status()
         self.outlook_data = response.json()
         return self.outlook_data
-    
+
     def hail(self, day):
         """
         Fetches the hail outlook data for a specified day.
@@ -284,7 +284,7 @@ class fetch:
         response.raise_for_status()
         self.outlook_data = response.json()
         return self.outlook_data
-    
+
     def d48(self, day):
         """
         Fetches a 48-hour severe weather outlook for a specified day.
@@ -326,7 +326,7 @@ class fetch:
         response.raise_for_status()
         self.outlook_data = response.json()
         return self.outlook_data
-    
+
     def prob(self, day):
         """
         Fetches the probability outlook data for a specified day.
@@ -358,7 +358,7 @@ class fetch:
         response.raise_for_status()
         self.outlook_data = response.json()
         return self.outlook_data
-    
+
     def no_outlook_available(self, gui_callback):
         """
         Displays an error message when no outlook is available for the selected day.

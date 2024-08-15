@@ -91,14 +91,14 @@ class plot:
     def create_output_directory(self):
         """
         Creates an output directory in the current directory named 'output' if it does not already exist.
-        
+
         Returns:
             str: The path of the newly created output directory.
         """
         self.output_directory = os.path.join(self.current_directory, 'output')
         os.makedirs(self.output_directory, exist_ok = True)
         return self.output_directory
-    
+
     def setup_plot(self):
         """
         Sets up the plot by configuring the figure and axes for plotting.
@@ -132,7 +132,7 @@ class plot:
         ctx.add_basemap(self.ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368') # type: ignore
 
         return self.fig, self.ax
-    
+
     def add_overlays(self, outlook_type):
         """
         Adds overlays and shapefiles to the plot.
@@ -174,7 +174,7 @@ class plot:
         else:
             log.error(f"There was an error getting the {outlook_type} header. Error on line 276.")
             self.popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
-        
+
         header_img = OffsetImage(header_img, zoom=0.4)
         ab = AnnotationBbox(header_img, (0.3, 0.95), xycoords='axes fraction', frameon=False)
         self.ax.add_artist(ab)
@@ -377,10 +377,10 @@ class display:
     def __init__(self):
         """
         Initializes the display object with default values for the ax, fig, and plotting attributes.
-        
+
         Parameters:
         None
-        
+
         Returns:
         None
         """
@@ -430,10 +430,10 @@ class display:
         def close_figure():
             """
             Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
-            
+
             Parameters:
                 None
-            
+
             Returns:
                 None
             """
@@ -495,10 +495,10 @@ class display:
         def close_figure():
             """
             Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
-            
+
             Parameters:
                 None
-            
+
             Returns:
                 None
             """
@@ -560,10 +560,10 @@ class display:
         def close_figure():
             """
             Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
-            
+
             Parameters:
                 None
-            
+
             Returns:
                 None
             """
@@ -625,10 +625,10 @@ class display:
         def close_figure():
             """
             Closes the current figure and withdraws the root window, then calls the start_gui_callback function.
-            
+
             Parameters:
                 None
-            
+
             Returns:
                 None
             """
@@ -647,7 +647,7 @@ class display:
 
         log.info('Showing the plot')
         plt.savefig(output_path, dpi=96, bbox_inches='tight')
-    
+
     def d48(self, day, start_gui_callback, outlook_data):
         """
         Displays a Day 4-8 Outlook for a given day.
@@ -712,7 +712,7 @@ class display:
 
         log.info('Showing the plot')
         plt.savefig(output_path, dpi=96, bbox_inches='tight')
-    
+
     def prob(self, day, start_gui_callback, outlook_data):
         """
         Displays a probabilistic outlook for a given day.
