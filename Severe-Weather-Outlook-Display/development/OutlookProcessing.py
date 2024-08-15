@@ -232,7 +232,7 @@ class plot:
 
         return colors.get(outlook_level, 'blue')  # Returns the Color, Blue if not found
 
-    def plot_outlook_polygons(self, outlook_type, outlook_data):
+    def plot_outlook_polygons(self, outlook_type, outlook_data):  # skipcq: PY-R1000
         """
         Plots outlook polygons on a given axis.
 
@@ -244,7 +244,6 @@ class plot:
         Returns:
             None
         """
-
         log.info('Plotting Outlook Polygons')
 
         for feature in outlook_data['features']:
@@ -259,19 +258,19 @@ class plot:
                     if outlook_type == 'tor':
                         if outlook_label == 'SIGN':
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('tor', outlook_label),
-                                                        edgecolor='black', hatch='x'))
+                                                               edgecolor='black', hatch='x'))
                         else:
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('tor', outlook_label)))
                     if outlook_type == 'wind':
                         if outlook_label == 'SIGN':
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('wind', outlook_label),
-                                                        edgecolor='black', hatch='x'))
+                                                               edgecolor='black', hatch='x'))
                         else:
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('wind', outlook_label)))
                     if outlook_type == 'hail':
                         if outlook_label == 'SIGN':
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('hail', outlook_label),
-                                                        edgecolor='black', hatch='x'))
+                                                               edgecolor='black', hatch='x'))
                         else:
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('hail', outlook_label)))
                     if outlook_type == 'd4-8':
@@ -279,7 +278,7 @@ class plot:
                     if outlook_type == 'prob':
                         if outlook_label == 'SIGN':
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('prob', outlook_label),
-                                                        edgecolor='black', hatch='x'))
+                                                               edgecolor='black', hatch='x'))
                         else:
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('prob', outlook_label)))
             if feature['geometry']['type'] == 'MultiPolygon':
@@ -292,19 +291,19 @@ class plot:
                         if outlook_type == 'tor':
                             if outlook_label == 'SIGN':
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('tor', outlook_label),
-                                                            edgecolor='black', hatch='x'))
+                                                                   edgecolor='black', hatch='x'))
                             else:
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('tor', outlook_label)))
                         if outlook_type == 'wind':
                             if outlook_label == 'SIGN':
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('wind', outlook_label),
-                                                            edgecolor='black', hatch='x'))
+                                                                   edgecolor='black', hatch='x'))
                             else:
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('wind', outlook_label)))
                         if outlook_type == 'hail':
                             if outlook_label == 'SIGN':
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('hail', outlook_label),
-                                                            edgecolor='black', hatch='x'))
+                                                                   edgecolor='black', hatch='x'))
                             else:
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('hail', outlook_label)))
                         if outlook_type == 'd4-8':
@@ -312,7 +311,7 @@ class plot:
                         if outlook_type == 'prob':
                             if outlook_label == 'SIGN':
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('prob', outlook_label),
-                                                            edgecolor='black', hatch='x'))
+                                                                   edgecolor='black', hatch='x'))
                             else:
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('prob', outlook_label)))
             else:

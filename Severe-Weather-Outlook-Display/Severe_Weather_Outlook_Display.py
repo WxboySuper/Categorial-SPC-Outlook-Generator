@@ -471,7 +471,7 @@ def check_outlook_availability(outlook_data):
 
 
 # Function to plot the polygons
-def plot_outlook_polygons(ax, outlook_type, outlook_data):
+def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
     """
     Plots outlook polygons on a given axis.
 
@@ -483,7 +483,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
     Returns:
         None
     """
-
     log.info('Plotting Outlook Polygons')
 
     for feature in outlook_data['features']:
@@ -498,19 +497,19 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                 if outlook_type == 'tor':
                     if outlook_label == 'SIGN':
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_label),
-                                                    edgecolor='black', hatch='x'))
+                                                      edgecolor='black', hatch='x'))
                     else:
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('tor', outlook_label)))
                 if outlook_type == 'wind':
                     if outlook_label == 'SIGN':
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_label),
-                                                    edgecolor='black', hatch='x'))
+                                                      edgecolor='black', hatch='x'))
                     else:
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('wind', outlook_label)))
                 if outlook_type == 'hail':
                     if outlook_label == 'SIGN':
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_label),
-                                                    edgecolor='black', hatch='x'))
+                                                      edgecolor='black', hatch='x'))
                     else:
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('hail', outlook_label)))
                 if outlook_type == 'd4-8':
@@ -518,7 +517,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                 if outlook_type == 'prob':
                     if outlook_label == 'SIGN':
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_label),
-                                                    edgecolor='black', hatch='x'))
+                                                      edgecolor='black', hatch='x'))
                     else:
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_label)))
         if feature['geometry']['type'] == 'MultiPolygon':
@@ -531,19 +530,19 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                     if outlook_type == 'tor':
                         if outlook_label == 'SIGN':
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_label),
-                                                        edgecolor='black', hatch='x'))
+                                                          edgecolor='black', hatch='x'))
                         else:
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('tor', outlook_label)))
                     if outlook_type == 'wind':
                         if outlook_label == 'SIGN':
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_label),
-                                                        edgecolor='black', hatch='x'))
+                                                          edgecolor='black', hatch='x'))
                         else:
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('wind', outlook_label)))
                     if outlook_type == 'hail':
                         if outlook_label == 'SIGN':
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_label),
-                                                        edgecolor='black', hatch='x'))
+                                                          edgecolor='black', hatch='x'))
                         else:
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('hail', outlook_label)))
                     if outlook_type == 'd4-8':
@@ -551,7 +550,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                     if outlook_type == 'prob':
                         if outlook_label == 'SIGN':
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_label),
-                                                        edgecolor='black', hatch='x'))
+                                                          edgecolor='black', hatch='x'))
                         else:
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_label)))
         else:
@@ -1785,7 +1784,7 @@ def start_gui():  # skipcq: PY-R1000
         """
         log.info('GUI - ' + outlook_type + day + ' button has been pressed.')
         window.withdraw()
-        run(outlook_type, day, window)
+        run(outlook_type, day, window, instance)
 
     def hide_to_system_tray():  # skipcq: PTC-W0065
         """
@@ -1857,7 +1856,7 @@ def start_gui():  # skipcq: PY-R1000
 
 
 # Function to Run the Program
-def run(outlook_type, day, window):
+def run(outlook_type, day, window, instance):
     """
     Runs the severe weather outlook program for a specified outlook type and day.
 
@@ -1884,10 +1883,9 @@ def run(outlook_type, day, window):
         'prob': fetch_prob_outlooks
     }
 
-    instance = 0
     fetch_function = outlook_functions.get(outlook_type)
     if fetch_function is None:
-        log.error(f'Invalid Outlook Type. Outlook Type = {outlook_type}')
+        log.error('Invalid Outlook Type. Outlook Type = ' + outlook_type)
         popup('error', 'Invalid Outlook Type', "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
         sys.exit(0)
 
