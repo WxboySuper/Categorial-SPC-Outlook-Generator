@@ -29,7 +29,10 @@ fetch = OutlookMonitoring.fetch()
 
 class plot:
     def __init__(self):
+        self.question = None
+        self.output_directory = None
         self.current_directory = os.path.dirname(os.path.realpath(__file__))
+        self.fig, self.ax = plt.subplots(figsize=(10,8))
 
     def popup(self, type, title, message):
         log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
@@ -52,7 +55,6 @@ class plot:
         return self.output_directory
     
     def setup_plot(self):
-        self.fig, self.ax = plt.subplots(figsize=(10,8))
         self.fig.patch.set_facecolor('black')
         self.ax.set_aspect('auto', adjustable='box')
 
@@ -78,29 +80,29 @@ class plot:
         log.info('Adding all Overlays and Shapefiles')
 
         # State Outlines
-        states_shapefile = os.path.join(self.current_directory, 's_11au16.shp') 
+        states_shapefile = os.path.join(self.current_directory, 'files/mapping/s_11au16.shp') 
         states = gpd.read_file(states_shapefile)  
         states.plot(ax=self.ax, edgecolor='black', lw=0.75, alpha=0.75) # Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
         self.ax.set_facecolor("black") # Background of the CONUS Shapefile will be Black
 
         # Interstate Lines
-        highways_shapefile = os.path.join(self.current_directory, 'USA_Freeway_System.shp')
+        highways_shapefile = os.path.join(self.current_directory, 'files/mapping/USA_Freeway_System.shp')
         highways_gdf = gpd.read_file(highways_shapefile)
         highways_gdf.plot(ax=self.ax, color='red', linewidth=0.6, alpha=0.75)
 
         # Header Image
         if outlook_type =='cat':
-            header_img = plt.imread(os.path.join(self.current_directory, 'wtus_cat_header.png'))
+            header_img = plt.imread(os.path.join(self.current_directory, 'files/overlays/wtus_cat_header.png'))
         elif outlook_type =='tor':
-            header_img = plt.imread(os.path.join(self.current_directory, 'wtus_tor_header.png'))
+            header_img = plt.imread(os.path.join(self.current_directory, 'files/overlays/wtus_tor_header.png'))
         elif outlook_type =='wind':
-            header_img = plt.imread(os.path.join(self.current_directory, 'wtus_wind_header.png'))
+            header_img = plt.imread(os.path.join(self.current_directory, 'files/overlays/wtus_wind_header.png'))
         elif outlook_type =='hail':
-            header_img = plt.imread(os.path.join(self.current_directory, 'wtus_hail_header.png'))
+            header_img = plt.imread(os.path.join(self.current_directory, 'files/overlays/wtus_hail_header.png'))
         elif outlook_type =='d4-8':
-            header_img = plt.imread(os.path.join(self.current_directory, 'wtus_d48_header.png'))
+            header_img = plt.imread(os.path.join(self.current_directory, 'files/overlays/wtus_d48_header.png'))
         elif outlook_type =='prob':
-            header_img = plt.imread(os.path.join(self.current_directory, 'wtus_prob_header.png'))
+            header_img = plt.imread(os.path.join(self.current_directory, 'files/overlays/wtus_prob_header.png'))
         else:
             log.error(f"There was an error getting the {outlook_type} header. Error on line 276.")
             self.popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
@@ -265,6 +267,8 @@ class plot:
 
 class display:
     def __init__(self):
+        self.ax = None
+        self.fig = None
         self.plotting = plot()
 
     def cat(self, day, start_gui_callback, outlook_data):

@@ -25,6 +25,8 @@ root.withdraw()
 
 class monitor:
     def __init__(self):
+        self.last_refresh_time = None
+        self.current_time = None
         self.current_directory = os.path.dirname(os.path.realpath(__file__))
         self.instance = 0
         self.rss_url = 'https://www.spc.noaa.gov/products/spcacrss.xml'
@@ -50,7 +52,7 @@ class monitor:
                         log.info(f'RSS - New RSS Notification. {entry.title}')
                         notification.notify( # type: ignore
                             title='New RSS Feed Update',
-                            message=(f'{truncated_title}. Check it out in the App!'),
+                            message=f'{truncated_title}. Check it out in the App!',
                             timeout=10
                         )
                         self.notified_titles.append(entry.title)
@@ -60,7 +62,8 @@ class monitor:
     
 class fetch:
     def __init__(self):
-        pass
+        self.question = None
+        self.outlook_data = None
 
     def popup(self, type, title, message):
         log.info(f'Showing a {type} popup titled {title} with the following message: {message}')

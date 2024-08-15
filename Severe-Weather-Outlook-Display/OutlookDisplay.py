@@ -29,19 +29,19 @@ class GUI:
     def __init__(self):
         self.current_directory = os.path.dirname(os.path.abspath(__file__))
 
-        self.tornado_icon_path = os.path.join(self.current_directory, 'Tornado.png')
+        self.tornado_icon_path = os.path.join(self.current_directory, 'files/icons/Tornado.png')
         self.tornado_icon = ctk.CTkImage(dark_image=Image.open(self.tornado_icon_path), 
                                          light_image=Image.open(self.tornado_icon_path), 
                                          size=(50,40))
-        self.home_icon_path = os.path.join(self.current_directory, 'Home.png')
+        self.home_icon_path = os.path.join(self.current_directory, 'files/icons/Home.png')
         self.home_icon = ctk.CTkImage(dark_image=Image.open(self.home_icon_path), 
                                       light_image=Image.open(self.home_icon_path), 
                                       size=(50,40))
-        self.lightning_icon_path = os.path.join(self.current_directory, 'Lightning.png')
+        self.lightning_icon_path = os.path.join(self.current_directory, 'files/icons/Lightning.png')
         self.lightning_icon = ctk.CTkImage(dark_image=Image.open(self.lightning_icon_path), 
                                            light_image=Image.open(self.lightning_icon_path), 
                                            size=(50,40))
-        self.logo_icon_path = os.path.join(self.current_directory, 'My_project.png')
+        self.logo_icon_path = os.path.join(self.current_directory, 'files/icons/My_project.png')
         self.logo_icon = ctk.CTkImage(dark_image=Image.open(self.logo_icon_path), 
                                       light_image=Image.open(self.logo_icon_path), 
                                       size=(120,120))
@@ -141,7 +141,7 @@ class GUI:
     def hide_to_system_tray(self):
         global icon
         self.window.withdraw()
-        image = Image.open('My_project.png')
+        image = Image.open('files/icons/My_project.png')
         menu = (pystray.MenuItem("Show", self.show_from_system_tray), pystray.MenuItem("Exit", self.close_program))
         icon = pystray.Icon("name", image, "My System Tray Icon", menu)
         icon.run()
