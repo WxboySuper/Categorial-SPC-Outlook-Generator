@@ -54,7 +54,8 @@ class GUI:
         It then sets the paths for the icons using `os.path.join` and loads the images using `Image.open`.
         The images are then used to create `CTkImage` objects with the specified size.
 
-        The method also sets up several dictionaries for mapping risk levels to integers. These dictionaries map different values to corresponding integer values.
+        The method also sets up several dictionaries for mapping risk levels to integers.
+        These dictionaries map different values to corresponding integer values.
 
         If the instance of the GUI class does not exist, a new instance is created and assigned to `GUI._instance`.
         Otherwise, the existing instance is assigned to `self`.
