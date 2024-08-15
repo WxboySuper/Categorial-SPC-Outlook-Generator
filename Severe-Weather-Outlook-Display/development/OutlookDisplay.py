@@ -118,11 +118,6 @@ class GUI:
             '0.30': 2
         }
 
-        if not GUI._instance:
-            GUI._instance = self
-        else:
-            self = GUI._instance
-
     def popup(self, popup_type, title, message):  # skipcq: PYL-R1710
         """
         The `popup` function displays different types of popups based on the input parameters such as
