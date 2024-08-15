@@ -1107,7 +1107,6 @@ def popup(popup_type, title, message):  # skipcq: PYL-R1710
     :return: The `popup` method returns the value of `question` when the `type` parameter is
     set to 'question'.
     """
-    global question
     log.info('Showing a ' + popup_type + ' popup titled ' + title + 'with the following message: ' + message)
     if popup_type == 'info':
         messagebox.showinfo(title, message)
@@ -1116,6 +1115,7 @@ def popup(popup_type, title, message):  # skipcq: PYL-R1710
     elif popup_type == 'warning':
         messagebox.showwarning(title, message)
     elif popup_type == 'question':
+        global question
         question = messagebox.askquestion(title, message)
         return question  # skipcq: PYL-R1710
     else:
