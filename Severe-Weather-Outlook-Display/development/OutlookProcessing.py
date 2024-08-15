@@ -133,7 +133,7 @@ class plot:
                 'sig': 'black'
             }
             return colors.get(outlook_label, 'blue') # Returns the color, Blue if not found
-        elif outlook_type == 'wind' or outlook_type == 'hail' or outlook_type == 'prob':
+        elif ('wind', 'hail', 'prob') in outlook_type:
             colors = {
                 '0.05': 'saddlebrown',
                 '0.15': 'gold',

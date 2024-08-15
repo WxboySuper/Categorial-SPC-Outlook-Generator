@@ -5,6 +5,7 @@
 Storm Prediction Center (SPC) under the National Weather Service (NWS) in a graphically friendly way
 for WeatherTrackUS and other users'''
 
+# skipcq: PYL-W1203
 
 # Import all necessary modules
 import os
@@ -729,7 +730,7 @@ def color(type, outlook_type):
             'sig': 'black'
         }
         return colors.get(outlook_type, 'blue') # Returns the color, Blue if not found
-    elif type == 'wind' or type == 'hail' or type == 'prob':
+    elif ('wind', 'hail', 'prob') in outlook_type:
         colors = {
             '0.05': 'saddlebrown',
             '0.15': 'gold',
