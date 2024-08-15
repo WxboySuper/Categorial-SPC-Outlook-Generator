@@ -4,31 +4,19 @@
 import OutlookMonitoring
 
 import os
-import requests
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import geopandas as gpd
 import tkinter as tk
-import ttkbootstrap as ttk
-import customtkinter as ctk
 import contextily as ctx
 import sys
 import logging as log
-import pystray
-import feedparser
-import time
-import threading
 
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-from matplotlib.widgets import Button
 from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import messagebox
-from tkinter import TclError
-from PIL import Image, ImageTk
-from customtkinter import CTkImage
-from plyer import notification
 
 matplotlib.use('TkAgg')
 
