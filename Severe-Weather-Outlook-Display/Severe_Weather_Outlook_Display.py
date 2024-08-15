@@ -1668,9 +1668,9 @@ def start_gui():
             
             # Day 4-8 Button
             D48_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 4-8', width=200, corner_radius=12,
-                                    fg_color='transparent',
-                                    font=Description_Font, command=lambda: frame_change('d4-8'),
-                                    state='disabled', image=lightning_icon)
+                                            fg_color='transparent',
+                                            font=Description_Font, command=lambda: frame_change('d4-8'),
+                                            state='disabled', image=lightning_icon)
             D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
             
             # Close Button
