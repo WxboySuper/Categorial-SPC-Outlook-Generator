@@ -1856,7 +1856,7 @@ def start_gui():  # skipcq: PY-R1000
 
 
 # Function to Run the Program
-def run(outlook_type, day, window, instance):
+def run(outlook_type, day, window, instance_run):
     """
     Runs the severe weather outlook program for a specified outlook type and day.
 
@@ -1892,10 +1892,10 @@ def run(outlook_type, day, window, instance):
     outlook_data = fetch_function(day)
 
     if check_outlook_availability(outlook_data):
-        if instance == 0:
+        if instance_run == 0:
             popup('info', 'Program is Running',
                   'The Severe Weather Outlook Display is now running. The program may take some time to load so be patient. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
-            instance = 1
+            instance_run = 1
 
         window.withdraw()
         display_function = getattr(sys.modules[__name__], f'display_{outlook_type}_outlook')
