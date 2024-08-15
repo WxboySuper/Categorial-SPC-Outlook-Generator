@@ -255,9 +255,9 @@ class GUI:
         self.window.withdraw()
         image = Image.open('../files/icons/My_project.png')
         menu = (pystray.MenuItem("Show", self.show_from_system_tray), pystray.MenuItem("Exit", self.close_program))
-        global icon
-        icon = pystray.Icon("name", image, "My System Tray Icon", menu)
-        icon.run()
+        global logo_icon_tray  # skipcq: PYL-W0601
+        logo_icon_tray = pystray.Icon("name", image, "My System Tray Icon", menu)
+        logo_icon_tray.run()
 
     def close_program(self):
         """
@@ -273,13 +273,12 @@ class GUI:
         Returns:
             None
         """
-        global question  # Declare question as a global variable
         log.info('GUI - Now Closing Program')
-        self.popup('question', 'Close Program?',
-                   'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
+        self.question = self.popup('question', 'Close Program?',
+                                   'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
         if self.question == 'yes':
-            if 'icon' in globals() and icon is not None:
-                icon.stop()
+            if 'icon' in globals() and logo_icon_tray is not None:
+                logo_icon_tray.stop()
             self.window.withdraw()
             os._exit(0)
         else:

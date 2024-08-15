@@ -51,19 +51,15 @@ notified_titles = []  # List to store notified titles
 first_message_title = None  # Title of the first message encountered
 
 # Icons
-global tornado_icon
 tornado_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Tornado.png')),
                             light_image=Image.open(os.path.join(current_directory, 'Tornado.png')), size=(50, 40))
 
-global home_icon
 home_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Home.png')),
                          light_image=Image.open(os.path.join(current_directory, 'Home.png')), size=(50, 40))
 
-global lightning_icon
 lightning_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Lightning.png')),
                               light_image=Image.open(os.path.join(current_directory, 'Lightning.png')), size=(50, 40))
 
-global logo_icon
 logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'My_project.png')),
                          light_image=Image.open(os.path.join(current_directory, 'My_project.png')), size=(120, 120))
 
@@ -604,7 +600,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
 
 
 # Function to display a popup and end the program if no outlook is available
-def no_outlook_available():
+def no_outlook_available():  # skipcq: PYL-R1711
     """
     Displays an error message when no severe weather outlook is available.
 
@@ -1120,7 +1116,6 @@ def popup(popup_type, title, message):  # skipcq: PYL-R1710
     elif popup_type == 'warning':
         messagebox.showwarning(title, message)
     elif popup_type == 'question':
-        global question
         question = messagebox.askquestion(title, message)
         return question  # skipcq: PYL-R1710
     else:
@@ -1135,8 +1130,6 @@ def start_gui():
     It creates the main window, sets up the layout, and defines the behavior for various buttons and events.
     The function does not take any parameters and does not return any values.
     """
-    
-
     # Initialize a window
     log.info('GUI - Initializing window')
     window = ctk.CTkToplevel()
@@ -1847,9 +1840,9 @@ def start_gui():
         image = Image.open('My_project.png')
         menu = (pystray.MenuItem("Show", show_from_system_tray),
                 pystray.MenuItem("Exit", close_program))
-        global icon
-        icon = pystray.Icon("name", image, "My System Tray Icon", menu)
-        icon.run()
+        global logo_icon_tray  # skipcq: PYL-W0601
+        logo_icon_tray = pystray.Icon("name", image, "My System Tray Icon", menu)
+        logo_icon_tray.run()
 
     def close_program():
         """
@@ -1865,12 +1858,12 @@ def start_gui():
             None
         """
         log.info('GUI - Now Closing Program')
-        popup('question',
-              'Close Program?',
-              'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
+        question = popup('question',
+                         'Close Program?',
+                         'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
         if question == 'yes':
-            if 'icon' in globals() and icon is not None:
-                icon.stop()
+            if 'icon' in globals() and logo_icon_tray is not None:
+                logo_icon_tray.stop()
             window.withdraw()
             os._exit(0)
         else:
