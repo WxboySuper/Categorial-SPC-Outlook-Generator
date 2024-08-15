@@ -370,7 +370,7 @@ class display:
         prob(day, start_gui_callback, outlook_data): Displays a probability outlook for a given day.
         close_figure(): Closes the current figure.
     """
-    
+
     def __init__(self):
         """
         Initializes the display object with default values for the ax, fig, and plotting attributes.

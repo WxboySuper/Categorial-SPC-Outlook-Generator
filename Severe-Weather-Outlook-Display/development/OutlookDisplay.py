@@ -46,6 +46,7 @@ class GUI:
     """
 
     _instance = None
+
     def __init__(self):
         """
         Initializes a new instance of the GUI class.
@@ -844,7 +845,7 @@ class RUN:
         popup(type, title, message): Displays a popup dialog box with the specified type, title, and message.
         run_program(outlook_type, day, window): Runs the severe weather outlook program for the specified outlook type and day.
     """
-    
+
     def __init__(self):
         """
         Initializes a new instance of the RUN class.

@@ -44,7 +44,7 @@ class monitor:
         __init__(): Initializes a new instance of the monitor class.
         rss(): Checks the RSS feed for new entries and sends notifications.
     """
-    
+
     def __init__(self):
         """
         Initializes a new instance of the monitor class.
