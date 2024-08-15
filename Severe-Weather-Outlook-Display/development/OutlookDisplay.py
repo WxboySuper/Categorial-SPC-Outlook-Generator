@@ -24,6 +24,7 @@ fetch = OutlookMonitoring.fetch()
 
 display = OutlookProcessing.display()
 
+
 class GUI:
     """
     Represents the graphical user interface (GUI) class for the severe weather outlook program.
@@ -65,24 +66,24 @@ class GUI:
         self.tornado_icon_path = os.path.join(self.current_directory, '../files/icons/Tornado.png')
         self.tornado_icon = ctk.CTkImage(dark_image=Image.open(self.tornado_icon_path), 
                                          light_image=Image.open(self.tornado_icon_path), 
-                                         size=(50,40))
+                                         size=(50, 40))
         self.home_icon_path = os.path.join(self.current_directory, '../files/icons/Home.png')
         self.home_icon = ctk.CTkImage(dark_image=Image.open(self.home_icon_path), 
                                       light_image=Image.open(self.home_icon_path), 
-                                      size=(50,40))
+                                      size=(50, 40))
         self.lightning_icon_path = os.path.join(self.current_directory, '../files/icons/Lightning.png')
         self.lightning_icon = ctk.CTkImage(dark_image=Image.open(self.lightning_icon_path), 
                                            light_image=Image.open(self.lightning_icon_path), 
-                                           size=(50,40))
+                                           size=(50, 40))
         self.logo_icon_path = os.path.join(self.current_directory, '../files/icons/My_project.png')
         self.logo_icon = ctk.CTkImage(dark_image=Image.open(self.logo_icon_path), 
                                       light_image=Image.open(self.logo_icon_path), 
-                                      size=(120,120))
+                                      size=(120, 120))
 
         self.risk_level_mapping_cat = {
-            'TSTM': 1, # Thunderstorm
-            'MRGL': 2, # Marginal
-            'SLGT': 3, # Slight
+            'TSTM': 1,  # Thunderstorm
+            'MRGL': 2,  # Marginal
+            'SLGT': 3,  # Slight
             'ENH': 4,   # Enhanced
             'MDT': 5,   # Moderate
             'HIGH': 6   # High
@@ -113,7 +114,6 @@ class GUI:
 
         if not GUI._instance:
             GUI._instance = self
-            #self.create_window()
         else:
             self = GUI._instance
 
@@ -266,7 +266,7 @@ class GUI:
         Returns:
             None
         """
-        global question # Declare question as a global variable
+        global question  # Declare question as a global variable
         log.info('GUI - Now Closing Program')
         self.popup('question', 'Close Program?', 'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')
         if self.question == 'yes':
@@ -295,7 +295,7 @@ class GUI:
         Returns:
             None
         """
-        ## Sidebar Buttons ##
+        """ Sidebar Buttons """
         # Logo
         logo_Button = ctk.CTkButton(self.sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent', 
                                     state='disabled', image=self.logo_icon, compound='top')
@@ -308,25 +308,25 @@ class GUI:
         Home_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 1 Button
-        D1_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 1',width=200, corner_radius=12, fg_color='transparent',
+        D1_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 1', width=200, corner_radius=12, fg_color='transparent',
                                     font=('karla', 26), command=lambda: self.frame_change(1),
                                     hover_color='#2191aa', image=self.tornado_icon)
         D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 2 Button
-        D2_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 2',width=200, corner_radius=12, fg_color='transparent',
+        D2_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 2', width=200, corner_radius=12, fg_color='transparent',
                                     font=('karla', 26), command=lambda: self.frame_change(2),
                                     hover_color='#2191aa', image=self.tornado_icon)
         D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 3 Button
-        D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3',width=200, corner_radius=12, fg_color='transparent', 
+        D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent', 
                                     font=('karla', 26), command=lambda: self.frame_change(3),
                                     hover_color='#2191aa', image=self.lightning_icon)
         D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 4-8 Button
-        D48_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 4-8',width=200, corner_radius=12, fg_color='transparent', 
+        D48_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent', 
                                         font=self.Description_Font, command=lambda: self.frame_change('d4-8'),
                                         hover_color='#2191aa', image=self.lightning_icon)
         D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
@@ -591,7 +591,7 @@ class GUI:
             self.side_bar()
 
             # Day 1 Button
-            D1_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 1',width=200, corner_radius=12, fg_color='transparent',
+            D1_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 1', width=200, corner_radius=12, fg_color='transparent',
                                    font=('karla', 26), command=lambda: self.frame_change(1),
                                    state='disabled', image=self.tornado_icon)
             D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
@@ -617,7 +617,7 @@ class GUI:
             highest_risk_label_cat_day_1.grid(row=3, column=2, columnspan=1, sticky='nsew')
 
             # Day 1 Tornado Button
-            D1_Tor_Button = ctk.CTkButton(self.main_frame, text='Day 1 Tornado', width = 150, height=50, font=('karla', 28), command=lambda: self.button_run('tor', 1))
+            D1_Tor_Button = ctk.CTkButton(self.main_frame, text='Day 1 Tornado', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('tor', 1))
             D1_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 1 Tornado Risk Label
@@ -681,7 +681,7 @@ class GUI:
             highest_risk_label_cat_day_2.grid(row=3, column=2, columnspan=1, sticky='nsew')
 
             # Day 2 Tornado Button
-            D2_Tor_Button = ctk.CTkButton(self.main_frame, text='Day 2 Tornado', width = 150, height=50, font=('karla', 28), command=lambda: self.button_run('tor', 2))
+            D2_Tor_Button = ctk.CTkButton(self.main_frame, text='Day 2 Tornado', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('tor', 2))
             D2_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 2 Tornado Risk Label
@@ -713,7 +713,7 @@ class GUI:
             self.side_bar()
 
             #Day 3 Button
-            D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3',width=200, corner_radius=12, fg_color='transparent', 
+            D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent', 
                                    font=('karla', 26), command=lambda: self.frame_change(3),
                                    state='disabled', image=self.lightning_icon)
             D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
@@ -826,6 +826,7 @@ class GUI:
             sys.exit(0)
 gui = GUI()
 
+
 class RUN:
     """
     Represents the main execution class for the severe weather outlook program.
@@ -937,7 +938,7 @@ class RUN:
             os.makedirs(self.log_directory)
 
         log.basicConfig(
-            level = log.INFO,
+            level=log.INFO,
             format='%(asctime)s - %(levelname)s - %(message)s',
             filename='C:\\log\\cod.log',
             filemode='w'

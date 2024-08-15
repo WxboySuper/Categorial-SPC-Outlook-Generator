@@ -65,9 +65,9 @@ class monitor:
         self.instance = 0
         self.rss_url = 'https://www.spc.noaa.gov/products/spcacrss.xml'
         self.check_interval = 60
-        self.refresh_interval = 15 # Refresh the list every 15 seconds
-        self.notified_titles = [] # List to store notified titles
-        self.first_message_title = None # Title of the first message encountered
+        self.refresh_interval = 15  # Refresh the list every 15 seconds
+        self.notified_titles = []  # List to store notified titles
+        self.first_message_title = None  # Title of the first message encountered
 
     def rss(self):
         """
@@ -91,9 +91,9 @@ class monitor:
             if feed.entries:
                 for entry in feed.entries:
                     if entry.title not in self.notified_titles:
-                        truncated_title = entry.title [:256]
+                        truncated_title = entry.title[:256]
                         log.info(f'RSS - New RSS Notification. {entry.title}')
-                        notification.notify( # type: ignore
+                        notification.notify(  # type: ignore
                             title='New RSS Feed Update',
                             message=f'{truncated_title}. Check it out in the App!',
                             timeout=10
@@ -102,6 +102,7 @@ class monitor:
             log.info(f'RSS - {self.notified_titles}')
             time.sleep(self.check_interval)
             log.info('RSS - Interval Passed')
+
 
 class fetch:
     """

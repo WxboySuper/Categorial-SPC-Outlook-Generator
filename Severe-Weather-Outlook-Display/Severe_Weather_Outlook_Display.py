@@ -50,15 +50,15 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 instance = 0
 rss_url = 'https://www.spc.noaa.gov/products/spcacrss.xml'
 check_interval = 60
-refresh_interval = 15 # Refresh the list every 15 seconds
-notified_titles = [] # List to store notified titles
-first_message_title = None # Title of the first message encountered
+refresh_interval = 15  # Refresh the list every 15 seconds
+notified_titles = []  # List to store notified titles
+first_message_title = None  # Title of the first message encountered
 
 # Icons
-tornado_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Tornado.png')), light_image=Image.open(os.path.join(current_directory, 'Tornado.png')), size=(50,40))
-home_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Home.png')), light_image=Image.open(os.path.join(current_directory, 'Home.png')), size=(50,40))
-lightning_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Lightning.png')), light_image=Image.open(os.path.join(current_directory, 'Lightning.png')), size=(50,40))
-logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'My_project.png')), light_image=Image.open(os.path.join(current_directory, 'My_project.png')), size=(120,120))
+tornado_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Tornado.png')), light_image=Image.open(os.path.join(current_directory, 'Tornado.png')), size=(50, 40))
+home_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Home.png')), light_image=Image.open(os.path.join(current_directory, 'Home.png')), size=(50, 40))
+lightning_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Lightning.png')), light_image=Image.open(os.path.join(current_directory, 'Lightning.png')), size=(50, 40))
+logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'My_project.png')), light_image=Image.open(os.path.join(current_directory, 'My_project.png')), size=(120, 120))
 
 # Create a Tkinter root window
 root = tk.Tk()
@@ -76,7 +76,7 @@ def check_rss_feed(url, interval):
     Returns:
         None
     """
-    last_refresh_time = time.time() # Time of the last refresh
+    last_refresh_time = time.time()  # Time of the last refresh
 
     while True:
         current_time = time.time()
@@ -93,7 +93,7 @@ def check_rss_feed(url, interval):
                     # For example, send a notification
                     truncated_title = entry.title[:256]
                     log.info(f'RSS - New RSS Notification. {entry.title}')
-                    notification.notify( # type: ignore
+                    notification.notify(  # type: ignore
                         title="New RSS Feed Update",
                         message=(f'{truncated_title}. Check it out in the App!'),
                         timeout=10
@@ -123,7 +123,8 @@ def global_exception_handler(exc_type, exc_value, exc_traceback):
 
 sys.excepthook = global_exception_handler
 
-### Fetch Functions ###
+
+""" Fetch Functions """
 def fetch_cat_outlooks(day):
     """
     Fetches the categorial outlook data for a specified day.
@@ -147,10 +148,11 @@ def fetch_cat_outlooks(day):
         log.error(f'Invalid Date. Day = {day}. Error on Line 114')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
-    response = requests.get(url) # Requests the data from the GeoJSON URL
+    response = requests.get(url)  # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
-    return outlook_data # Returns the data from the Outlook
+    return outlook_data  # Returns the data from the Outlook
+
 
 def fetch_tor_outlooks(day):
     """
@@ -177,10 +179,11 @@ def fetch_tor_outlooks(day):
     else:
         log.error(f'Invalid Date. Day = {day}. Error on line 131')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
-    response = requests.get(url) # Requests the data from the GeoJSON URL
+    response = requests.get(url)  # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
-    return outlook_data # Returns the data from the Outlook
+    return outlook_data  # Returns the data from the Outlook
+
 
 def fetch_wind_outlooks(day):
     """
@@ -203,10 +206,11 @@ def fetch_wind_outlooks(day):
         log.error(f'Invalid Date. Day = {day}. Error on line 148')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
-    response = requests.get(url) # Requests the data from the GeoJSON URL
+    response = requests.get(url)  # Requests the data from the GeoJSON URL
     response.raise_for_status()
     outlook_data = response.json()
-    return outlook_data # Returns the data from the outlook
+    return outlook_data  # Returns the data from the outlook
+
 
 def fetch_hail_outlooks(day):
     """
@@ -237,7 +241,8 @@ def fetch_hail_outlooks(day):
     response = requests.get(url)
     response.raise_for_status()
     outlook_data = response.json()
-    return outlook_data # Returns the data from the outlook
+    return outlook_data  # Returns the data from the outlook
+
 
 def fetch_d48_outlooks(day):
     """
@@ -267,7 +272,8 @@ def fetch_d48_outlooks(day):
     response = requests.get(url)
     response.raise_for_status()
     outlook_data = response.json()
-    return outlook_data # Returns the data from the outlook
+    return outlook_data  # Returns the data from the outlook
+
 
 def fetch_prob_outlooks(day):
     """
@@ -294,7 +300,8 @@ def fetch_prob_outlooks(day):
     response = requests.get(url)
     response.raise_for_status()
     outlook_data = response.json()
-    return outlook_data # Returns the data from the outlook
+    return outlook_data  # Returns the data from the outlook
+
 
 # Function to create the output directory
 def create_output_directory():
@@ -308,9 +315,10 @@ def create_output_directory():
         str: The path of the newly created output directory.
     """
     log.info('running create_output_directory')
-    output_directory = os.path.join(current_directory, 'output') # Creates a folder named "output"
+    output_directory = os.path.join(current_directory, 'output')  # Creates a folder named "output"
     os.makedirs(output_directory, exist_ok=True)
-    return output_directory # Returns where the output directory is
+    return output_directory  # Returns where the output directory is
+
 
 def setup_plot():
     """
@@ -321,10 +329,11 @@ def setup_plot():
         ax (matplotlib.axes.Axes): The axes object.
     """
     log.info('running setup_plot')
-    fig, ax = plt.subplots(figsize=(10,8)) # Set the size of the plot
+    fig, ax = plt.subplots(figsize=(10, 8))  # Set the size of the plot
     fig.set_facecolor('black')
     ax.set_aspect('auto', adjustable='box')
-    return fig, ax # Return the variables holding the data about the plot
+    return fig, ax  # Return the variables holding the data about the plot
+
 
 # Function to set the limits of the plot
 def set_plot_limits(ax):
@@ -338,8 +347,9 @@ def set_plot_limits(ax):
         None
     """
     log.info('running set_plot_limits')
-    ax.set_xlim([-125, -66]) # Base for x: (-125, -66)
-    ax.set_ylim([20,60]) # Base for y: (23, 50)
+    ax.set_xlim([-125, -66])  # Base for x: (-125, -66)
+    ax.set_ylim([20, 60])  # Base for y: (23, 50)
+
 
 # Function to remove all labels and axes
 def remove_axes_labels_boxes_title(ax):
@@ -370,6 +380,7 @@ def remove_axes_labels_boxes_title(ax):
     # Remove the Title
     plt.title('')
 
+
 # Function to control the CONUS State Outlines  
 def add_overlays(ax, outlook_type):
     """
@@ -388,8 +399,8 @@ def add_overlays(ax, outlook_type):
     # State Outlines
     states_shapefile = os.path.join(current_directory, 's_11au16.shp') 
     states = gpd.read_file(states_shapefile)  
-    states.plot(ax=ax, edgecolor='black', lw=0.75, alpha=0.75) # Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
-    ax.set_facecolor("black") # Background of the CONUS Shapefile will be Black
+    states.plot(ax=ax, edgecolor='black', lw=0.75, alpha=0.75)  # Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
+    ax.set_facecolor("black")  # Background of the CONUS Shapefile will be Black
 
     # Interstate Lines
     highways_shapefile = os.path.join(current_directory, 'USA_Freeway_System.shp')
@@ -417,6 +428,7 @@ def add_overlays(ax, outlook_type):
     ab = AnnotationBbox(header_img, (0.3, 0.95), xycoords='axes fraction', frameon=False)
     ax.add_artist(ab)
 
+
 # Function to control the basemap
 def add_basemap(ax):
     """
@@ -429,8 +441,9 @@ def add_basemap(ax):
         None
     """
     log.info('running add_basemap')
-    ctx.add_basemap(ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368') # type: ignore 
+    ctx.add_basemap(ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368')  # type: ignore 
     log.info('basemap loaded')
+
 
 # Function to check if there is a outlook to display
 def check_outlook_availability(outlook_data):
@@ -450,6 +463,7 @@ def check_outlook_availability(outlook_data):
             log.info('There is an outlook')
             return True
     return False
+
 
 # Function to plot the polygons
 def plot_outlook_polygons(ax, outlook_type, outlook_data):
@@ -471,7 +485,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
             outlook_polygon = feature['geometry']['coordinates']
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-            for polygon in outlook_polygon: # Find the properties of each polygon
+            for polygon in outlook_polygon:  # Find the properties of each polygon
                 x, y = zip(*polygon[0])
                 ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('cat', outlook_label)))
     elif outlook_type == 'tor':
@@ -480,7 +494,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
             outlook_polygon = feature['geometry']['coordinates']
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for polygon in outlook_polygon: # Find the properties of each polygon
+                for polygon in outlook_polygon:  # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_label),
@@ -489,7 +503,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('tor', outlook_label)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for multipolygon in outlook_polygon: # Find the properties of each polygon
+                for multipolygon in outlook_polygon:  # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
@@ -503,7 +517,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
             outlook_polygon = feature['geometry']['coordinates']
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for polygon in outlook_polygon: # Find the properties of each polygon
+                for polygon in outlook_polygon:  # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_label),
@@ -512,7 +526,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('wind', outlook_label)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for multipolygon in outlook_polygon: # Find the properties of each polygon
+                for multipolygon in outlook_polygon:  # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
@@ -526,7 +540,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
             outlook_polygon = feature['geometry']['coordinates']
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for polygon in outlook_polygon: # Find the properties of each polygon
+                for polygon in outlook_polygon:  # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_label),
@@ -535,7 +549,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('hail', outlook_label)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for multipolygon in outlook_polygon: # Find the properties of each polygon
+                for multipolygon in outlook_polygon:  # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
@@ -549,7 +563,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
             outlook_polygon = feature['geometry']['coordinates']
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-            for polygon in outlook_polygon: # Find the properties of each polygon
+            for polygon in outlook_polygon:  # Find the properties of each polygon
                 x, y = zip(*polygon[0])
                 ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('d4-8', outlook_label)))
     elif outlook_type == 'prob':
@@ -558,7 +572,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
             outlook_polygon = feature['geometry']['coordinates']
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for polygon in outlook_polygon: # Find the properties of each polygon
+                for polygon in outlook_polygon:  # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_label),
@@ -567,7 +581,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_label)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for multipolygon in outlook_polygon: # Find the properties of each polygon
+                for multipolygon in outlook_polygon:  # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
@@ -597,7 +611,8 @@ def no_outlook_available():
     """
     log.info('There is no outlook available')
     popup('warning', 'No Outlook', "There is no outlook available at this time")
-    return # Ends Program
+    return  # Ends Program
+
 
 # Function to display the outlook
 def display_cat_outlook(day, outlook_data):
@@ -671,6 +686,7 @@ def display_cat_outlook(day, outlook_data):
     log.info('Showing the plot')
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
+
 def display_tor_outlook(day, outlook_data):
     """
     Displays a tornado outlook for a given day.
@@ -737,6 +753,7 @@ def display_tor_outlook(day, outlook_data):
 
     log.info('Showing the plot')
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
+
 
 def display_wind_outlook(day, outlook_data):
     """
@@ -805,6 +822,7 @@ def display_wind_outlook(day, outlook_data):
     log.info('Showing the plot')
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
+
 def display_hail_outlook(day, outlook_data):
     """
     Displays a hail outlook for a given day.
@@ -871,6 +889,7 @@ def display_hail_outlook(day, outlook_data):
 
     log.info('Showing the plot')
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
+
 
 def display_d48_outlook(day, outlook_data):
     """
@@ -943,6 +962,7 @@ def display_d48_outlook(day, outlook_data):
     log.info('Showing the plot')
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
+
 def display_prob_outlook(day, outlook_data):
     """
     Displays a probabilistic outlook for a given day.
@@ -984,6 +1004,7 @@ def display_prob_outlook(day, outlook_data):
     toolbar = NavigationToolbar2Tk(canvas, root)
     toolbar.update()
 
+
     def close_figure():
         """
         Closes the current figure, withdraws the root window, and starts the GUI.
@@ -1009,6 +1030,7 @@ def display_prob_outlook(day, outlook_data):
 
     log.info('Showing the plot')
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
+
 
 # Colors for Display
 def color(outlook_type, outlook_level):
@@ -1065,6 +1087,7 @@ def color(outlook_type, outlook_level):
 
     return colors.get(outlook_level, 'blue')  # Returns the color, blue if not found
 
+
 # Displaying Popups
 def popup(type, title, message):
     """
@@ -1095,6 +1118,7 @@ def popup(type, title, message):
     else:
         messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup. The program will now quit.')
         sys.exit(0)
+
 
 # Start the GUI
 def start_gui():
@@ -1146,7 +1170,7 @@ def start_gui():
         Returns:
             None
         """
-        ## Sidebar Buttons ##
+        """ Sidebar Buttons """
         # Logo
         logo_Button = ctk.CTkButton(sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent',
                                     state='disabled', image=logo_icon, compound='top')
@@ -1159,38 +1183,33 @@ def start_gui():
         Home_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 1 Button
-        D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1',width=200, corner_radius=12, fg_color='transparent',
+        D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1', width=200, corner_radius=12, fg_color='transparent',
                                     font=('karla', 26), command=lambda: frame_change(1),
                                     hover_color='#2191aa', image=tornado_icon)
         D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 2 Button
-        D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2',width=200, corner_radius=12, fg_color='transparent',
+        D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2', width=200, corner_radius=12, fg_color='transparent',
                                     font=('karla', 26), command=lambda: frame_change(2),
                                     hover_color='#2191aa', image=tornado_icon)
         D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 3 Button
-        D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3',width=200, corner_radius=12, fg_color='transparent',
+        D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent',
                                     font=('karla', 26), command=lambda: frame_change(3),
                                     hover_color='#2191aa', image=lightning_icon)
         D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 4-8 Button
-        D48_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 4-8',width=200, corner_radius=12, fg_color='transparent',
+        D48_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent',
                                         font=Description_Font, command=lambda: frame_change('d4-8'),
                                         hover_color='#2191aa', image=lightning_icon)
         D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
 
-        # Day Test Button
-        Test_Side_Button = ctk.CTkButton(sidebar_frame, text='Test',width=200, height=50, font=Description_Font,
-                                         command=lambda: frame_change('test'))
-        #Test_Side_Button.grid(row=6, column=0, columnspan=1, padx=5, pady=10)
-
     risk_level_mapping_cat = {
-        'TSTM': 1, # Thunderstorm
-        'MRGL': 2, # Marginal
-        'SLGT': 3, # Slight
+        'TSTM': 1,  # Thunderstorm
+        'MRGL': 2,  # Marginal
+        'SLGT': 3,  # Slight
         'ENH': 4,   # Enhanced
         'MDT': 5,   # Moderate
         'HIGH': 6   # High
@@ -1465,9 +1484,9 @@ def start_gui():
             highest_risk_level_hail_day_1 = determine_highest_risk_level_hail(outlook_data_hail_day_1)
 
             side_bar()
-            
+
             # Day 1 Button
-            D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1',width=200, corner_radius=12, fg_color='transparent',
+            D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1', width=200, corner_radius=12, fg_color='transparent',
                                    font=('karla', 26), command=lambda: frame_change(1),
                                    state='disabled', image=tornado_icon)
             D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
@@ -1497,7 +1516,7 @@ def start_gui():
             highest_risk_label_cat_day_1.grid(row=3, column=2, columnspan=1, sticky='nsew')
 
             # Day 1 Tornado Button
-            D1_Tor_Button = ctk.CTkButton(main_frame, text='Day 1 Tornado', width = 150, height=50, font=('karla', 28),
+            D1_Tor_Button = ctk.CTkButton(main_frame, text='Day 1 Tornado', width=150, height=50, font=('karla', 28),
                                           command=lambda: button_run('tor', 1))
             D1_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
@@ -1541,7 +1560,7 @@ def start_gui():
             side_bar()
 
             # Day 2 Button
-            D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2',width=200, corner_radius=12,
+            D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2', width=200, corner_radius=12,
                                            fg_color='transparent',
                                    font=('karla', 26), command=lambda: frame_change(2),
                                    state='disabled', image=tornado_icon)
@@ -1572,7 +1591,7 @@ def start_gui():
             highest_risk_label_cat_day_2.grid(row=3, column=2, columnspan=1, sticky='nsew')
 
             # Day 2 Tornado Button
-            D2_Tor_Button = ctk.CTkButton(main_frame, text='Day 2 Tornado', width = 150, height=50, font=('karla', 28),
+            D2_Tor_Button = ctk.CTkButton(main_frame, text='Day 2 Tornado', width=150, height=50, font=('karla', 28),
                                           command=lambda: button_run('tor', 2))
             D2_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
@@ -1609,8 +1628,8 @@ def start_gui():
 
             side_bar()
 
-            #Day 3 Button
-            D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3',width=200, corner_radius=12,
+            # Day 3 Button
+            D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3', width=200, corner_radius=12,
                                            fg_color='transparent',
                                    font=('karla', 26), command=lambda: frame_change(3),
                                    state='disabled', image=lightning_icon)
@@ -1758,17 +1777,17 @@ def start_gui():
             Test_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Test Tornado Button
-            Test_Tor_Button = ctk.CTkButton(main_frame, text='(Test) March 17th, 2021', width = 300,
+            Test_Tor_Button = ctk.CTkButton(main_frame, text='(Test) March 17th, 2021', width=300,
                                             font=Description_Font, command=lambda: button_run('tor', 'test'))
             Test_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Test Wind Button
-            Test_Wind_Button = ctk.CTkButton(main_frame, text='(Test) March 25th, 2021', width = 300,
+            Test_Wind_Button = ctk.CTkButton(main_frame, text='(Test) March 25th, 2021', width=300,
                                              font=Description_Font, command=lambda: button_run('wind', 'test'))
             Test_Wind_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Test Hail Button
-            Test_Hail_Button = ctk.CTkButton(main_frame, text='(Test) May 26th, 2021', width = 300,
+            Test_Hail_Button = ctk.CTkButton(main_frame, text='(Test) May 26th, 2021', width=300,
                                              font=Description_Font, command=lambda: button_run('hail', 'test'))
             Test_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
         else:
@@ -1838,7 +1857,7 @@ def start_gui():
         Returns:
             None
         """
-        global question # Declare question as a global variable
+        global question  # Declare question as a global variable
         log.info('GUI - Now Closing Program')
         popup('question',
               'Close Program?',
@@ -1876,7 +1895,8 @@ def start_gui():
     log.info('GUI - Running window')
     window.mainloop()
 
-### Function to Run the Program ###
+
+""" Function to Run the Program """
 def run(type, day):
     """
     Runs the Severe Weather Outlook Display program based on the provided outlook type and day.
@@ -1954,6 +1974,7 @@ def run(type, day):
         popup('error', 'Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly. The program will now quit.")
         sys.exit(0)
 
+
 # Startup Function
 def startup():
     """
@@ -1969,7 +1990,7 @@ def startup():
         os.makedirs(log_directory)
 
     log.basicConfig(
-        level = log.INFO,
+        level=log.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s',
         filename='C:\\log\\cod.log',
         filemode='w'

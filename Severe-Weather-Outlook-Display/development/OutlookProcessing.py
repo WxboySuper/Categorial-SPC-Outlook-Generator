@@ -57,7 +57,7 @@ class plot:
         self.question = None
         self.output_directory = None
         self.current_directory = os.path.dirname(os.path.realpath(__file__))
-        self.fig, self.ax = plt.subplots(figsize=(10,8))
+        self.fig, self.ax = plt.subplots(figsize=(10, 8))
 
     def popup(self, type, title, message):
         """
@@ -96,7 +96,7 @@ class plot:
             str: The path of the newly created output directory.
         """
         self.output_directory = os.path.join(self.current_directory, 'output')
-        os.makedirs(self.output_directory, exist_ok = True)
+        os.makedirs(self.output_directory, exist_ok=True)
         return self.output_directory
 
     def setup_plot(self):
@@ -129,7 +129,7 @@ class plot:
 
         self.ax.set_title('')
 
-        ctx.add_basemap(self.ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368') # type: ignore
+        ctx.add_basemap(self.ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368')  # type: ignore
 
         return self.fig, self.ax
 
@@ -150,8 +150,8 @@ class plot:
         # State Outlines
         states_shapefile = os.path.join(self.current_directory, '../files/mapping/s_11au16.shp') 
         states = gpd.read_file(states_shapefile)  
-        states.plot(ax=self.ax, edgecolor='black', lw=0.75, alpha=0.75) # Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
-        self.ax.set_facecolor("black") # Background of the CONUS Shapefile will be Black
+        states.plot(ax=self.ax, edgecolor='black', lw=0.75, alpha=0.75)  # Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
+        self.ax.set_facecolor("black")  # Background of the CONUS Shapefile will be Black
 
         # Interstate Lines
         highways_shapefile = os.path.join(self.current_directory, '../files/mapping/USA_Freeway_System.shp')
@@ -159,17 +159,17 @@ class plot:
         highways_gdf.plot(ax=self.ax, color='red', linewidth=0.6, alpha=0.75)
 
         # Header Image
-        if outlook_type =='cat':
+        if outlook_type == 'cat':
             header_img = plt.imread(os.path.join(self.current_directory, '../files/overlays/wtus_cat_header.png'))
-        elif outlook_type =='tor':
+        elif outlook_type == 'tor':
             header_img = plt.imread(os.path.join(self.current_directory, '../files/overlays/wtus_tor_header.png'))
-        elif outlook_type =='wind':
+        elif outlook_type == 'wind':
             header_img = plt.imread(os.path.join(self.current_directory, '../files/overlays/wtus_wind_header.png'))
-        elif outlook_type =='hail':
+        elif outlook_type == 'hail':
             header_img = plt.imread(os.path.join(self.current_directory, '../files/overlays/wtus_hail_header.png'))
-        elif outlook_type =='d4-8':
+        elif outlook_type == 'd4-8':
             header_img = plt.imread(os.path.join(self.current_directory, '../files/overlays/wtus_d48_header.png'))
-        elif outlook_type =='prob':
+        elif outlook_type == 'prob':
             header_img = plt.imread(os.path.join(self.current_directory, '../files/overlays/wtus_prob_header.png'))
         else:
             log.error(f"There was an error getting the {outlook_type} header. Error on line 276.")
@@ -250,7 +250,7 @@ class plot:
                 outlook_polygon = feature['geometry']['coordinates']
                 if feature['geometry']['type'] == 'Polygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for polygon in outlook_polygon: # Find the properties of each polygon
+                for polygon in outlook_polygon:  # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('cat', outlook_label)))
         elif outlook_type == 'tor':
@@ -259,7 +259,7 @@ class plot:
                 outlook_polygon = feature['geometry']['coordinates']
                 if feature['geometry']['type'] == 'Polygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                    for polygon in outlook_polygon: # Find the properties of each polygon
+                    for polygon in outlook_polygon:  # Find the properties of each polygon
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('tor', outlook_label), edgecolor='black', hatch='x'))
@@ -267,7 +267,7 @@ class plot:
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('tor', outlook_label)))
                 elif feature['geometry']['type'] == 'MultiPolygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                    for multipolygon in outlook_polygon: # Find the properties of each polygon
+                    for multipolygon in outlook_polygon:  # Find the properties of each polygon
                         for polygon in multipolygon:
                             x, y = zip(*polygon[0])
                             if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
@@ -280,7 +280,7 @@ class plot:
                 outlook_polygon = feature['geometry']['coordinates']
                 if feature['geometry']['type'] == 'Polygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                    for polygon in outlook_polygon: # Find the properties of each polygon
+                    for polygon in outlook_polygon:  # Find the properties of each polygon
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('wind', outlook_label), edgecolor='black', hatch='x'))
@@ -288,7 +288,7 @@ class plot:
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('wind', outlook_label)))
                 elif feature['geometry']['type'] == 'MultiPolygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                    for multipolygon in outlook_polygon: # Find the properties of each polygon
+                    for multipolygon in outlook_polygon:  # Find the properties of each polygon
                         for polygon in multipolygon:
                             x, y = zip(*polygon[0])
                             if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
@@ -301,7 +301,7 @@ class plot:
                 outlook_polygon = feature['geometry']['coordinates']
                 if feature['geometry']['type'] == 'Polygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                    for polygon in outlook_polygon: # Find the properties of each polygon
+                    for polygon in outlook_polygon:  # Find the properties of each polygon
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('hail', outlook_label), edgecolor='black', hatch='x'))
@@ -309,7 +309,7 @@ class plot:
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('hail', outlook_label)))
                 elif feature['geometry']['type'] == 'MultiPolygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                    for multipolygon in outlook_polygon: # Find the properties of each polygon
+                    for multipolygon in outlook_polygon:  # Find the properties of each polygon
                         for polygon in multipolygon:
                             x, y = zip(*polygon[0])
                             if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
@@ -322,7 +322,7 @@ class plot:
                 outlook_polygon = feature['geometry']['coordinates']
                 if feature['geometry']['type'] == 'Polygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                for polygon in outlook_polygon: # Find the properties of each polygon
+                for polygon in outlook_polygon:  # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('d4-8', outlook_label)))
         elif outlook_type == 'prob':
@@ -331,7 +331,7 @@ class plot:
                 outlook_polygon = feature['geometry']['coordinates']
                 if feature['geometry']['type'] == 'Polygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                    for polygon in outlook_polygon: # Find the properties of each polygon
+                    for polygon in outlook_polygon:  # Find the properties of each polygon
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('prob', outlook_label), edgecolor='black', hatch='x'))
@@ -339,7 +339,7 @@ class plot:
                             self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('prob', outlook_label)))
                 elif feature['geometry']['type'] == 'MultiPolygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
-                    for multipolygon in outlook_polygon: # Find the properties of each polygon
+                    for multipolygon in outlook_polygon:  # Find the properties of each polygon
                         for polygon in multipolygon:
                             x, y = zip(*polygon[0])
                             if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
@@ -350,6 +350,7 @@ class plot:
             log.error(f"There was an error plotting the {type} outlook. Error on line 405.")
             self.popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
             sys.exit(0)
+
 
 class display:
     """
