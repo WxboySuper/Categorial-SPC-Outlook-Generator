@@ -61,7 +61,7 @@ logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, '
 root = tk.Tk()
 root.withdraw()
 
-def check_rss_feed(url, interval, refresh_interval):
+def check_rss_feed(url, interval):
     """
     Checks the RSS feed at the specified URL for new entries and sends a notification for each new entry.
 
@@ -295,7 +295,7 @@ def fetch_prob_outlooks(day):
     return outlook_data # Returns the data from the outlook
 
 # Function to create the output directory
-def create_output_directory(current_directory):
+def create_output_directory():
     """
     Creates an output directory in the specified current directory.
 
@@ -369,7 +369,7 @@ def remove_axes_labels_boxes_title(ax):
     plt.title('')
     
 # Function to control the CONUS State Outlines  
-def add_overlays(ax, current_directory, type):
+def add_overlays(ax, type):
     """
     Adds overlays and shapefiles to a plot.
 
@@ -612,14 +612,14 @@ def display_cat_outlook(day, outlook_data):
         no_outlook_available()
         start_gui()
 
-    add_overlays(ax, current_directory, 'cat')
+    add_overlays(ax, 'cat')
     set_plot_limits(ax)
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
     plot_outlook_polygons(ax, 'cat', outlook_data)
 
-    output_directory = create_output_directory(current_directory)
+    output_directory = create_output_directory()
     output_filename = f'spc_day_{day}cat_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
@@ -679,14 +679,14 @@ def display_tor_outlook(day, outlook_data):
     fig.clear()
     ax = fig.add_subplot(111)
 
-    add_overlays(ax, current_directory, 'tor')
+    add_overlays(ax, 'tor')
     set_plot_limits(ax)
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
     plot_outlook_polygons(ax, 'tor', outlook_data)
 
-    output_directory = create_output_directory(current_directory)
+    output_directory = create_output_directory()
     output_filename = f'spc_day_{day}_tor_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
@@ -746,14 +746,14 @@ def display_wind_outlook(day, outlook_data):
     fig.clear()
     ax = fig.add_subplot(111)
 
-    add_overlays(ax, current_directory, 'wind')
+    add_overlays(ax, 'wind')
     set_plot_limits(ax)
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
     plot_outlook_polygons(ax, 'wind', outlook_data)
 
-    output_directory = create_output_directory(current_directory)
+    output_directory = create_output_directory()
     output_filename = f'spc_day_{day}_wind_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
@@ -813,14 +813,14 @@ def display_hail_outlook(day, outlook_data):
     fig.clear()
     ax = fig.add_subplot(111)
 
-    add_overlays(ax, current_directory, 'hail')
+    add_overlays(ax, 'hail')
     set_plot_limits(ax)
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
     plot_outlook_polygons(ax, 'hail', outlook_data)
 
-    output_directory = create_output_directory(current_directory)
+    output_directory = create_output_directory()
     output_filename = f'spc_day_{day}_hail_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
@@ -880,14 +880,14 @@ def display_d48_outlook(day, outlook_data):
     fig.clear()
     ax = fig.add_subplot(111)
 
-    add_overlays(ax, current_directory, 'd4-8')
+    add_overlays(ax, 'd4-8')
     set_plot_limits(ax)
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
     plot_outlook_polygons(ax, 'd4-8', outlook_data)
 
-    output_directory = create_output_directory(current_directory)
+    output_directory = create_output_directory()
     output_filename = f'spc_day_{day}_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
@@ -951,14 +951,14 @@ def display_prob_outlook(day, outlook_data):
     fig.clear()
     ax = fig.add_subplot(111)
 
-    add_overlays(ax, current_directory, 'prob')
+    add_overlays(ax, 'prob')
     set_plot_limits(ax)
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
     plot_outlook_polygons(ax, 'prob', outlook_data)
 
-    output_directory = create_output_directory(current_directory)
+    output_directory = create_output_directory()
     output_filename = f'spc_day_{day}_prob_outlook.png'
     output_path = os.path.join(output_directory, output_filename)
 
@@ -1790,7 +1790,7 @@ def start_gui():
         else:
             return
 
-    def show_from_system_tray(icon, item):
+    def show_from_system_tray(logo_icon, item):
         """
         Shows the application window from the system tray.
 
@@ -1801,7 +1801,7 @@ def start_gui():
         Returns:
             None
         """
-        icon.stop()
+        logo_icon.stop()
         window.deiconify()
 
     window.protocol("WM_DELETE_WINDOW", close_program)
@@ -1914,7 +1914,7 @@ def startup():
         filemode='w'
     )
 
-    rss_feed_thread = threading.Thread(target=check_rss_feed, args=(rss_url, check_interval, refresh_interval))
+    rss_feed_thread = threading.Thread(target=check_rss_feed, args=(rss_url, check_interval))
     rss_feed_thread.daemon = True
     rss_feed_thread.start()
 
