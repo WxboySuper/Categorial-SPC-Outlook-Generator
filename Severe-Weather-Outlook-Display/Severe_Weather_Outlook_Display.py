@@ -1795,7 +1795,7 @@ def start_gui():
             popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly. The program will now quit.")
             sys.exit(0)
 
-    def frame_change(day):
+    def frame_change(day):  # skipcq: PTC-W0065
         """
         This function changes the frame of the GUI based on the provided day.
 
@@ -1812,7 +1812,7 @@ def start_gui():
 
         frames(day)
 
-    def button_run(outlook_type, day):
+    def button_run(outlook_type, day):  # skipcq: PTC-W0065
         """
         Handles the button press event for running a specific outlook type for a given day.
 
@@ -1825,9 +1825,9 @@ def start_gui():
         """
         log.info('GUI - ' + outlook_type + day + ' button has been pressed.')
         window.withdraw()
-        run(type, day)
+        run(outlook_type, day, window)
 
-    def hide_to_system_tray():
+    def hide_to_system_tray():  # skipcq: PTC-W0065
         """
         Hides the application window to the system tray.
 
@@ -1870,7 +1870,7 @@ def start_gui():
         else:
             return
 
-    def show_from_system_tray(logo_icon_tray_1, item):  # skipcq: PYL-W0613
+    def show_from_system_tray(logo_icon_tray_1, item):  # skipcq: PYL-W0613  # skipcq: PTC-W0065
         """
         Shows the application window from the system tray.
 
@@ -1897,88 +1897,59 @@ def start_gui():
 
 
 # Function to Run the Program
-def run(outlook_type, day):
+def run(outlook_type, day, window):
     """
-    Runs the Severe Weather Outlook Display program based on the provided outlook type and day.
+    Runs the severe weather outlook program for a specified outlook type and day.
 
-    This function takes in two parameters: type and day. The type parameter specifies the type of outlook to display,
-    and the day parameter specifies the day for which the outlook should be displayed. The function then fetches the
-    relevant outlook data, checks its availability, and displays it on the map. If the outlook data is not available,
-    it displays a notification and starts the GUI.
+    This function logs the start of the program, fetches the outlook data, checks its availability,
+    and displays it on the map if available. If the outlook data is not available, it displays a
+    warning message. It also checks if the outlook type is valid and exits the program if it's not.
 
     Parameters:
-        type (str): The type of outlook to display. Can be 'cat', 'tor', 'wind', 'hail', 'd4-8', or 'prob'.
-        day (int): The day for which the outlook should be displayed.
+        outlook_type (str): The type of severe weather outlook (e.g., 'cat', 'tor', 'wind', etc.).
+        day (int): The day of the outlook (e.g., 1, 2, 3, etc.).
+        window: The GUI window object.
 
     Returns:
         None
     """
-    global instance
-    log.info('Running the Program under day ' + day)
-    if outlook_type == 'cat':
-        outlook_data = fetch_cat_outlooks(day)
-        if not check_outlook_availability(outlook_data):
-            no_outlook_available()
-            start_gui()
+    log.info('Running outlook' + outlook_type + 'day' + day)
+
+    outlook_functions = {
+        'cat': fetch_cat_outlooks,
+        'tor': fetch_tor_outlooks,
+        'wind': fetch_wind_outlooks,
+        'hail': fetch_hail_outlooks,
+        'd4-8': fetch_d48_outlooks,
+        'prob': fetch_prob_outlooks
+    }
+
+    instance = 0
+    fetch_function = outlook_functions.get(outlook_type)
+    if fetch_function is None:
+        log.error(f'Invalid Outlook Type. Outlook Type = {outlook_type}')
+        popup('error', 'Invalid Outlook Type', "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
+        sys.exit(0)
+
+    outlook_data = fetch_function(day)
+
+    if check_outlook_availability(outlook_data):
         if instance == 0:
             popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be patient. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
-        display_cat_outlook(day, outlook_data)
-    elif outlook_type == 'tor':
-        outlook_data = fetch_tor_outlooks(day)
-        if not check_outlook_availability(outlook_data):
-            no_outlook_available()
-            start_gui()
-        if instance == 0:
-            popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
-            instance = 1
-        display_tor_outlook(day, outlook_data)
-    elif outlook_type == 'wind':
-        outlook_data = fetch_wind_outlooks(day)
-        if not check_outlook_availability(outlook_data):
-            no_outlook_available()
-            start_gui()
-        if instance == 0:
-            popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
-            instance = 1
-        display_wind_outlook(day, outlook_data)
-    elif outlook_type == 'hail':
-        outlook_data = fetch_hail_outlooks(day)
-        if not check_outlook_availability(outlook_data):
-            no_outlook_available()
-            start_gui()
-        if instance == 0:
-            popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
-            instance = 1
-        display_hail_outlook(day, outlook_data)
-    elif outlook_type == 'd4-8':
-        outlook_data = fetch_d48_outlooks(day)
-        if not check_outlook_availability(outlook_data):
-            no_outlook_available()
-            start_gui()
-        if instance == 0:
-            popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
-            instance = 1
-        display_d48_outlook(day, outlook_data)
-    elif outlook_type == 'prob':
-        outlook_data = fetch_prob_outlooks(day)
-        if not check_outlook_availability(outlook_data):
-            no_outlook_available()
-            start_gui()
-        if instance == 0:
-            popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
-            instance = 1
-        display_prob_outlook(day, outlook_data)
+
+        window.withdraw()
+        display_function = getattr(sys.modules[__name__], f'display_{outlook_type}_outlook')
+        display_function(day, start_gui, outlook_data)
     else:
+        popup('warning', 'No Outlook Available', f'There is no {outlook_type} outlook available for day {day}.')
+        start_gui()
+
+    if outlook_type not in ['cat', 'tor', 'wind', 'hail', 'd4-8', 'prob']:
         log.error('Invalid Outlook Type. Outlook Type = ' + outlook_type)
         popup('error', 'Invalid Outlook Type',
-              "An error has occured where the outlook type wasn't read correctly. The program will now quit.")
+              "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
         sys.exit(0)
 
 
