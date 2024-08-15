@@ -930,7 +930,7 @@ class RUN:
         if fetch.check_outlook_availability(outlook_data):
             if self.instance == 0:
                 self.popup('info', 'Program is Running',
-                           'The Severe Weather Outlook Display is now running. The program may take some time to load so be patient. Click "Ok" or Close the Window to Continue')
+                           'The Severe Weather Outlook Display is now running. The program may take some time to load so be patient. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
                 self.instance = 1
 
             window.withdraw()
