@@ -74,7 +74,7 @@ class plot:
         :return: The `popup` method returns the value of `self.question` when the `type` parameter is
         set to 'question'.
         """
-        log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
+        log.info(f'Showing a ' + type + ' popup titled ' + title + ' with the following message: ' + message)
         if type == 'info':
             messagebox.showinfo(title, message)
         elif type == 'error':
@@ -172,7 +172,7 @@ class plot:
         elif outlook_type == 'prob':
             header_img = plt.imread(os.path.join(self.current_directory, '../files/overlays/wtus_prob_header.png'))
         else:
-            log.error(f"There was an error getting the {outlook_type} header. Error on line 276.")
+            log.error(f"There was an error getting the " + outlook_type + " header. Error on line 276.")
             self.popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
 
         header_img = OffsetImage(header_img, zoom=0.4)
@@ -365,7 +365,7 @@ class plot:
                                 self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
                                                                    lw=1, fc=self.color('prob', outlook_label)))
         else:
-            log.error(f"There was an error plotting the {type} outlook. Error on line 405.")
+            log.error('There was an error plotting the ' + outlook_type + ' outlook. Error on line 368.')
             self.popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
             sys.exit(0)
 

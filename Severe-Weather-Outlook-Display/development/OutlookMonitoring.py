@@ -92,14 +92,14 @@ class monitor:
                 for entry in feed.entries:
                     if entry.title not in self.notified_titles:
                         truncated_title = entry.title[:256]
-                        log.info(f'RSS - New RSS Notification. {entry.title}')
+                        log.info(f'RSS - New RSS Notification. {entry.title}')  # skipcq: PYL-W1203
                         notification.notify(  # type: ignore
                             title='New RSS Feed Update',
                             message=f'{truncated_title}. Check it out in the App!',
                             timeout=10
                         )
                         self.notified_titles.append(entry.title)
-            log.info(f'RSS - {self.notified_titles}')
+            log.info(f'RSS - {self.notified_titles}')  # skipcq: PYL-W1203
             time.sleep(self.check_interval)
             log.info('RSS - Interval Passed')
 
@@ -135,7 +135,7 @@ class fetch:
         self.question = None
         self.outlook_data = None
 
-    def popup(self, type, title, message):  # skipcq: PYL-R1710
+    def popup(self, popup_type, title, message):  # skipcq: PYL-R1710
         """
         Displays a popup message box of the specified type with the given title and message.
 
@@ -147,14 +147,14 @@ class fetch:
         Returns:
             str: If the type is 'question', returns the user's response to the question. Otherwise, returns None.
         """
-        log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
-        if type == 'info':
+        log.info(f'Showing a ' + popup_type + ' popup titled ' + title + ' with the following message: ' + message)
+        if popup_type == 'info':
             messagebox.showinfo(title, message)
-        elif type == 'error':
+        elif popup_type == 'error':
             messagebox.showerror(title, message)
-        elif type == 'warning':
+        elif popup_type == 'warning':
             messagebox.showwarning(title, message)
-        elif type == 'question':
+        elif popup_type == 'question':
             self.question = messagebox.askquestion(title, message)
             return self.question  # skipcq: PYL-R1710
         else:
@@ -184,7 +184,7 @@ class fetch:
         elif day == 'test':
             url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210526_1630_cat.lyr.geojson'
         else:
-            log.error(f'Invalid Date. Day = {day}. Error on line 199')
+            log.error('Invalid Date. Day = ' + day + '. Error on line 187')
             self.popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
             sys.exit(0)
         response = requests.get(url)
@@ -213,7 +213,7 @@ class fetch:
         elif day == 'test':
             url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210317_1630_torn.lyr.geojson'
         else:
-            log.error(f'Invalid Date. Day = {day}. Error on line 131')
+            log.error('Invalid Date. Day = ' + day + '. Error on line 216')
             self.popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
             sys.exit(0)
         response = requests.get(url)
@@ -242,7 +242,7 @@ class fetch:
         elif day == 'test':
             url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210325_1630_wind.lyr.geojson'
         else:
-            log.error(f'Invalid Date. Day = {day}. Error on line 148')
+            log.error('Invalid Date. Day = ' + day + '. Error on line 245')
             self.popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
             sys.exit(0)
         response = requests.get(url)
@@ -278,7 +278,7 @@ class fetch:
         elif day == 'test':
             url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210526_1630_hail.lyr.geojson'
         else:
-            log.error(f'Invalid Date. Day = {day}. Error on line 165')
+            log.error('Invalid Date. Day = ' + day + '. Error on line 165')
             self.popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
             sys.exit(0)
         response = requests.get(url)
@@ -320,7 +320,7 @@ class fetch:
         elif day == 'test':
             url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210526_1630_48hr.lyr.geojson'
         else:
-            log.error(f'Invalid Date. Day = {day}. Error on line 181')
+            log.error('Invalid Date. Day = ' + day + '. Error on line 323')
             self.popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
             sys.exit(0)
         response = requests.get(url)
@@ -352,7 +352,7 @@ class fetch:
         if day == 3:
             url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.lyr.geojson'
         else:
-            log.error(f'Invalid Date. Day = {day}. Error on line 197')
+            log.error('Invalid Date. Day = ' + day + '. Error on line 355')
             self.popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
             sys.exit(0)
         response = requests.get(url)

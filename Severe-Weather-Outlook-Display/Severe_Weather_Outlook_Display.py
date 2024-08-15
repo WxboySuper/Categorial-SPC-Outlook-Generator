@@ -97,7 +97,7 @@ def check_rss_feed(url, interval):
                     # Process the message here
                     # For example, send a notification
                     truncated_title = entry.title[:256]
-                    log.info(f'RSS - New RSS Notification. {entry.title}')
+                    log.info(f'RSS - New RSS Notification. {entry.title}')  # skipcq: PYL-W1203
                     notification.notify(  # type: ignore
                         title="New RSS Feed Update",
                         message=(f'{truncated_title}. Check it out in the App!'),
@@ -105,7 +105,7 @@ def check_rss_feed(url, interval):
                     )
                     # Add the title to the notified_titles list
                     notified_titles.append(entry.title)
-        log.info(f'RSS - {notified_titles}')
+        log.info(f'RSS - {notified_titles}')  # skipcq: PYL-W1203
         time.sleep(interval)
         log.info('RSS - Interval Passed')
 
@@ -150,7 +150,7 @@ def fetch_cat_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2023/day1otlk_20230331_1630_cat.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on Line 114')
+        log.error('Invalid Date. Day = ' + day + 'Error on line 153')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url)  # Requests the data from the GeoJSON URL
@@ -182,7 +182,7 @@ def fetch_tor_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210317_1630_torn.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on line 131')
+        log.error('Invalid Date. Day = ' + day + 'Error on line 185')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
     response = requests.get(url)  # Requests the data from the GeoJSON URL
     response.raise_for_status()
@@ -208,7 +208,7 @@ def fetch_wind_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210325_1630_wind.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on line 148')
+        log.error('Invalid Date. Day = ' + day + 'Error on line 211')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url)  # Requests the data from the GeoJSON URL
@@ -240,7 +240,7 @@ def fetch_hail_outlooks(day):
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210526_1630_hail.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on line 165')
+        log.error('Invalid Date. Day = ' + day + 'Error on line 243')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url)
@@ -259,7 +259,7 @@ def fetch_d48_outlooks(day):
     Returns:
         dict: The outlook data in JSON format.
     """
-    log.info(f'Fetching Day {day} outlook')
+    log.info('Fetching Day ' + day + ' outlook')
     if day == 4:
         url = 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.lyr.geojson'
     elif day == 5:
@@ -271,7 +271,7 @@ def fetch_d48_outlooks(day):
     elif day == 8:
         url = 'https://www.spc.noaa.gov/products/exper/day4-8/day8prob.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on line 186')
+        log.error('Invalid Date. Day = ' + day + 'Error on line 274')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url)
@@ -299,7 +299,7 @@ def fetch_prob_outlooks(day):
     if day == 3:
         url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.lyr.geojson'
     else:
-        log.error(f'Invalid Date. Day = {day}. Error on line 199')
+        log.error('Invalid Date. Day = ' + day + 'Error on line 302')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
     response = requests.get(url)
@@ -426,7 +426,7 @@ def add_overlays(ax, outlook_type):
     elif outlook_type == 'prob':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_prob_header.png'))
     else:
-        log.error(f"There was an error getting the {outlook_type} header. Error on line 276.")
+        log.error('Header Error. Outlook_type ' + outlook_type + 'Error on line 429')
         popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
         sys.exit(0)
     header_img = OffsetImage(header_img, zoom=0.4)
@@ -595,7 +595,7 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):
                         else:
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_label)))
     else:
-        log.error(f"There was an error plotting the {outlook_type} outlook. Error on line 405.")
+        log.error('Plotting Error. Outlook_Type' + outlook_type + 'error on line 598')
         popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
         sys.exit(0)
 
@@ -1049,7 +1049,7 @@ def color(outlook_type, outlook_level):
     Returns:
         str: The color associated with the given outlook type, or 'blue' if not found.
     """
-    log.info(f'Getting {outlook_level} for {outlook_type} outlook')
+    log.info('Getting ' + outlook_level + ' for ' + outlook_type + ' outlook')
     if outlook_type == 'cat':
         colors = {
             'TSTM': 'lightgreen',
@@ -1085,7 +1085,7 @@ def color(outlook_type, outlook_level):
             '0.30': 'sandybrown'
         }
     if outlook_type not in ('cat', 'tor', 'wind', 'hail', 'prob', 'd4-8'):
-        log.error(f"There was an error accessing colors. Error on line 751")
+        log.error("There was an error accessing colors. Error on line 751")
         popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors. The program will now quit.')
         sys.exit(0)
 
@@ -1093,7 +1093,7 @@ def color(outlook_type, outlook_level):
 
 
 # Displaying Popups
-def popup(type, title, message):  # skipcq: PYL-R1710
+def popup(popup_type, title, message):  # skipcq: PYL-R1710
     """
     The `popup` function displays different types of popups based on the input parameters such as
     info, error, warning, or question.
@@ -1109,14 +1109,14 @@ def popup(type, title, message):  # skipcq: PYL-R1710
     set to 'question'.
     """
     global question
-    log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
-    if type == 'info':
+    log.info('Showing a ' + popup_type + ' popup titled ' + title + 'with the following message: ' + message)
+    if popup_type == 'info':
         messagebox.showinfo(title, message)
-    elif type == 'error':
+    elif popup_type == 'error':
         messagebox.showerror(title, message)
-    elif type == 'warning':
+    elif popup_type == 'warning':
         messagebox.showwarning(title, message)
-    elif type == 'question':
+    elif popup_type == 'question':
         question = messagebox.askquestion(title, message)
         return question  # skipcq: PYL-R1710
     else:
@@ -1795,7 +1795,7 @@ def start_gui():
                                              font=Description_Font, command=lambda: button_run('hail', 'test'))
             Test_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
         else:
-            log.error(f'Invalid Button. Day = {day}. Error on line 1305')
+            log.error('Invalid Button. Day = ' + day + 'Error on line 1798')
             popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly. The program will now quit.")
             sys.exit(0)
 
@@ -1816,7 +1816,7 @@ def start_gui():
 
         frames(day)
 
-    def button_run(type, day):
+    def button_run(outlook_type, day):
         """
         Handles the button press event for running a specific outlook type for a given day.
 
@@ -1827,7 +1827,7 @@ def start_gui():
         Returns:
             None
         """
-        log.info(f'GUI - {type} {day} button has been pressed. Running Day {day} {type} outlook')
+        log.info('GUI - ' + outlook_type + day + ' button has been pressed.')
         window.withdraw()
         run(type, day)
 
@@ -1902,7 +1902,7 @@ def start_gui():
 
 
 # Function to Run the Program
-def run(type, day):
+def run(outlook_type, day):
     """
     Runs the Severe Weather Outlook Display program based on the provided outlook type and day.
 
@@ -1919,8 +1919,8 @@ def run(type, day):
         None
     """
     global instance
-    log.info(f'Running the Program under day {day}')
-    if type == 'cat':
+    log.info('Running the Program under day ' + day)
+    if outlook_type == 'cat':
         outlook_data = fetch_cat_outlooks(day)
         if not check_outlook_availability(outlook_data):
             no_outlook_available()
@@ -1930,7 +1930,7 @@ def run(type, day):
                   'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_cat_outlook(day, outlook_data)
-    elif type == 'tor':
+    elif outlook_type == 'tor':
         outlook_data = fetch_tor_outlooks(day)
         if not check_outlook_availability(outlook_data):
             no_outlook_available()
@@ -1940,7 +1940,7 @@ def run(type, day):
                   'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_tor_outlook(day, outlook_data)
-    elif type == 'wind':
+    elif outlook_type == 'wind':
         outlook_data = fetch_wind_outlooks(day)
         if not check_outlook_availability(outlook_data):
             no_outlook_available()
@@ -1950,7 +1950,7 @@ def run(type, day):
                   'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_wind_outlook(day, outlook_data)
-    elif type == 'hail':
+    elif outlook_type == 'hail':
         outlook_data = fetch_hail_outlooks(day)
         if not check_outlook_availability(outlook_data):
             no_outlook_available()
@@ -1960,7 +1960,7 @@ def run(type, day):
                   'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_hail_outlook(day, outlook_data)
-    elif type == 'd4-8':
+    elif outlook_type == 'd4-8':
         outlook_data = fetch_d48_outlooks(day)
         if not check_outlook_availability(outlook_data):
             no_outlook_available()
@@ -1970,7 +1970,7 @@ def run(type, day):
                   'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_d48_outlook(day, outlook_data)
-    elif type == 'prob':
+    elif outlook_type == 'prob':
         outlook_data = fetch_prob_outlooks(day)
         if not check_outlook_availability(outlook_data):
             no_outlook_available()
@@ -1981,7 +1981,7 @@ def run(type, day):
             instance = 1
         display_prob_outlook(day, outlook_data)
     else:
-        log.error(f'Invalid Outlook Type. Outlook Type = {type}')
+        log.error('Invalid Outlook Type. Outlook Type = ' + outlook_type)
         popup('error', 'Invalid Outlook Type',
               "An error has occured where the outlook type wasn't read correctly. The program will now quit.")
         sys.exit(0)

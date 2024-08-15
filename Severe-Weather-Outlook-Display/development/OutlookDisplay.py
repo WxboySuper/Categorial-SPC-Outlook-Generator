@@ -137,7 +137,7 @@ class GUI:
         :return: The `popup` method returns the value of `self.question` when the `type` parameter is
         set to 'question'.
         """
-        log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
+        log.info('Showing' + type + 'popup' + 'titled' + title + 'with the following message' + message)
         if type == 'info':
             messagebox.showinfo(title, message)
         elif type == 'error':
@@ -223,7 +223,7 @@ class GUI:
         Returns:
             None
         """
-        log.info(f'GUI - {type} {day} button has been pressed. Running Day {day} {type} outlook')
+        log.info('DISPLAY: GUI - ' + outlook_type + ' ' + day + ' button has been pressed. Running Day ' + day + ' ' + outlook_type + ' outlook')
         self.window.withdraw()
         run.run_program(outlook_type, day, self.window)
 
@@ -846,7 +846,7 @@ class GUI:
             highest_risk_label_d48_day_8 = ctk.CTkLabel(self.main_frame, text=f'Highest Risk: {highest_risk_level_d48_day_8}', font=('karla', 25))
             highest_risk_label_d48_day_8.grid(row=7, column=2, columnspan=1, sticky='nsew')
         else:
-            log.error(f'Invalid Button. Day = {day}. Error on line 1305')
+            log.error('DISPLAY: Invalid Button. Day = ' + day + '. Error on line 849')
             self.popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly. The program will now quit.")
             sys.exit(0)
 
@@ -886,7 +886,7 @@ class RUN:
         self.instance = 0
         self.log_directory = 'C:\\log'
 
-    def popup(self, type, title, message):  # skipcq: PYL-R1710
+    def popup(self, popup_type, title, message):  # skipcq: PYL-R1710
         """
         The `popup` function displays different types of popups based on the input parameters such as
         info, error, warning, or question.
@@ -901,14 +901,14 @@ class RUN:
         :return: The `popup` method returns the value of `self.question` when the `type` parameter is
         set to 'question'.
         """
-        log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
-        if type == 'info':
+        log.info('Showing' + popup_type + 'popup' + 'titled' + title + 'with the following message' + message)
+        if popup_type == 'info':
             messagebox.showinfo(title, message)
-        elif type == 'error':
+        elif popup_type == 'error':
             messagebox.showerror(title, message)
-        elif type == 'warning':
+        elif popup_type == 'warning':
             messagebox.showwarning(title, message)
-        elif type == 'question':
+        elif popup_type == 'question':
             self.question = messagebox.askquestion(title, message)
             return self.question  # skipcq: PYL-R1710
         else:
@@ -931,7 +931,7 @@ class RUN:
         Returns:
             None
         """
-        log.info(f'Running outlook {outlook_type} for day {day}')
+        log.info('Running outlook'+ outlook_type + 'day' + day)
 
         outlook_data = getattr(fetch, outlook_type)(day)
 
@@ -948,7 +948,7 @@ class RUN:
             gui.run_gui()
 
         if outlook_type not in ['cat', 'tor', 'wind', 'hail', 'd4-8', 'prob']:
-            log.error(f'Invalid Outlook Type. Outlook Type = {outlook_type}')
+            log.error('Invalid Outlook Type. Outlook Type = '+ outlook_type)
             self.popup('error', 'Invalid Outlook Type',
                        "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
             sys.exit(0)
