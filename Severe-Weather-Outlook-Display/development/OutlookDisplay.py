@@ -2,10 +2,24 @@
 # Created by WeatherboySuper
 # Created with WeatherTrackUS
 
-
-
 # Imports
-import os, requests, matplotlib, matplotlib.pyplot as plt, matplotlib.patches as mpatches, geopandas as gpd, tkinter as tk, ttkbootstrap as ttk, customtkinter as ctk, contextily as ctx, sys, logging as log, pystray, feedparser, time, threading
+import os
+import requests
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import geopandas as gpd
+import tkinter as tk
+import ttkbootstrap as ttk
+import customtkinter as ctk
+import contextily as ctx
+import sys
+import logging as log
+import pystray
+import feedparser
+import time
+import threading
+
 
 import OutlookMonitoring
 import OutlookProcessing
