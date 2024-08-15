@@ -179,18 +179,18 @@ class plot:
         ab = AnnotationBbox(header_img, (0.3, 0.95), xycoords='axes fraction', frameon=False)
         self.ax.add_artist(ab)
 
-    def color(self, outlook_type, outlook_label):
+    def color(self, outlook_type, outlook_level):
         """
-        Returns the color associated with a given outlook type and label.
+        Returns the color associated with a given outlook type.
 
         Parameters:
-            outlook_type (str): The type of outlook. Can be 'cat', 'tor', 'wind', 'hail', 'd4-8', or 'prob'.
-            outlook_label (str): The label of the outlook.
+            type (str): The type of outlook (e.g., 'cat', 'tor', 'wind', 'hail', 'prob', 'd4-8').
+            outlook_type (str): The specific outlook type (e.g., 'TSTM', 'MRGL', 'SLGT', 'ENH', 'MDT', 'HIGH', '0.02', '0.05', '0.10', '0.15', '0.30', '0.45', '0.60', 'sig').
 
         Returns:
-            str: The color associated with the outlook type and label. Returns 'blue' if the label is not found.
+            str: The color associated with the given outlook type, or 'blue' if not found.
         """
-        log.info(f'Getting {outlook_type} for {type} outlook')
+        log.info(f'Getting {outlook_level} for {outlook_type} outlook')
         if outlook_type == 'cat':
             colors = {
             'TSTM': 'lightgreen',
@@ -200,8 +200,8 @@ class plot:
             'MDT': 'red',
             'HIGH': 'magenta'
             }
-            return colors.get(outlook_label, 'blue') # Returns the Color, Blue if not found
-        elif outlook_type == 'tor':
+            return colors.get(outlook_level, 'blue') # Returns the Color, Blue if not found
+        if outlook_type == 'tor':
             colors = {
                 '0.02': 'green',
                 '0.05': 'brown',
@@ -212,8 +212,8 @@ class plot:
                 '0.60': 'blue',
                 'sig': 'black'
             }
-            return colors.get(outlook_label, 'blue') # Returns the color, Blue if not found
-        elif ('wind', 'hail', 'prob') in outlook_type:
+            return colors.get(outlook_level, 'blue') # Returns the color, Blue if not found
+        if ('wind', 'hail', 'prob') in outlook_type:
             colors = {
                 '0.05': 'saddlebrown',
                 '0.15': 'gold',
@@ -222,14 +222,14 @@ class plot:
                 '0.60': 'blueviolet',
                 'sig': 'black'
             }
-            return colors.get(outlook_label, 'blue') # Returns the color, Blue if not found
-        elif outlook_type == 'd4-8':
+            return colors.get(outlook_level, 'blue') # Returns the color, Blue if not found
+        if outlook_type == 'd4-8':
             colors = {
                 '0.15': 'gold',
                 '0.30': 'sandybrown'
             }
-            return colors.get(outlook_label, 'blue') # Returns the color, blue if not found
-        else:
+            return colors.get(outlook_level, 'blue') # Returns the color, blue if not found
+        if outlook_type is not ('cat', 'tor', 'wind', 'hail', 'prob', 'd4-8'):
             log.error(f"There was an error accessing colors. Error on line 751")
             self.popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors. The program will now quit.')
             sys.exit(0)
