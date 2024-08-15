@@ -49,6 +49,7 @@ check_interval = 60
 refresh_interval = 15  # Refresh the list every 15 seconds
 notified_titles = []  # List to store notified titles
 first_message_title = None  # Title of the first message encountered
+question = None
 
 # Icons
 tornado_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Tornado.png')),
@@ -1115,7 +1116,6 @@ def popup(popup_type, title, message):  # skipcq: PYL-R1710
     elif popup_type == 'warning':
         messagebox.showwarning(title, message)
     elif popup_type == 'question':
-        global question
         question = messagebox.askquestion(title, message)
         return question  # skipcq: PYL-R1710
     else:
