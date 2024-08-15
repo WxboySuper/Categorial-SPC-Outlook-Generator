@@ -2,6 +2,8 @@
 # Created by WeatherboySuper
 # Created with WeatherTrackUS
 
+
+
 # Imports
 import os, requests, matplotlib, matplotlib.pyplot as plt, matplotlib.patches as mpatches, geopandas as gpd, tkinter as tk, ttkbootstrap as ttk, customtkinter as ctk, contextily as ctx, sys, logging as log, pystray, feedparser, time, threading
 
@@ -29,6 +31,21 @@ class GUI:
     _instance = None
 
     def __init__(self):
+        """
+        Initializes a new instance of the GUI class.
+
+        This method initializes the GUI class and sets up various attributes and icons. It sets the current directory to the directory of the current file using `os.path.dirname(os.path.abspath(__file__))`. It then sets the paths for the icons using `os.path.join` and loads the images using `Image.open`. The images are then used to create `CTkImage` objects with the specified size.
+
+        The method also sets up several dictionaries for mapping risk levels to integers. These dictionaries map different values to corresponding integer values.
+
+        If the instance of the GUI class does not exist, a new instance is created and assigned to `GUI._instance`. Otherwise, the existing instance is assigned to `self`.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         self.current_directory = os.path.dirname(os.path.abspath(__file__))
 
         self.tornado_icon_path = os.path.join(self.current_directory, '../files/icons/Tornado.png')
@@ -86,29 +103,21 @@ class GUI:
         else:
             self = GUI._instance
 
-    '''def create_window(self):
-        # Initialize a window
-        log.info('GUI - Initializing window')
-        self.window = ctk.CTkToplevel()
-        self.window.geometry('1700x900+50+50')
-        self.window.title('Severe Weather Outlook Display')
-
-        # Configure Layout
-        self.window.grid_rowconfigure(0, weight=1)
-        self.window.grid_columnconfigure(2, weight=1)
-
-        # Fonts
-        self.Title_Font = ctk.CTkFont(family='Montserrat', size=50, weight='bold')
-        self.Description_Font = ctk.CTkFont(family='karla', size=21)
-
-        # Frames
-        self.sidebar_frame = ctk.CTkFrame(self.window, height=550, fg_color='#103157')
-        self.sidebar_frame.grid(row=0, column=0, sticky='ns')
-
-        self.main_frame = ctk.CTkFrame(self.window)
-        self.main_frame.grid(row=0, column=1, columnspan=2, sticky='nsew')'''
-
     def popup(self, type, title, message):
+        """
+        The `popup` function displays different types of popups based on the input parameters such as
+        info, error, warning, or question.
+
+        :param type: The `type` parameter in the `popup` method specifies the type of popup to display.
+        :param title: The `title` parameter in the `popup` function refers to the title of the popup
+        window that will be displayed. It is the text that appears at the top of the popup window to
+        provide context or information about the message being shown to the user.
+        :param message: The `message` parameter in the `popup` function is the text that will be
+        displayed in the popup dialog box. It is the information, error message, warning message, or
+        question that you want to show to the user depending on the type of popup being displayed.
+        :return: The `popup` method returns the value of `self.question` when the `type` parameter is
+        set to 'question'.
+        """
         log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
         if type == 'info':
             messagebox.showinfo(title, message)
@@ -124,6 +133,17 @@ class GUI:
             sys.exit(0)
 
     def run_gui(self):
+        """
+        This function initializes and runs the graphical user interface (GUI) of the Severe Weather Outlook Display application.
+        
+        It sets up the main window, configures the layout, defines the fonts and frames, and starts the main event loop.
+        
+        Parameters:
+            self (object): A reference to the current instance of the class.
+        
+        Returns:
+            None
+        """
         log.info('Starting GUI')
 
         # Initialize a window
@@ -153,22 +173,66 @@ class GUI:
         self.window.mainloop()
 
     def frame_change(self, day):
-
+        """
+        This function changes the frame of the GUI based on the provided day.
+        
+        It destroys all the widgets in the main frame and then calls the frames function to recreate the frame for the specified day.
+        
+        Parameters:
+            self (object): A reference to the current instance of the class.
+            day (int): The day for which the frame needs to be changed.
+        
+        Returns:
+            None
+        """
         for widget in self.main_frame.winfo_children():
             widget.destroy()
         
         self.frames(day)
 
     def button_run(self, outlook_type, day):
+        """
+        This function handles the button press event for running a specific outlook type for a given day.
+        
+        It logs the event, hides the current window, and then runs the specified outlook program.
+        
+        Parameters:
+            self (object): A reference to the current instance of the class.
+            outlook_type (str): The type of outlook to be run.
+            day (int): The day for which the outlook needs to be run.
+        
+        Returns:
+            None
+        """
         log.info(f'GUI - {type} {day} button has been pressed. Running Day {day} {type} outlook')
         self.window.withdraw()
         run.run_program(outlook_type, day, self.window)
 
     def show_from_system_tray(self,icon, item):
+        """
+        Shows the application window from the system tray.
+
+        Parameters:
+            self (object): A reference to the current instance of the class.
+            icon: The system tray icon object.
+            item: The item that triggered this function call.
+
+        Returns:
+            None
+        """
         icon.stop()
         self.window.deiconify()
 
     def hide_to_system_tray(self):
+        """
+        Hides the application window to the system tray.
+
+        Parameters:
+            self (object): A reference to the current instance of the class.
+
+        Returns:
+            None
+        """
         global icon
         self.window.withdraw()
         image = Image.open('../files/icons/My_project.png')
@@ -177,6 +241,17 @@ class GUI:
         icon.run()
 
     def close_program(self):
+        """
+        This function closes the program after prompting the user for confirmation.
+        
+        It displays a popup asking the user if they want to close the program, and if the user responds with 'yes', it stops the system tray icon, withdraws the main window, and exits the program.
+        
+        Parameters:
+            self (object): A reference to the current instance of the class.
+        
+        Returns:
+            None
+        """
         global question # Declare question as a global variable
         log.info('GUI - Now Closing Program')
         self.popup('question', 'Close Program?', 'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')
@@ -189,6 +264,23 @@ class GUI:
             return
 
     def side_bar(self):
+        """
+        Initializes the sidebar buttons for the GUI.
+
+        Creates and configures the following buttons:
+        - Logo Button: Displays the logo image and is disabled.
+        - Home Button: Changes the frame to the home frame when clicked.
+        - Day 1 Button: Changes the frame to the frame corresponding to day 1 when clicked.
+        - Day 2 Button: Changes the frame to the frame corresponding to day 2 when clicked.
+        - Day 3 Button: Changes the frame to the frame corresponding to day 3 when clicked.
+        - Day 4-8 Button: Changes the frame to the frame corresponding to days 4-8 when clicked.
+
+        Parameters:
+            self (object): A reference to the current instance of the class.
+
+        Returns:
+            None
+        """
         ## Sidebar Buttons ##
         # Logo
         logo_Button = ctk.CTkButton(self.sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent', 
@@ -226,6 +318,18 @@ class GUI:
         D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
 
     def determine_highest_risk_level_cat(self, outlook_data):
+        """
+        Determines the highest risk level category for severe weather from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level category.
+
+        Raises:
+            None.
+        """
         highest_risk_level = 0
         for feature in outlook_data['features']:
             risk_level_label = feature['properties'].get('LABEL')
@@ -250,6 +354,18 @@ class GUI:
         return highest_risk_level
 
     def determine_highest_risk_level_tor(self, outlook_data):
+        """
+        Determines the highest risk level for tornadoes from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for tornadoes as a string, or 'None' if no risk level is found.
+
+        Raises:
+            None.
+        """
         highest_tor_risk_level = 0
         for feature in outlook_data['features']:
             tor_risk_level_label = feature['properties'].get('LABEL')
@@ -276,6 +392,18 @@ class GUI:
         return highest_tor_risk_level
     
     def determine_highest_risk_level_wind(self, outlook_data):
+        """
+        Determines the highest risk level for wind from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for wind as a string, or 'None' if no risk level is found.
+
+        Raises:
+            None.
+        """
         highest_wind_risk_level = 0
         for feature in outlook_data['features']:
             wind_risk_level_label = feature['properties'].get('LABEL')
@@ -298,6 +426,18 @@ class GUI:
         return highest_wind_risk_level
     
     def determine_highest_risk_level_hail(self, outlook_data):
+        """
+        Determines the highest risk level for hail from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for hail as a string, or 'None' if no risk level is found.
+
+        Raises:
+            None.
+        """
         highest_hail_risk_level = 0
         for feature in outlook_data['features']:
             hail_risk_level_label = feature['properties'].get('LABEL')
@@ -320,6 +460,18 @@ class GUI:
         return highest_hail_risk_level
     
     def determine_highest_risk_level_prob(self, outlook_data):
+        """
+        Determines the highest risk level for probability from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for probability as a string, or 'None' if no risk level is found.
+
+        Raises:
+            None.
+        """
         highest_prob_risk_level = 0
         for feature in outlook_data['features']:
             prob_risk_level_label = feature['properties'].get('LABEL')
@@ -342,6 +494,18 @@ class GUI:
         return highest_prob_risk_level
     
     def determine_highest_risk_level_d48(self, outlook_data):
+        """
+        Determines the highest risk level for a 4-8 day outlook from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for the 48-hour period as a string, or 'None' if no risk level is found.
+
+        Raises:
+            None.
+        """
         highest_d48_risk_level = 0
         for feature in outlook_data['features']:
             d48_risk_level_label = feature['properties'].get('LABEL')
@@ -358,6 +522,19 @@ class GUI:
         return highest_d48_risk_level
 
     def frames(self, day):
+        """
+        This function handles the creation of frames for different days of severe weather outlooks.
+        
+        It takes a 'day' parameter which determines which day's outlook to display. The function then creates the necessary buttons and labels for that day's outlook.
+        
+        The function does not return any values.
+        
+        Parameters:
+        day (str or int): The day of the severe weather outlook to display. Can be 'home', 1, 2, 3, or 'd4-8'.
+        
+        Returns:
+        None
+        """
         if day == 'home':
             self.side_bar()
             
@@ -634,12 +811,38 @@ class GUI:
             self.popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly. The program will now quit.")
             sys.exit(0)
 gui = GUI()
+
 class RUN:
     def __init__(self):
+        """
+        Initializes a new instance of the RUN class.
+        
+        Sets the initial state of the instance and log directory.
+        
+        Parameters:
+        None
+        
+        Returns:
+        None
+        """
         self.instance = 0
         self.log_directory = 'C:\\log'
 
     def popup(self, type, title, message):
+        """
+        The `popup` function displays different types of popups based on the input parameters such as
+        info, error, warning, or question.
+
+        :param type: The `type` parameter in the `popup` method specifies the type of popup to display.
+        :param title: The `title` parameter in the `popup` function refers to the title of the popup
+        window that will be displayed. It is the text that appears at the top of the popup window to
+        provide context or information about the message being shown to the user.
+        :param message: The `message` parameter in the `popup` function is the text that will be
+        displayed in the popup dialog box. It is the information, error message, warning message, or
+        question that you want to show to the user depending on the type of popup being displayed.
+        :return: The `popup` method returns the value of `self.question` when the `type` parameter is
+        set to 'question'.
+        """
         log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
         if type == 'info':
             messagebox.showinfo(title, message)
@@ -655,6 +858,21 @@ class RUN:
             sys.exit(0)
 
     def run_program(self, outlook_type, day, window):
+        """
+        Runs the severe weather outlook program for a specified outlook type and day.
+
+        This function logs the start of the program, fetches the outlook data, checks its availability, 
+        and displays it on the map if available. If the outlook data is not available, it displays a 
+        warning message. It also checks if the outlook type is valid and exits the program if it's not.
+
+        Parameters:
+            outlook_type (str): The type of severe weather outlook (e.g., 'cat', 'tor', 'wind', etc.).
+            day (int): The day of the outlook (e.g., 1, 2, 3, etc.).
+            window: The GUI window object.
+
+        Returns:
+            None
+        """
         log.info(f'Running outlook {outlook_type} for day {day}')
 
         outlook_data = getattr(fetch, outlook_type)(day)
@@ -676,6 +894,15 @@ class RUN:
             sys.exit(0)
     
     def startup(self):
+        """
+        Initializes the application by setting up the log directory and starting the RSS feed monitoring thread.
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
         if not os.path.exists(self.log_directory):
             os.makedirs(self.log_directory)
     
