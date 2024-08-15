@@ -302,7 +302,6 @@ class GUI:
         Returns:
             None
         """
-        """ Sidebar Buttons """
         # Logo
         logo_Button = ctk.CTkButton(self.sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent',
                                     state='disabled', image=self.logo_icon, compound='top')
