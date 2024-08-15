@@ -931,7 +931,7 @@ class RUN:
         Returns:
             None
         """
-        log.info('Running outlook'+ outlook_type + 'day' + day)
+        log.info('Running outlook' + outlook_type + 'day' + day)
 
         outlook_data = getattr(fetch, outlook_type)(day)
 
@@ -948,7 +948,7 @@ class RUN:
             gui.run_gui()
 
         if outlook_type not in ['cat', 'tor', 'wind', 'hail', 'd4-8', 'prob']:
-            log.error('Invalid Outlook Type. Outlook Type = '+ outlook_type)
+            log.error('Invalid Outlook Type. Outlook Type = ' + outlook_type)
             self.popup('error', 'Invalid Outlook Type',
                        "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
             sys.exit(0)

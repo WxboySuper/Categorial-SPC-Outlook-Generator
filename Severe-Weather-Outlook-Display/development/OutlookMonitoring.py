@@ -147,7 +147,7 @@ class fetch:
         Returns:
             str: If the type is 'question', returns the user's response to the question. Otherwise, returns None.
         """
-        log.info(f'Showing a ' + popup_type + ' popup titled ' + title + ' with the following message: ' + message)
+        log.info('Showing a ' + popup_type + ' popup titled ' + title + ' with the following message: ' + message)
         if popup_type == 'info':
             messagebox.showinfo(title, message)
         elif popup_type == 'error':
