@@ -103,10 +103,10 @@ class plot:
         """
         Sets up the plot by configuring the figure and axes for plotting.
 
-        This function sets the face color of the figure to black and adjusts the aspect ratio of the axes to 'auto'. 
-        It also sets the x-axis and y-axis limits to (-125, -66) and (20, 60) respectively. 
-        The function then removes the x-axis and y-axis ticks and tick labels, hides the top, right, bottom, and left spines, 
-        and sets the title of the plot to an empty string. 
+        This function sets the face color of the figure to black and adjusts the aspect ratio of the axes to 'auto'.
+        It also sets the x-axis and y-axis limits to (-125, -66) and (20, 60) respectively.
+        The function then removes the x-axis and y-axis ticks and tick labels, hides the top, right, bottom, and left spines,
+        and sets the title of the plot to an empty string.
         Finally, it adds a basemap to the axes using the specified zoom level, coordinate reference system, and source URL.
 
         Returns:
@@ -148,8 +148,8 @@ class plot:
         log.info('Adding all Overlays and Shapefiles')
 
         # State Outlines
-        states_shapefile = os.path.join(self.current_directory, '../files/mapping/s_11au16.shp') 
-        states = gpd.read_file(states_shapefile)  
+        states_shapefile = os.path.join(self.current_directory, '../files/mapping/s_11au16.shp')
+        states = gpd.read_file(states_shapefile)
         states.plot(ax=self.ax, edgecolor='black', lw=0.75, alpha=0.75)
         self.ax.set_facecolor("black")  # Background of the CONUS Shapefile will be Black
 

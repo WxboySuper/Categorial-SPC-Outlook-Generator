@@ -2,7 +2,7 @@
 # Created by WeatherboySuper under the WeatherTrackUS Group
 
 """
-Purpose of this program as of 3/18/2024 is to display the Severe Weather Outlook from the 
+Purpose of this program as of 3/18/2024 is to display the Severe Weather Outlook from the
 Storm Prediction Center (SPC) under the National Weather Service (NWS) in a graphically friendly way
 for WeatherTrackUS and other users
 """
@@ -17,7 +17,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import geopandas as gpd
-import tkinter as tk 
+import tkinter as tk
 import ttkbootstrap as ttk
 import customtkinter as ctk
 import contextily as ctx
@@ -207,7 +207,7 @@ def fetch_wind_outlooks(day):
         url = 'https://www.spc.noaa.gov/products/outlook/day2otlk_wind.nolyr.geojson'
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210325_1630_wind.lyr.geojson'
-    else: 
+    else:
         log.error(f'Invalid Date. Day = {day}. Error on line 148')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
@@ -239,7 +239,7 @@ def fetch_hail_outlooks(day):
         url = 'https://www.spc.noaa.gov/products/outlook/day2otlk_hail.nolyr.geojson'
     elif day == 'test':
         url = 'https://www.spc.noaa.gov/products/outlook/archive/2021/day1otlk_20210526_1630_hail.lyr.geojson'
-    else: 
+    else:
         log.error(f'Invalid Date. Day = {day}. Error on line 165')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
@@ -260,7 +260,7 @@ def fetch_d48_outlooks(day):
         dict: The outlook data in JSON format.
     """
     log.info(f'Fetching Day {day} outlook')
-    if day == 4: 
+    if day == 4:
         url = 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.lyr.geojson'
     elif day == 5:
         url = 'https://www.spc.noaa.gov/products/exper/day4-8/day5prob.lyr.geojson'
@@ -298,7 +298,7 @@ def fetch_prob_outlooks(day):
     log.info('Fetching a Probabilistic Outlook')
     if day == 3:
         url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.lyr.geojson'
-    else: 
+    else:
         log.error(f'Invalid Date. Day = {day}. Error on line 199')
         popup('error', 'Invalid Day', "An error has occured where the day wasn't read correctly. The program will now quit.")
         sys.exit(0)
@@ -386,7 +386,7 @@ def remove_axes_labels_boxes_title(ax):
     plt.title('')
 
 
-# Function to control the CONUS State Outlines  
+# Function to control the CONUS State Outlines
 def add_overlays(ax, outlook_type):
     """
     Adds overlays and shapefiles to a plot.
@@ -402,8 +402,8 @@ def add_overlays(ax, outlook_type):
     log.info('Adding all Overlays and Shapefiles')
 
     # State Outlines
-    states_shapefile = os.path.join(current_directory, 's_11au16.shp') 
-    states = gpd.read_file(states_shapefile)  
+    states_shapefile = os.path.join(current_directory, 's_11au16.shp')
+    states = gpd.read_file(states_shapefile)
     states.plot(ax=ax, edgecolor='black', lw=0.75, alpha=0.75)
     ax.set_facecolor("black")  # Background of the CONUS Shapefile will be Black
 
@@ -414,7 +414,7 @@ def add_overlays(ax, outlook_type):
 
     # Header Image
     if outlook_type == 'cat':
-        header_img = plt.imread(os.path.join(current_directory, 'wtus_cat_header.png'))  
+        header_img = plt.imread(os.path.join(current_directory, 'wtus_cat_header.png'))
     elif outlook_type == 'tor':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_tor_header.png'))
     elif outlook_type == 'wind':
@@ -426,8 +426,8 @@ def add_overlays(ax, outlook_type):
     elif outlook_type == 'prob':
         header_img = plt.imread(os.path.join(current_directory, 'wtus_prob_header.png'))
     else:
-        log.error(f"There was an error getting the {outlook_type} header. Error on line 276.") 
-        popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.') 
+        log.error(f"There was an error getting the {outlook_type} header. Error on line 276.")
+        popup('error', 'Header Error', 'An error has occured getting the header image. The program will now quit.')
         sys.exit(0)
     header_img = OffsetImage(header_img, zoom=0.4)
     ab = AnnotationBbox(header_img, (0.3, 0.95), xycoords='axes fraction', frameon=False)
@@ -464,7 +464,7 @@ def check_outlook_availability(outlook_data):
     log.info('running check_outlook_availability')
     for feature in outlook_data['features']:
         # Check is there is a LABEL if there is coordinates in the geometry portion of the feature from the Source
-        if 'coordinates' in feature['geometry']: 
+        if 'coordinates' in feature['geometry']:
             log.info('There is an outlook')
             return True
     return False
@@ -1133,7 +1133,7 @@ def start_gui():
     """
     global home_icon
     global lightning_icon
-    global tornado_icon 
+    global tornado_icon
 
     # Initialize a window
     log.info('GUI - Initializing window')
@@ -1270,7 +1270,7 @@ def start_gui():
             highest_risk_level = 'Enhanced'
         elif highest_risk_level == 5:
             highest_risk_level = 'Moderate'
-        elif highest_risk_level == 6: 
+        elif highest_risk_level == 6:
             highest_risk_level = 'High'
         return highest_risk_level
 
@@ -1305,7 +1305,7 @@ def start_gui():
             highest_tor_risk_level = '30%'
         elif highest_tor_risk_level == 6:
             highest_tor_risk_level = '45%'
-        elif highest_tor_risk_level == 7: 
+        elif highest_tor_risk_level == 7:
             highest_tor_risk_level = '60%'
         return highest_tor_risk_level
 
@@ -1336,7 +1336,7 @@ def start_gui():
             highest_wind_risk_level = '30%'
         elif highest_wind_risk_level == 4:
             highest_wind_risk_level = '45%'
-        elif highest_wind_risk_level == 5: 
+        elif highest_wind_risk_level == 5:
             highest_wind_risk_level = '60%'
         return highest_wind_risk_level
 
@@ -1367,7 +1367,7 @@ def start_gui():
             highest_hail_risk_level = '30%'
         elif highest_hail_risk_level == 4:
             highest_hail_risk_level = '45%'
-        elif highest_hail_risk_level == 5: 
+        elif highest_hail_risk_level == 5:
             highest_hail_risk_level = '60%'
         return highest_hail_risk_level
 
@@ -1435,7 +1435,7 @@ def start_gui():
 
     def frames(day):
         """
-        This function handles the frames for different days of the week. It takes a day parameter and 
+        This function handles the frames for different days of the week. It takes a day parameter and
         based on that, it creates the corresponding frame with the required buttons and labels.
 
         Parameters:
@@ -1845,7 +1845,7 @@ def start_gui():
         window.withdraw()
         image = Image.open('My_project.png')
         menu = (pystray.MenuItem("Show", show_from_system_tray),
-                pystray.MenuItem("Exit", close_program)) 
+                pystray.MenuItem("Exit", close_program))
         icon = pystray.Icon("name", image, "My System Tray Icon", menu)
         icon.run()
 
@@ -1869,8 +1869,8 @@ def start_gui():
               'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
         if question == 'yes':
             if 'icon' in globals() and icon is not None:
-                icon.stop() 
-            window.withdraw() 
+                icon.stop()
+            window.withdraw()
             os._exit(0)
         else:
             return
@@ -1906,9 +1906,9 @@ def run(type, day):
     """
     Runs the Severe Weather Outlook Display program based on the provided outlook type and day.
 
-    This function takes in two parameters: type and day. The type parameter specifies the type of outlook to display, 
-    and the day parameter specifies the day for which the outlook should be displayed. The function then fetches the 
-    relevant outlook data, checks its availability, and displays it on the map. If the outlook data is not available, 
+    This function takes in two parameters: type and day. The type parameter specifies the type of outlook to display,
+    and the day parameter specifies the day for which the outlook should be displayed. The function then fetches the
+    relevant outlook data, checks its availability, and displays it on the map. If the outlook data is not available,
     it displays a notification and starts the GUI.
 
     Parameters:

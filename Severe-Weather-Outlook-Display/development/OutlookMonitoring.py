@@ -49,8 +49,8 @@ class monitor:
         """
         Initializes a new instance of the monitor class.
 
-        Sets the initial state of the object, including the last refresh time, current time, 
-        current directory, instance number, RSS URL, check interval, refresh interval, 
+        Sets the initial state of the object, including the last refresh time, current time,
+        current directory, instance number, RSS URL, check interval, refresh interval,
         notified titles, and the title of the first message.
 
         Parameters:
@@ -306,8 +306,8 @@ class fetch:
         Exits:
             The program will exit if the day parameter is invalid.
         """
-        log.info('Fetching a 48 Hour Outlook')
-        if day == 4: 
+        log.info('Fetching a 4-8 Day Outlook')
+        if day == 4:
             url = 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.lyr.geojson'
         elif day == 5:
             url = 'https://www.spc.noaa.gov/products/exper/day4-8/day5prob.lyr.geojson'

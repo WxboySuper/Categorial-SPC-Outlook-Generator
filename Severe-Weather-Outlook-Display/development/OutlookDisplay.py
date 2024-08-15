@@ -49,7 +49,7 @@ class GUI:
         """
         Initializes a new instance of the GUI class.
 
-        This method initializes the GUI class and sets up various attributes and icons. 
+        This method initializes the GUI class and sets up various attributes and icons.
         It sets the current directory to the directory of the current file using `os.path.dirname(os.path.abspath(__file__))`.
         It then sets the paths for the icons using `os.path.join` and loads the images using `Image.open`.
         The images are then used to create `CTkImage` objects with the specified size.
@@ -69,20 +69,20 @@ class GUI:
         self.current_directory = os.path.dirname(os.path.abspath(__file__))
 
         self.tornado_icon_path = os.path.join(self.current_directory, '../files/icons/Tornado.png')
-        self.tornado_icon = ctk.CTkImage(dark_image=Image.open(self.tornado_icon_path), 
-                                         light_image=Image.open(self.tornado_icon_path), 
+        self.tornado_icon = ctk.CTkImage(dark_image=Image.open(self.tornado_icon_path),
+                                         light_image=Image.open(self.tornado_icon_path),
                                          size=(50, 40))
         self.home_icon_path = os.path.join(self.current_directory, '../files/icons/Home.png')
-        self.home_icon = ctk.CTkImage(dark_image=Image.open(self.home_icon_path), 
-                                      light_image=Image.open(self.home_icon_path), 
+        self.home_icon = ctk.CTkImage(dark_image=Image.open(self.home_icon_path),
+                                      light_image=Image.open(self.home_icon_path),
                                       size=(50, 40))
         self.lightning_icon_path = os.path.join(self.current_directory, '../files/icons/Lightning.png')
-        self.lightning_icon = ctk.CTkImage(dark_image=Image.open(self.lightning_icon_path), 
-                                           light_image=Image.open(self.lightning_icon_path), 
+        self.lightning_icon = ctk.CTkImage(dark_image=Image.open(self.lightning_icon_path),
+                                           light_image=Image.open(self.lightning_icon_path),
                                            size=(50, 40))
         self.logo_icon_path = os.path.join(self.current_directory, '../files/icons/My_project.png')
-        self.logo_icon = ctk.CTkImage(dark_image=Image.open(self.logo_icon_path), 
-                                      light_image=Image.open(self.logo_icon_path), 
+        self.logo_icon = ctk.CTkImage(dark_image=Image.open(self.logo_icon_path),
+                                      light_image=Image.open(self.logo_icon_path),
                                       size=(120, 120))
 
         self.risk_level_mapping_cat = {
@@ -279,8 +279,8 @@ class GUI:
                    'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
         if self.question == 'yes':
             if 'icon' in globals() and icon is not None:
-                icon.stop() 
-            self.window.withdraw() 
+                icon.stop()
+            self.window.withdraw()
             os._exit(0)
         else:
             return
@@ -371,7 +371,7 @@ class GUI:
             highest_risk_level = 'Enhanced'
         elif highest_risk_level == 5:
             highest_risk_level = 'Moderate'
-        elif highest_risk_level == 6: 
+        elif highest_risk_level == 6:
             highest_risk_level = 'High'
         return highest_risk_level
 
@@ -409,7 +409,7 @@ class GUI:
             highest_tor_risk_level = '30%'
         elif highest_tor_risk_level == 6:
             highest_tor_risk_level = '45%'
-        elif highest_tor_risk_level == 7: 
+        elif highest_tor_risk_level == 7:
             highest_tor_risk_level = '60%'
         return highest_tor_risk_level
 
@@ -443,7 +443,7 @@ class GUI:
             highest_wind_risk_level = '30%'
         elif highest_wind_risk_level == 4:
             highest_wind_risk_level = '45%'
-        elif highest_wind_risk_level == 5: 
+        elif highest_wind_risk_level == 5:
             highest_wind_risk_level = '60%'
         return highest_wind_risk_level
 
@@ -477,7 +477,7 @@ class GUI:
             highest_hail_risk_level = '30%'
         elif highest_hail_risk_level == 4:
             highest_hail_risk_level = '45%'
-        elif highest_hail_risk_level == 5: 
+        elif highest_hail_risk_level == 5:
             highest_hail_risk_level = '60%'
         return highest_hail_risk_level
 
@@ -576,7 +576,7 @@ class GUI:
             Hide_Button.place(x=1075, y=15)
 
             # Title Label
-            Title_Label = ctk.CTkLabel(self.main_frame, text='Severe Weather Outlook Display', 
+            Title_Label = ctk.CTkLabel(self.main_frame, text='Severe Weather Outlook Display',
                                        font=('Montserrat', 72, 'bold'), width=1200)
             Title_Label.place(x=150, y=350)
 
@@ -784,7 +784,7 @@ class GUI:
             self.side_bar()
 
             # Day 4-8 Button
-            D48_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent', 
+            D48_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent',
                                             font=self.Description_Font, command=lambda: self.frame_change('d4-8'),
                                             state='disabled', image=self.lightning_icon)
             D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
