@@ -1085,7 +1085,7 @@ def popup(popup_type, title, message):  # skipcq: PYL-R1710
 
 
 # Start the GUI
-def start_gui():
+def start_gui():  # skipcq: PY-R1000
     """
     This function initializes and runs the graphical user interface (GUI) for the Severe Weather Outlook Display program.
     It creates the main window, sets up the layout, and defines the behavior for various buttons and events.
