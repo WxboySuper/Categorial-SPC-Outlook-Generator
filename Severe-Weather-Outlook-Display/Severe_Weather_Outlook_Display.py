@@ -1062,7 +1062,7 @@ def color(outlook_type, outlook_level):
         log.error(f"There was an error accessing colors. Error on line 751")
         popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors. The program will now quit.')
         sys.exit(0)
-    
+
     return colors.get(outlook_level, 'blue')  # Returns the color, blue if not found
 
 # Displaying Popups
