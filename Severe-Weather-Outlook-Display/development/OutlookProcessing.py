@@ -190,7 +190,7 @@ class plot:
         Returns:
             str: The color associated with the given outlook type, or 'blue' if not found.
         """
-        log.info(f'Getting {outlook_level} for {outlook_type} outlook')
+        log.info('Getting ' + outlook_level + ' for ' + outlook_type + ' outlook')
         if outlook_type == 'cat':
             colors = {
                 'TSTM': 'lightgreen',
@@ -226,7 +226,7 @@ class plot:
                 '0.30': 'sandybrown'
             }
         if outlook_type not in ('cat', 'tor', 'wind', 'hail', 'prob', 'd4-8'):
-            log.error(f"There was an error accessing colors. Error on line 751")
+            log.error("There was an error accessing colors. Error on line 751")
             self.popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors. The program will now quit.')
             sys.exit(0)
 
