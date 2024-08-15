@@ -129,7 +129,7 @@ class plot:
 
         self.ax.set_title('')
 
-        ctx.add_basemap(self.ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368')  # type: ignore
+        ctx.add_basemap(self.ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368')  # type: ignore  # skipcq: FLK-E501
 
         return self.fig, self.ax
 
@@ -150,7 +150,7 @@ class plot:
         # State Outlines
         states_shapefile = os.path.join(self.current_directory, '../files/mapping/s_11au16.shp') 
         states = gpd.read_file(states_shapefile)  
-        states.plot(ax=self.ax, edgecolor='black', lw=0.75, alpha=0.75)  # Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
+        states.plot(ax=self.ax, edgecolor='black', lw=0.75, alpha=0.75)
         self.ax.set_facecolor("black")  # Background of the CONUS Shapefile will be Black
 
         # Interstate Lines

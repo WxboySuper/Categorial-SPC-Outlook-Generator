@@ -297,7 +297,7 @@ class GUI:
         """
         """ Sidebar Buttons """
         # Logo
-        logo_Button = ctk.CTkButton(self.sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent', 
+        logo_Button = ctk.CTkButton(self.sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent',
                                     state='disabled', image=self.logo_icon, compound='top')
         logo_Button.grid(row=0, column=0, columnspan=1, padx=5, pady=10)
 
@@ -320,13 +320,13 @@ class GUI:
         D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 3 Button
-        D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent', 
+        D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent',
                                     font=('karla', 26), command=lambda: self.frame_change(3),
                                     hover_color='#2191aa', image=self.lightning_icon)
         D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 4-8 Button
-        D48_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent', 
+        D48_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent',
                                         font=self.Description_Font, command=lambda: self.frame_change('d4-8'),
                                         hover_color='#2191aa', image=self.lightning_icon)
         D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
@@ -609,7 +609,8 @@ class GUI:
             D1_Label.grid(row=2, column=1, columnspan=2, padx=435, pady=50, sticky='nsew')
 
             # Day 1 Categorical Button
-            D1_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 1 Categorical', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('cat', 1))
+            D1_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 1 Categorical', width=150, height=50,
+                                          font=('karla', 28), command=lambda: self.button_run('cat', 1))
             D1_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 1 Categorial Risk Label
@@ -617,7 +618,8 @@ class GUI:
             highest_risk_label_cat_day_1.grid(row=3, column=2, columnspan=1, sticky='nsew')
 
             # Day 1 Tornado Button
-            D1_Tor_Button = ctk.CTkButton(self.main_frame, text='Day 1 Tornado', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('tor', 1))
+            D1_Tor_Button = ctk.CTkButton(self.main_frame, text='Day 1 Tornado', width=150, height=50,
+                                          font=('karla', 28), command=lambda: self.button_run('tor', 1))
             D1_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 1 Tornado Risk Label
@@ -625,7 +627,8 @@ class GUI:
             highest_risk_label_tor_day_1.grid(row=4, column=2, columnspan=1, sticky='nsew')
 
             # Day 1 Wind Outlook
-            D1_Wind_Button = ctk.CTkButton(self.main_frame, text='Day 1 Wind', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('wind', 1))
+            D1_Wind_Button = ctk.CTkButton(self.main_frame, text='Day 1 Wind', width=150, height=50,
+                                           font=('karla', 28), command=lambda: self.button_run('wind', 1))
             D1_Wind_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 1 Wind Risk Label
@@ -633,7 +636,8 @@ class GUI:
             highest_risk_label_wind_day_1.grid(row=5, column=2, columnspan=1, sticky='nsew')
 
             # Day 1 Hail Outlook
-            D1_Hail_Button = ctk.CTkButton(self.main_frame, text='Day 1 Hail', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('hail', 1))
+            D1_Hail_Button = ctk.CTkButton(self.main_frame, text='Day 1 Hail', width=150, height=50,
+                                           font=('karla', 28), command=lambda: self.button_run('hail', 1))
             D1_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 1 Hail Risk Label
@@ -673,7 +677,8 @@ class GUI:
             D2_Label.grid(row=2, column=1, columnspan=2, padx=435, pady=50, sticky='nsew')
 
             # Day 2 Categorical Button
-            D2_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 2 Categorical', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('cat', 2))
+            D2_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 2 Categorical', width=150, height=50,
+                                          font=('karla', 28), command=lambda: self.button_run('cat', 2))
             D2_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 2 Categorial Risk Label
@@ -681,7 +686,8 @@ class GUI:
             highest_risk_label_cat_day_2.grid(row=3, column=2, columnspan=1, sticky='nsew')
 
             # Day 2 Tornado Button
-            D2_Tor_Button = ctk.CTkButton(self.main_frame, text='Day 2 Tornado', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('tor', 2))
+            D2_Tor_Button = ctk.CTkButton(self.main_frame, text='Day 2 Tornado', width=150, height=50,
+                                          font=('karla', 28), command=lambda: self.button_run('tor', 2))
             D2_Tor_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 2 Tornado Risk Label
@@ -689,7 +695,8 @@ class GUI:
             highest_risk_label_tor_day_2.grid(row=4, column=2, columnspan=1, sticky='nsew')
 
             # Day 2 Wind Outlook
-            D1_Wind_Button = ctk.CTkButton(self.main_frame, text='Day 2 Wind', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('wind', 2))
+            D1_Wind_Button = ctk.CTkButton(self.main_frame, text='Day 2 Wind', width=150, height=50,
+                                           font=('karla', 28), command=lambda: self.button_run('wind', 2))
             D1_Wind_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 2 Wind Risk Label
@@ -697,7 +704,8 @@ class GUI:
             highest_risk_label_wind_day_2.grid(row=5, column=2, columnspan=1, sticky='nsew')
 
             # Day 2 Hail Outlook
-            D2_Hail_Button = ctk.CTkButton(self.main_frame, text='Day 2 Hail', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('hail', 2))
+            D2_Hail_Button = ctk.CTkButton(self.main_frame, text='Day 2 Hail', width=150, height=50,
+                                           font=('karla', 28), command=lambda: self.button_run('hail', 2))
             D2_Hail_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 2 Hail Risk Label
@@ -713,7 +721,7 @@ class GUI:
             self.side_bar()
 
             #Day 3 Button
-            D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent', 
+            D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent',
                                    font=('karla', 26), command=lambda: self.frame_change(3),
                                    state='disabled', image=self.lightning_icon)
             D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)

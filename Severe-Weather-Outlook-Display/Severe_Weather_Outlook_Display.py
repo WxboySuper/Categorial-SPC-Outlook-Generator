@@ -55,10 +55,14 @@ notified_titles = []  # List to store notified titles
 first_message_title = None  # Title of the first message encountered
 
 # Icons
-tornado_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Tornado.png')), light_image=Image.open(os.path.join(current_directory, 'Tornado.png')), size=(50, 40))
-home_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Home.png')), light_image=Image.open(os.path.join(current_directory, 'Home.png')), size=(50, 40))
-lightning_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Lightning.png')), light_image=Image.open(os.path.join(current_directory, 'Lightning.png')), size=(50, 40))
-logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'My_project.png')), light_image=Image.open(os.path.join(current_directory, 'My_project.png')), size=(120, 120))
+tornado_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Tornado.png')),
+                            light_image=Image.open(os.path.join(current_directory, 'Tornado.png')), size=(50, 40))
+home_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Home.png')),
+                         light_image=Image.open(os.path.join(current_directory, 'Home.png')), size=(50, 40))
+lightning_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'Lightning.png')),
+                              light_image=Image.open(os.path.join(current_directory, 'Lightning.png')), size=(50, 40))
+logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, 'My_project.png')),
+                         light_image=Image.open(os.path.join(current_directory, 'My_project.png')), size=(120, 120))
 
 # Create a Tkinter root window
 root = tk.Tk()
@@ -124,7 +128,6 @@ def global_exception_handler(exc_type, exc_value, exc_traceback):
 sys.excepthook = global_exception_handler
 
 
-""" Fetch Functions """
 def fetch_cat_outlooks(day):
     """
     Fetches the categorial outlook data for a specified day.
@@ -399,7 +402,7 @@ def add_overlays(ax, outlook_type):
     # State Outlines
     states_shapefile = os.path.join(current_directory, 's_11au16.shp') 
     states = gpd.read_file(states_shapefile)  
-    states.plot(ax=ax, edgecolor='black', lw=0.75, alpha=0.75)  # Remove facecolor (Added right below), and changed edgecolor to 'white' to contrast with the black 
+    states.plot(ax=ax, edgecolor='black', lw=0.75, alpha=0.75)
     ax.set_facecolor("black")  # Background of the CONUS Shapefile will be Black
 
     # Interstate Lines
@@ -441,7 +444,7 @@ def add_basemap(ax):
         None
     """
     log.info('running add_basemap')
-    ctx.add_basemap(ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368')  # type: ignore 
+    ctx.add_basemap(ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368')  # type: ignore  # skipcq: FLK-E501
     log.info('basemap loaded')
 
 
@@ -1004,7 +1007,6 @@ def display_prob_outlook(day, outlook_data):
     toolbar = NavigationToolbar2Tk(canvas, root)
     toolbar.update()
 
-
     def close_figure():
         """
         Closes the current figure, withdraws the root window, and starts the GUI.
@@ -1170,7 +1172,6 @@ def start_gui():
         Returns:
             None
         """
-        """ Sidebar Buttons """
         # Logo
         logo_Button = ctk.CTkButton(sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent',
                                     state='disabled', image=logo_icon, compound='top')
@@ -1896,7 +1897,7 @@ def start_gui():
     window.mainloop()
 
 
-""" Function to Run the Program """
+# Function to Run the Program
 def run(type, day):
     """
     Runs the Severe Weather Outlook Display program based on the provided outlook type and day.
