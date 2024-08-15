@@ -491,7 +491,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
         if feature['geometry']['type'] == 'Polygon':
             outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
             for polygon in outlook_polygon:  # Find the properties of each polygon
-                x, y = zip(*polygon[0])
                 if outlook_type == 'cat':
                     ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('cat', outlook_label)))
                 if outlook_type == 'tor':
