@@ -25,6 +25,19 @@ root.withdraw()
 
 class monitor:
     def __init__(self):
+        """
+        Initializes a new instance of the monitor class.
+
+        Sets the initial state of the object, including the last refresh time, current time, 
+        current directory, instance number, RSS URL, check interval, refresh interval, 
+        notified titles, and the title of the first message.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         self.last_refresh_time = None
         self.current_time = None
         self.current_directory = os.path.dirname(os.path.realpath(__file__))
@@ -36,6 +49,15 @@ class monitor:
         self.first_message_title = None # Title of the first message encountered
     
     def rss(self):
+        """
+        Checks the RSS feed at the specified URL for new entries and sends a notification for each new entry.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         self.last_refresh_time = time.time()
         
         while True:
@@ -62,10 +84,32 @@ class monitor:
     
 class fetch:
     def __init__(self):
+        """
+        Initializes a new instance of the class.
+
+        Sets the initial state of the object, including the question and outlook data.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         self.question = None
         self.outlook_data = None
 
     def popup(self, type, title, message):
+        """
+        Displays a popup message box of the specified type with the given title and message.
+
+        Parameters:
+            type (str): The type of popup to display. Can be 'info', 'error', 'warning', or 'question'.
+            title (str): The title of the popup.
+            message (str): The message to display in the popup.
+
+        Returns:
+            str: If the type is 'question', returns the user's response to the question. Otherwise, returns None.
+        """
         log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
         if type == 'info':
             messagebox.showinfo(title, message)
@@ -81,6 +125,18 @@ class fetch:
             sys.exit(0)
 
     def cat(self, day):
+        """
+        Fetches the categorical outlook data for a specified day.
+
+        Parameters:
+            day (int or str): The day for which to fetch the outlook data. Can be 1, 2, 3, or 'test'.
+
+        Returns:
+            dict: The fetched outlook data in JSON format.
+
+        Raises:
+            SystemExit: If the day parameter is invalid.
+        """
         log.info('Fetching a Categorical Outlook')
         if day == 1:
             url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_cat.nolyr.geojson'
@@ -100,6 +156,18 @@ class fetch:
         return self.outlook_data
     
     def tor(self, day):
+        """
+        Fetches the tornado outlook data for a specified day.
+
+        Parameters:
+            day (int or str): The day for which to fetch the outlook data. Can be 1, 2, or 'test'.
+
+        Returns:
+            dict: The fetched outlook data in JSON format.
+
+        Raises:
+            SystemExit: If the day parameter is invalid.
+        """
         log.info('Fetching a Tornado Outlook')
         if day == 1:
             url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_torn.nolyr.geojson'
@@ -117,6 +185,18 @@ class fetch:
         return self.outlook_data
     
     def wind(self, day):
+        """
+        Fetches the wind outlook data for a specified day.
+
+        Parameters:
+            day (int or str): The day for which to fetch the outlook data. Can be 1, 2, or 'test'.
+
+        Returns:
+            dict: The fetched outlook data in JSON format.
+
+        Raises:
+            SystemExit: If the day parameter is invalid.
+        """
         log.info('Fetching a Wind Outlook')
         if day == 1:
             url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_wind.nolyr.geojson'
@@ -134,6 +214,25 @@ class fetch:
         return self.outlook_data
     
     def hail(self, day):
+        """
+        Fetches the hail outlook data for a specified day.
+
+        Args:
+            day (int or str): The day for which to fetch the outlook data. Can be 1, 2, or 'test'.
+
+        Returns:
+            dict: The fetched outlook data in JSON format.
+
+        Raises:
+            SystemExit: If the day parameter is invalid.
+
+        Logs:
+            info: Fetching a Hail Outlook
+            error: Invalid Date. Day = {day}. Error on line 165
+
+        Exits:
+            The program will exit if the day parameter is invalid.
+        """
         log.info('Fetching a Hail Outlook')
         if day == 1:
             url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_hail.nolyr.geojson'
@@ -151,6 +250,25 @@ class fetch:
         return self.outlook_data
     
     def d48(self, day):
+        """
+        Fetches a 48-hour severe weather outlook for a specified day.
+
+        Args:
+            day (int or str): The day for which to fetch the outlook. Can be an integer between 4 and 8, or 'test'.
+
+        Returns:
+            dict: The fetched outlook data in JSON format.
+
+        Raises:
+            requests.exceptions.HTTPError: If the HTTP request fails.
+
+        Logs:
+            info: Fetching a 48-hour outlook.
+            error: Invalid Date. Day = {day}. Error on line {line_number}.
+
+        Exits:
+            The program will exit if the day parameter is invalid.
+        """
         log.info('Fetching a 48 Hour Outlook')
         if day == 4: 
             url = 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.lyr.geojson'
@@ -174,6 +292,25 @@ class fetch:
         return self.outlook_data
     
     def prob(self, day):
+        """
+        Fetches the probability outlook data for a specified day.
+
+        Parameters:
+            day (int): The day for which to fetch the outlook data. Currently only supports day 3.
+
+        Returns:
+            dict: The fetched outlook data in JSON format.
+
+        Raises:
+            SystemExit: If the day parameter is invalid.
+
+        Logs:
+            info: Fetching a Probability Outlook
+            error: Invalid Date. Day = {day}. Error on line 197
+
+        Exits:
+            The program will exit if the day parameter is invalid.
+        """
         log.info('Fetching a Probability Outlook')
         if day == 3:
             url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.lyr.geojson'
@@ -187,12 +324,39 @@ class fetch:
         return self.outlook_data
     
     def no_outlook_available(self, gui_callback):
+        """
+        Displays an error message when no outlook is available for the selected day.
+
+        Parameters:
+            gui_callback (function): A callback function to be executed after displaying the error message.
+
+        Returns:
+            None
+
+        Logs:
+            info: No outlook available
+
+        Exits:
+            The function does not exit the program but instead calls the provided gui_callback function.
+        """
         log.info('No outlook available')
         self.popup('error', 'No Outlook Available', 'There is no outlook available for the selected day. The outlook will not be displayed.')
         gui_callback()
 
     @staticmethod
     def check_outlook_availability(outlook_data):
+        """
+        Checks if there is an outlook available in the given outlook data.
+
+        Parameters:
+            outlook_data (dict): The outlook data to check for availability.
+
+        Returns:
+            bool: True if an outlook is available, False otherwise.
+
+        Logs:
+            info: If an outlook is available.
+        """
         for feature in outlook_data['features']:
             if 'coordinates' in feature['geometry']:
                 log.info('There is an outlook')

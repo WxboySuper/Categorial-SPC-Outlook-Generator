@@ -62,6 +62,17 @@ root = tk.Tk()
 root.withdraw()
 
 def check_rss_feed(url, interval, refresh_interval):
+    """
+    Checks the RSS feed at the specified URL for new entries and sends a notification for each new entry.
+
+    Parameters:
+        url (str): The URL of the RSS feed to check.
+        interval (int): The interval in seconds to wait between checks.
+        refresh_interval (int): The interval in seconds to refresh the list of notified titles.
+
+    Returns:
+        None
+    """
     last_refresh_time = time.time() # Time of the last refresh
 
     while True:
@@ -93,6 +104,17 @@ def check_rss_feed(url, interval, refresh_interval):
 
 # Set the global exception handler
 def global_exception_handler(exc_type, exc_value, exc_traceback):
+    """
+    Handles uncaught exceptions by logging the error and exiting the program.
+
+    Parameters:
+        exc_type (type): The type of the exception.
+        exc_value (Exception): The instance of the exception.
+        exc_traceback (traceback): The traceback object associated with the exception.
+
+    Returns:
+        None
+    """
     log.error('uncaught exception', exc_info=(exc_type, exc_value, exc_traceback))
     sys.exit(0)
 
@@ -100,6 +122,15 @@ sys.excepthook = global_exception_handler
 
 ### Fetch Functions ###
 def fetch_cat_outlooks(day):
+    """
+    Fetches the categorial outlook data for a specified day.
+
+    Parameters:
+        day (int or str): The day for which to fetch the outlook data. Can be 1, 2, 3, or 'test'.
+
+    Returns:
+        dict: The outlook data in JSON format.
+    """
     log.info('Fetching a Categorial Outlook')
     if day == 1:
         url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_cat.nolyr.geojson'
@@ -119,6 +150,20 @@ def fetch_cat_outlooks(day):
     return outlook_data # Returns the data from the Outlook
 
 def fetch_tor_outlooks(day):
+    """
+    Fetches the tornado outlook data for a specified day.
+
+    Parameters:
+        day (int or str): The day for which to fetch the outlook data. Can be 1, 2, or 'test'.
+
+    Returns:
+        dict: The outlook data in JSON format.
+
+    Raises:
+        requests.exceptions.RequestException: If the request to the GeoJSON URL fails.
+
+    Exits the program with status code 0 if the specified day is invalid.
+    """
     log.info('Fetching a Tornado Outlook')
     if day == 1:
         url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_torn.nolyr.geojson'
@@ -136,6 +181,15 @@ def fetch_tor_outlooks(day):
     return outlook_data # Returns the data from the Outlook
 
 def fetch_wind_outlooks(day):
+    """
+    Fetches the wind outlook data for a specified day.
+
+    Parameters:
+        day (int or str): The day for which to fetch the outlook data. Can be 1, 2, or 'test'.
+
+    Returns:
+        dict: The outlook data in JSON format.
+    """
     log.info('Fetching a Wind Outlook')
     if day == 1:
         url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_wind.nolyr.geojson'
@@ -153,6 +207,20 @@ def fetch_wind_outlooks(day):
     return outlook_data # Returns the data from the outlook
 
 def fetch_hail_outlooks(day):
+    """
+    Fetches the hail outlook data for a specified day.
+
+    Parameters:
+        day (int or str): The day for which to fetch the outlook data. Can be 1, 2, or 'test'.
+
+    Returns:
+        dict: The outlook data in JSON format.
+
+    Raises:
+        requests.exceptions.RequestException: If the request to the GeoJSON URL fails.
+
+    Exits the program with status code 0 if the specified day is invalid.
+    """
     log.info('Fetching a Hail Outlook')
     if day == 1:
         url = 'https://www.spc.noaa.gov/products/outlook/day1otlk_hail.nolyr.geojson'
@@ -170,6 +238,15 @@ def fetch_hail_outlooks(day):
     return outlook_data # Returns the data from the outlook
 
 def fetch_d48_outlooks(day):
+    """
+    Fetches the 48 hour outlook data for a specified day.
+
+    Parameters:
+        day (int): The day for which to fetch the outlook data. Can be 4, 5, 6, 7, or 8.
+
+    Returns:
+        dict: The outlook data in JSON format.
+    """
     log.info(f'Fetching Day {day} outlook')
     if day == 4: 
         url = 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.lyr.geojson'
@@ -191,6 +268,20 @@ def fetch_d48_outlooks(day):
     return outlook_data # Returns the data from the outlook
 
 def fetch_prob_outlooks(day):
+    """
+    Fetches a probabilistic outlook for a given day.
+
+    Parameters:
+        day (int): The day for which to fetch the outlook.
+
+    Returns:
+        dict: The outlook data in JSON format.
+
+    Raises:
+        requests.exceptions.RequestException: If the request to the GeoJSON URL fails.
+
+    Exits the program with status code 0 if the specified day is invalid.
+    """
     log.info('Fetching a Probabilistic Outlook')
     if day == 3:
         url = 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.lyr.geojson'
@@ -205,12 +296,28 @@ def fetch_prob_outlooks(day):
 
 # Function to create the output directory
 def create_output_directory(current_directory):
+    """
+    Creates an output directory in the specified current directory.
+
+    Parameters:
+        current_directory (str): The path of the current directory.
+
+    Returns:
+        str: The path of the newly created output directory.
+    """
     log.info('running create_output_directory')
     output_directory = os.path.join(current_directory, 'output') # Creates a folder named "output"
     os.makedirs(output_directory, exist_ok=True)
     return output_directory # Returns where the output directory is
 
 def setup_plot():
+    """
+    Sets up a plot with a specified size and aspect ratio.
+
+    Returns:
+        fig (matplotlib.figure.Figure): The figure object.
+        ax (matplotlib.axes.Axes): The axes object.
+    """
     log.info('running setup_plot')
     fig, ax = plt.subplots(figsize=(10,8)) # Set the size of the plot
     fig.set_facecolor('black')
@@ -219,12 +326,30 @@ def setup_plot():
 
 # Function to set the limits of the plot
 def set_plot_limits(ax):
+    """
+    Sets the x and y limits of a plot.
+
+    Parameters:
+        ax (matplotlib.axes.Axes): The axes object to set the limits for.
+
+    Returns:
+        None
+    """
     log.info('running set_plot_limits')
     ax.set_xlim([-125, -66]) # Base for x: (-125, -66)
     ax.set_ylim([20,60]) # Base for y: (23, 50)
 
 # Function to remove all labels and axes
 def remove_axes_labels_boxes_title(ax):
+    """
+    Removes axes, labels, boxes, and titles from a plot.
+
+    Parameters:
+        ax (matplotlib.axes.Axes): The axes object to modify.
+
+    Returns:
+        None
+    """
     log.info('running remove_axes_labels_boxes_title')
     # Remove the Axes
     ax.set_xticks([])
@@ -245,6 +370,17 @@ def remove_axes_labels_boxes_title(ax):
     
 # Function to control the CONUS State Outlines  
 def add_overlays(ax, current_directory, type):
+    """
+    Adds overlays and shapefiles to a plot.
+
+    Parameters:
+        ax (matplotlib.axes.Axes): The axes object to add overlays to.
+        current_directory (str): The path of the current directory.
+        type (str): The type of header image to add.
+
+    Returns:
+        None
+    """
     log.info('Adding all Overlays and Shapefiles')
     
     # State Outlines
@@ -281,12 +417,30 @@ def add_overlays(ax, current_directory, type):
 
 # Function to control the basemap
 def add_basemap(ax):
+    """
+    Adds a basemap to a plot.
+
+    Parameters:
+        ax (matplotlib.axes.Axes): The axes object to add the basemap to.
+
+    Returns:
+        None
+    """
     log.info('running add_basemap')
     ctx.add_basemap(ax, zoom=6, crs='EPSG:4326', source='https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=63fe7729-f786-444d-8787-817db15f3368') # type: ignore
     log.info('basemap loaded')
 
 # Function to check if there is a outlook to display
 def check_outlook_availability(outlook_data):
+    """
+    Checks if there is an available outlook in the given outlook data.
+
+    Parameters:
+        outlook_data (dict): The outlook data to check for availability.
+
+    Returns:
+        bool: True if an outlook is available, False otherwise.
+    """
     log.info('running check_outlook_availability')
     for feature in outlook_data['features']:
         # Check is there is a LABEL if there is coordinates in the geometry portion of the feature from the Source
@@ -296,7 +450,18 @@ def check_outlook_availability(outlook_data):
     return False
 
 # Function to plot the polygons
-def plot_outlook_polygons(self, outlook_type, outlook_data):
+def plot_outlook_polygons(ax, outlook_type, outlook_data):
+    """
+    Plots outlook polygons on a given axis.
+
+    Parameters:
+        ax (matplotlib.axes.Axes): The axis to plot the outlook polygons on.
+        outlook_type (str): The type of outlook to plot (e.g. 'cat', 'tor', 'wind', etc.).
+        outlook_data (dict): A dictionary containing the outlook data, including features and geometry.
+
+    Returns:
+        None
+    """
     log.info('Plotting Outlook Polygons')
     if outlook_type == 'cat':
         for feature in outlook_data['features']:
@@ -306,7 +471,7 @@ def plot_outlook_polygons(self, outlook_type, outlook_data):
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
             for polygon in outlook_polygon: # Find the properties of each polygon
                 x, y = zip(*polygon[0])
-                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('cat', outlook_label)))
+                ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('cat', outlook_label)))
     elif outlook_type == 'tor':
         for feature in outlook_data['features']:
             outlook_label = feature['properties']['LABEL']
@@ -316,18 +481,18 @@ def plot_outlook_polygons(self, outlook_type, outlook_data):
                 for polygon in outlook_polygon: # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                        self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('tor', outlook_label), edgecolor='black', hatch='x'))
+                        ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_label), edgecolor='black', hatch='x'))
                     else:
-                        self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('tor', outlook_label)))
+                        ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('tor', outlook_label)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon: # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('tor', outlook_label), edgecolor='black', hatch='x'))
+                            ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_label), edgecolor='black', hatch='x'))
                         else:
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('tor', outlook_label)))
+                            ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('tor', outlook_label)))
     elif outlook_type == 'wind':
         for feature in outlook_data['features']:
             outlook_label = feature['properties']['LABEL']
@@ -337,18 +502,18 @@ def plot_outlook_polygons(self, outlook_type, outlook_data):
                 for polygon in outlook_polygon: # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                        self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('wind', outlook_label), edgecolor='black', hatch='x'))
+                        ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_label), edgecolor='black', hatch='x'))
                     else:
-                        self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('wind', outlook_label)))
+                        ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('wind', outlook_label)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon: # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('wind', outlook_label), edgecolor='black', hatch='x'))
+                            ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_label), edgecolor='black', hatch='x'))
                         else:
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('wind', outlook_label)))
+                            ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('wind', outlook_label)))
     elif outlook_type == 'hail':
         for feature in outlook_data['features']:
             outlook_label = feature['properties']['LABEL']
@@ -358,18 +523,18 @@ def plot_outlook_polygons(self, outlook_type, outlook_data):
                 for polygon in outlook_polygon: # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                        self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('hail', outlook_label), edgecolor='black', hatch='x'))
+                        ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_label), edgecolor='black', hatch='x'))
                     else:
-                        self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('hail', outlook_label)))
+                        ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('hail', outlook_label)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon: # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('hail', outlook_label), edgecolor='black', hatch='x'))
+                            ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_label), edgecolor='black', hatch='x'))
                         else:
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('hail', outlook_label)))
+                            ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('hail', outlook_label)))
     elif outlook_type == 'd4-8':
         for feature in outlook_data['features']:
             outlook_label = feature['properties']['LABEL']
@@ -378,7 +543,7 @@ def plot_outlook_polygons(self, outlook_type, outlook_data):
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
             for polygon in outlook_polygon: # Find the properties of each polygon
                 x, y = zip(*polygon[0])
-                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('d4-8', outlook_label)))
+                ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('d4-8', outlook_label)))
     elif outlook_type == 'prob':
         for feature in outlook_data['features']:
             outlook_label = feature['properties']['LABEL']
@@ -388,32 +553,54 @@ def plot_outlook_polygons(self, outlook_type, outlook_data):
                 for polygon in outlook_polygon: # Find the properties of each polygon
                     x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                        self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('prob', outlook_label), edgecolor='black', hatch='x'))
+                        ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_label), edgecolor='black', hatch='x'))
                     else:
-                        self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('prob', outlook_label)))
+                        ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_label)))
             elif feature['geometry']['type'] == 'MultiPolygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon: # Find the properties of each polygon
                     for polygon in multipolygon:
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('prob', outlook_label), edgecolor='black', hatch='x'))
+                            ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_label), edgecolor='black', hatch='x'))
                         else:
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('prob', outlook_label)))
+                            ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('prob', outlook_label)))
     else:
-        log.error(f"There was an error plotting the {type} outlook. Error on line 405.")
-        self.popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
+        log.error(f"There was an error plotting the {outlook_type} outlook. Error on line 405.")
+        popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')
         sys.exit(0)
     
 
 # Function to display a popup and end the program if no outlook is available
 def no_outlook_available():
+    """
+    Displays an error message when no severe weather outlook is available.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+
+    Logs:
+        info: No outlook available
+    """
     log.info('There is no outlook available')
     popup('warning', 'No Outlook', "There is no outlook available at this time")
     return # Ends Program
 
 # Function to display the outlook
 def display_cat_outlook(day, outlook_data):
+    """
+    Displays the categorical outlook for a given day.
+
+    Parameters:
+        day (int): The day for which to display the outlook.
+        outlook_data (dict): The data containing the outlook information.
+
+    Returns:
+        None
+    """
     log.info('Displaying Categorial Outlook')
     fig, ax = setup_plot()
 
@@ -430,7 +617,7 @@ def display_cat_outlook(day, outlook_data):
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
-    plot_outlook_polygons(ax, outlook_data, 'cat')
+    plot_outlook_polygons(ax, 'cat', outlook_data)
 
     output_directory = create_output_directory(current_directory)
     output_filename = f'spc_day_{day}cat_outlook.png'
@@ -449,6 +636,15 @@ def display_cat_outlook(day, outlook_data):
     toolbar.update()
 
     def close_figure():
+        """
+        Closes the current figure, withdraws the root window, and starts the GUI.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         plt.close(fig)
         root.withdraw()
         start_gui()
@@ -466,6 +662,16 @@ def display_cat_outlook(day, outlook_data):
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
 def display_tor_outlook(day, outlook_data):
+    """
+    Displays a tornado outlook for a given day.
+
+    Parameters:
+        day (int): The day for which to display the tornado outlook.
+        outlook_data (dict): The data containing the tornado outlook information.
+
+    Returns:
+        None
+    """
     log.info('Displaying Tornado Outlook')
     fig, ax = setup_plot()
 
@@ -478,7 +684,7 @@ def display_tor_outlook(day, outlook_data):
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
-    plot_outlook_polygons(ax, outlook_data, 'tor')
+    plot_outlook_polygons(ax, 'tor', outlook_data)
 
     output_directory = create_output_directory(current_directory)
     output_filename = f'spc_day_{day}_tor_outlook.png'
@@ -497,6 +703,15 @@ def display_tor_outlook(day, outlook_data):
     toolbar.update()
 
     def close_figure():
+        """
+        Closes the current figure, withdraws the root window, and starts the GUI.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         plt.close(fig)
         root.withdraw()
         start_gui()
@@ -514,6 +729,16 @@ def display_tor_outlook(day, outlook_data):
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
 def display_wind_outlook(day, outlook_data):
+    """
+    Displays a wind outlook for a given day.
+
+    Parameters:
+        day (int): The day for which to display the wind outlook.
+        outlook_data (dict): The data containing the wind outlook information.
+
+    Returns:
+        None
+    """
     log.info('Displaying Wind Outlook')
     fig, ax = setup_plot()
 
@@ -526,7 +751,7 @@ def display_wind_outlook(day, outlook_data):
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
-    plot_outlook_polygons(ax, outlook_data, 'wind')
+    plot_outlook_polygons(ax, 'wind', outlook_data)
 
     output_directory = create_output_directory(current_directory)
     output_filename = f'spc_day_{day}_wind_outlook.png'
@@ -545,6 +770,15 @@ def display_wind_outlook(day, outlook_data):
     toolbar.update()
 
     def close_figure():
+        """
+        Closes the current figure, withdraws the root window, and starts the GUI.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         plt.close(fig)
         root.withdraw()
         start_gui()
@@ -562,6 +796,16 @@ def display_wind_outlook(day, outlook_data):
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
 def display_hail_outlook(day, outlook_data):
+    """
+    Displays a hail outlook for a given day.
+
+    Parameters:
+        day (int): The day for which to display the hail outlook.
+        outlook_data (dict): The data containing the hail outlook information.
+
+    Returns:
+        None
+    """
     log.info('Displaying Hail Outlook')
     fig, ax = setup_plot()
 
@@ -574,7 +818,7 @@ def display_hail_outlook(day, outlook_data):
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
-    plot_outlook_polygons(ax, outlook_data, 'hail')
+    plot_outlook_polygons(ax, 'hail', outlook_data)
 
     output_directory = create_output_directory(current_directory)
     output_filename = f'spc_day_{day}_hail_outlook.png'
@@ -593,6 +837,15 @@ def display_hail_outlook(day, outlook_data):
     toolbar.update()
 
     def close_figure():
+        """
+        Closes the current figure, withdraws the root window, and starts the GUI.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         plt.close(fig)
         root.withdraw()
         start_gui()
@@ -610,6 +863,16 @@ def display_hail_outlook(day, outlook_data):
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
 def display_d48_outlook(day, outlook_data):
+    """
+    Displays a Day 4-8 outlook for a given day.
+
+    Parameters:
+        day (int): The day for which to display the Day 4-8 outlook.
+        outlook_data (dict): The data containing the Day 4-8 outlook information.
+
+    Returns:
+        None
+    """
     log.info('Displaying a Day 4-8 Outlook')
     fig, ax = setup_plot()
 
@@ -622,7 +885,7 @@ def display_d48_outlook(day, outlook_data):
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
-    plot_outlook_polygons(ax, outlook_data, 'd4-8')
+    plot_outlook_polygons(ax, 'd4-8', outlook_data)
 
     output_directory = create_output_directory(current_directory)
     output_filename = f'spc_day_{day}_outlook.png'
@@ -641,6 +904,19 @@ def display_d48_outlook(day, outlook_data):
     toolbar.update()
 
     def close_figure():
+        """
+        Closes the current figure, withdraws the root window, and starts the GUI.
+
+        This function closes the current figure using the `plt.close()` function.
+        It then withdraws the root window using the `root.withdraw()` function.
+        Finally, it starts the GUI by calling the `start_gui()` function.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         plt.close(fig)
         root.withdraw()
         start_gui()
@@ -658,6 +934,16 @@ def display_d48_outlook(day, outlook_data):
     plt.savefig(output_path, dpi=96, bbox_inches='tight')
 
 def display_prob_outlook(day, outlook_data):
+    """
+    Displays a probabilistic outlook for a given day.
+
+    Parameters:
+        day (int): The day for which to display the probabilistic outlook.
+        outlook_data (dict): The data containing the probabilistic outlook information.
+
+    Returns:
+        None
+    """
     log.info('Displaying Probabilistic Outlook')
     fig, ax = setup_plot()
 
@@ -670,7 +956,7 @@ def display_prob_outlook(day, outlook_data):
     add_basemap(ax)
     remove_axes_labels_boxes_title(ax)
 
-    plot_outlook_polygons(ax, outlook_data, 'prob')
+    plot_outlook_polygons(ax, 'prob', outlook_data)
 
     output_directory = create_output_directory(current_directory)
     output_filename = f'spc_day_{day}_prob_outlook.png'
@@ -689,6 +975,15 @@ def display_prob_outlook(day, outlook_data):
     toolbar.update()
 
     def close_figure():
+        """
+        Closes the current figure, withdraws the root window, and starts the GUI.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         plt.close(fig)
         root.withdraw()
         start_gui()
@@ -707,6 +1002,16 @@ def display_prob_outlook(day, outlook_data):
 
 # Colors for Display
 def color(type, outlook_type):
+    """
+    Returns the color associated with a given outlook type.
+
+    Parameters:
+        type (str): The type of outlook (e.g., 'cat', 'tor', 'wind', 'hail', 'prob', 'd4-8').
+        outlook_type (str): The specific outlook type (e.g., 'TSTM', 'MRGL', 'SLGT', 'ENH', 'MDT', 'HIGH', '0.02', '0.05', '0.10', '0.15', '0.30', '0.45', '0.60', 'sig').
+
+    Returns:
+        str: The color associated with the given outlook type, or 'blue' if not found.
+    """
     log.info(f'Getting {outlook_type} for {type} outlook')
     if type == 'cat':
         colors = {
@@ -753,6 +1058,20 @@ def color(type, outlook_type):
 
 # Displaying Popups
 def popup(type, title, message):
+    """
+    The `popup` function displays different types of popups based on the input parameters such as
+    info, error, warning, or question.
+
+    :param type: The `type` parameter in the `popup` method specifies the type of popup to display.
+    :param title: The `title` parameter in the `popup` function refers to the title of the popup
+    window that will be displayed. It is the text that appears at the top of the popup window to
+    provide context or information about the message being shown to the user.
+    :param message: The `message` parameter in the `popup` function is the text that will be
+    displayed in the popup dialog box. It is the information, error message, warning message, or
+    question that you want to show to the user depending on the type of popup being displayed.
+    :return: The `popup` method returns the value of `question` when the `type` parameter is
+    set to 'question'.
+    """
     global question
     log.info(f'Showing a {type} popup titled {title} with the following message: {message}')
     if type == 'info':
@@ -770,6 +1089,11 @@ def popup(type, title, message):
 
 # Start the GUI
 def start_gui():
+    """
+    This function initializes and runs the graphical user interface (GUI) for the Severe Weather Outlook Display program.
+    It creates the main window, sets up the layout, and defines the behavior for various buttons and events.
+    The function does not take any parameters and does not return any values.
+    """
     global home_icon
     global lightning_icon
     global tornado_icon 
@@ -796,6 +1120,23 @@ def start_gui():
     main_frame.grid(row=0, column=1, columnspan=2, sticky='nsew')
 
     def side_bar():
+        """
+        Initializes the sidebar buttons for the GUI.
+
+        Creates and configures the following buttons:
+        - Logo Button: Displays the logo image and is disabled.
+        - Home Button: Changes the frame to the home frame when clicked.
+        - Day 1 Button: Changes the frame to the frame corresponding to day 1 when clicked.
+        - Day 2 Button: Changes the frame to the frame corresponding to day 2 when clicked.
+        - Day 3 Button: Changes the frame to the frame corresponding to day 3 when clicked.
+        - Day 4-8 Button: Changes the frame to the frame corresponding to days 4-8 when clicked.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         ## Sidebar Buttons ##
         # Logo
         logo_Button = ctk.CTkButton(sidebar_frame, text='', width=200, height=250, corner_radius=10, fg_color='transparent', 
@@ -869,6 +1210,15 @@ def start_gui():
     }
 
     def determine_highest_risk_level_cat(outlook_data):
+        """
+        Determines the highest risk level category from the given outlook data.
+
+        Args:
+            outlook_data (dict): A dictionary containing the outlook data with 'features' key.
+
+        Returns:
+            str: The highest risk level category, or 'None' if no risk level is found.
+        """
         highest_risk_level = 0
         for feature in outlook_data['features']:
             risk_level_label = feature['properties'].get('LABEL')
@@ -893,6 +1243,15 @@ def start_gui():
         return highest_risk_level
 
     def determine_highest_risk_level_tor(outlook_data):
+        """
+        Determines the highest risk level for tornadoes from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for tornadoes as a string, or 'None' if no risk level is found.
+        """
         highest_tor_risk_level = 0
         for feature in outlook_data['features']:
             tor_risk_level_label = feature['properties'].get('LABEL')
@@ -919,6 +1278,15 @@ def start_gui():
         return highest_tor_risk_level
 
     def determine_highest_risk_level_wind(outlook_data):
+        """
+        Determines the highest wind risk level from the given outlook data.
+
+        Args:
+            outlook_data (dict): A dictionary containing the outlook data with 'features' key.
+
+        Returns:
+            str: The highest wind risk level category, or 'None' if no risk level is found.
+        """
         highest_wind_risk_level = 0
         for feature in outlook_data['features']:
             wind_risk_level_label = feature['properties'].get('LABEL')
@@ -941,6 +1309,15 @@ def start_gui():
         return highest_wind_risk_level
 
     def determine_highest_risk_level_hail(outlook_data):
+        """
+        Determines the highest risk level for hail from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for hail as a string, or 'None' if no risk level is found.
+        """
         highest_hail_risk_level = 0
         for feature in outlook_data['features']:
             hail_risk_level_label = feature['properties'].get('LABEL')
@@ -963,6 +1340,18 @@ def start_gui():
         return highest_hail_risk_level
 
     def determine_highest_risk_level_prob(outlook_data):
+        """
+        Determines the highest risk level for probability from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for probability as a string, or 'None' if no risk level is found.
+
+        Raises:
+            None.
+        """
         highest_prob_risk_level = 0
         for feature in outlook_data['features']:
             prob_risk_level_label = feature['properties'].get('LABEL')
@@ -985,6 +1374,18 @@ def start_gui():
         return highest_prob_risk_level
 
     def determine_highest_risk_level_d48(outlook_data):
+        """
+        Determines the highest risk level for day 4-8 from the given outlook data.
+
+        Args:
+            outlook_data (dict): The outlook data containing the features.
+
+        Returns:
+            str: The highest risk level for day 4-8 as a string, or 'None' if no risk level is found.
+
+        Raises:
+            None.
+        """
         highest_d48_risk_level = 0
         for feature in outlook_data['features']:
             d48_risk_level_label = feature['properties'].get('LABEL')
@@ -1001,6 +1402,16 @@ def start_gui():
         return highest_d48_risk_level
 
     def frames(day):
+        """
+        This function handles the frames for different days of the week. It takes a day parameter and 
+        based on that, it creates the corresponding frame with the required buttons and labels.
+
+        Parameters:
+        day (str or int): The day of the week. It can be 'home', 1, 2, 3, 'd4-8', or 'test'.
+
+        Returns:
+        None
+        """
         if day == 'home':
             side_bar()
             
@@ -1306,17 +1717,47 @@ def start_gui():
             sys.exit(0)
         
     def frame_change(day):
+        """
+        This function changes the frame of the GUI based on the provided day.
+        
+        It destroys all the widgets in the main frame and then calls the frames function to recreate the frame for the specified day.
+        
+        Parameters:
+            day (int): The day for which the frame needs to be changed.
+        
+        Returns:
+            None
+        """
         for widget in main_frame.winfo_children():
             widget.destroy()
         
         frames(day)
 
     def button_run(type, day):
+        """
+        Handles the button press event for running a specific outlook type for a given day.
+        
+        Parameters:
+            type (str): The type of outlook to be run.
+            day (int): The day for which the outlook needs to be run.
+        
+        Returns:
+            None
+        """
         log.info(f'GUI - {type} {day} button has been pressed. Running Day {day} {type} outlook')
         window.withdraw()
         run(type, day)
 
     def hide_to_system_tray():
+        """
+        Hides the application window to the system tray.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         global icon
         window.withdraw()
         image = Image.open('My_project.png')
@@ -1325,6 +1766,17 @@ def start_gui():
         icon.run()
 
     def close_program():
+        """
+        Closes the program after prompting the user for confirmation.
+
+        This function displays a popup asking the user if they want to close the program. If the user responds with 'yes', it stops the system tray icon, withdraws the main window, and exits the program.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         global question # Declare question as a global variable
         log.info('GUI - Now Closing Program')
         popup('question', 
@@ -1339,6 +1791,16 @@ def start_gui():
             return
 
     def show_from_system_tray(icon, item):
+        """
+        Shows the application window from the system tray.
+
+        Parameters:
+            icon: The system tray icon object.
+            item: The item that triggered this function call.
+
+        Returns:
+            None
+        """
         icon.stop()
         window.deiconify()
 
@@ -1355,6 +1817,21 @@ def start_gui():
 
 ### Function to Run the Program ###
 def run(type, day):
+    """
+    Runs the Severe Weather Outlook Display program based on the provided outlook type and day.
+
+    This function takes in two parameters: type and day. The type parameter specifies the type of outlook to display, 
+    and the day parameter specifies the day for which the outlook should be displayed. The function then fetches the 
+    relevant outlook data, checks its availability, and displays it on the map. If the outlook data is not available, 
+    it displays a notification and starts the GUI.
+
+    Parameters:
+        type (str): The type of outlook to display. Can be 'cat', 'tor', 'wind', 'hail', 'd4-8', or 'prob'.
+        day (int): The day for which the outlook should be displayed.
+
+    Returns:
+        None
+    """
     global instance
     log.info(f'Running the Program under day {day}')
     if type == 'cat':
@@ -1418,6 +1895,15 @@ def run(type, day):
 
 # Startup Function
 def startup():
+    """
+    Initializes the application by setting up the log directory and starting the RSS feed monitoring thread.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
     
