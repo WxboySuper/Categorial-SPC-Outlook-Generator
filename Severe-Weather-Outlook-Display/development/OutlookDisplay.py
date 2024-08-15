@@ -258,8 +258,8 @@ class GUI:
         """
         This function closes the program after prompting the user for confirmation.
 
-        It displays a popup asking the user if they want to close the program, 
-        and if the user responds with 'yes', it stops the system tray icon, withdraws the main window, 
+        It displays a popup asking the user if they want to close the program,
+        and if the user responds with 'yes', it stops the system tray icon, withdraws the main window,
         and exits the program.
 
         Parameters:
@@ -542,7 +542,7 @@ class GUI:
         """
         This function handles the creation of frames for different days of severe weather outlooks.
 
-        It takes a 'day' parameter which determines which day's outlook to display. 
+        It takes a 'day' parameter which determines which day's outlook to display.
         The function then creates the necessary buttons and labels for that day's outlook.
 
         The function does not return any values.

@@ -1853,7 +1853,7 @@ def start_gui():
         """
         Closes the program after prompting the user for confirmation.
 
-        This function displays a popup asking the user if they want to close the program. 
+        This function displays a popup asking the user if they want to close the program.
         If the user responds with 'yes', it stops the system tray icon, withdraws the main window, and exits the program.
 
         Parameters:
