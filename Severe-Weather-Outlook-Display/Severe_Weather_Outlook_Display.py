@@ -1012,6 +1012,7 @@ def display_prob_outlook(day, outlook_data):
 
 # Colors for Display
 def color(outlook_type, outlook_level):
+    # skipcq: FLK-W505
     """
     Returns the color associated with a given outlook type.
 
@@ -1032,7 +1033,6 @@ def color(outlook_type, outlook_level):
         'MDT': 'red',
         'HIGH': 'magenta'
         }
-        return colors.get(outlook_level, 'blue') # Returns the Color, Blue if not found
     if outlook_type == 'tor':
         colors = {
             '0.02': 'green',
@@ -1044,8 +1044,7 @@ def color(outlook_type, outlook_level):
             '0.60': 'blue',
             'sig': 'black'
         }
-        return colors.get(outlook_level, 'blue') # Returns the color, Blue if not found
-    if ('wind', 'hail', 'prob') in outlook_type:
+    if outlook_type in ('wind', 'hail', 'prob'):
         colors = {
             '0.05': 'saddlebrown',
             '0.15': 'gold',
@@ -1054,17 +1053,17 @@ def color(outlook_type, outlook_level):
             '0.60': 'blueviolet',
             'sig': 'black'
         }
-        return colors.get(outlook_level, 'blue') # Returns the color, Blue if not found
     if outlook_type == 'd4-8':
         colors = {
             '0.15': 'gold',
             '0.30': 'sandybrown'
         }
-        return colors.get(outlook_level, 'blue') # Returns the color, blue if not found
-    if outlook_type is not ('cat', 'tor', 'wind', 'hail', 'prob', 'd4-8'):
+    if outlook_type not in ('cat', 'tor', 'wind', 'hail', 'prob', 'd4-8'):
         log.error(f"There was an error accessing colors. Error on line 751")
         popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors. The program will now quit.')
         sys.exit(0)
+    
+    return colors.get(outlook_level, 'blue')  # Returns the color, blue if not found
 
 # Displaying Popups
 def popup(type, title, message):

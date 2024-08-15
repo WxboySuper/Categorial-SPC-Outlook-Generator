@@ -200,7 +200,6 @@ class plot:
             'MDT': 'red',
             'HIGH': 'magenta'
             }
-            return colors.get(outlook_level, 'blue') # Returns the Color, Blue if not found
         if outlook_type == 'tor':
             colors = {
                 '0.02': 'green',
@@ -212,8 +211,7 @@ class plot:
                 '0.60': 'blue',
                 'sig': 'black'
             }
-            return colors.get(outlook_level, 'blue') # Returns the color, Blue if not found
-        if ('wind', 'hail', 'prob') in outlook_type:
+        if outlook_type in ('wind', 'hail', 'prob'):
             colors = {
                 '0.05': 'saddlebrown',
                 '0.15': 'gold',
@@ -222,17 +220,17 @@ class plot:
                 '0.60': 'blueviolet',
                 'sig': 'black'
             }
-            return colors.get(outlook_level, 'blue') # Returns the color, Blue if not found
         if outlook_type == 'd4-8':
             colors = {
                 '0.15': 'gold',
                 '0.30': 'sandybrown'
             }
-            return colors.get(outlook_level, 'blue') # Returns the color, blue if not found
-        if outlook_type is not ('cat', 'tor', 'wind', 'hail', 'prob', 'd4-8'):
+        if outlook_type not in ('cat', 'tor', 'wind', 'hail', 'prob', 'd4-8'):
             log.error(f"There was an error accessing colors. Error on line 751")
             self.popup('warning', 'Invalid Outlook Type', 'There was an error when trying to get colors. The program will now quit.')
             sys.exit(0)
+        
+        return colors.get(outlook_level, 'blue')  # Returns the Color, Blue if not found
 
     def plot_outlook_polygons(self, outlook_type, outlook_data):
         """
