@@ -491,7 +491,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
             for polygon in outlook_polygon:  # Find the properties of each polygon
-                x, y = zip(*polygon[0])
                 ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('cat', outlook_label)))
     elif outlook_type == 'tor':
         for feature in outlook_data['features']:
@@ -500,7 +499,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for polygon in outlook_polygon:  # Find the properties of each polygon
-                    x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_label),
                                                       edgecolor='black', hatch='x'))
@@ -510,7 +508,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon:  # Find the properties of each polygon
                     for polygon in multipolygon:
-                        x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('tor', outlook_label),
                                                           edgecolor='black', hatch='x'))
@@ -523,7 +520,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for polygon in outlook_polygon:  # Find the properties of each polygon
-                    x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_label),
                                                       edgecolor='black', hatch='x'))
@@ -533,7 +529,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon:  # Find the properties of each polygon
                     for polygon in multipolygon:
-                        x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('wind', outlook_label),
                                                           edgecolor='black', hatch='x'))
@@ -546,7 +541,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for polygon in outlook_polygon:  # Find the properties of each polygon
-                    x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_label),
                                                       edgecolor='black', hatch='x'))
@@ -556,7 +550,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon:  # Find the properties of each polygon
                     for polygon in multipolygon:
-                        x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('hail', outlook_label),
                                                           edgecolor='black', hatch='x'))
@@ -569,7 +562,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
             for polygon in outlook_polygon:  # Find the properties of each polygon
-                x, y = zip(*polygon[0])
                 ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=color('d4-8', outlook_label)))
     elif outlook_type == 'prob':
         for feature in outlook_data['features']:
@@ -578,7 +570,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
             if feature['geometry']['type'] == 'Polygon':
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for polygon in outlook_polygon:  # Find the properties of each polygon
-                    x, y = zip(*polygon[0])
                     if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                         ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_label),
                                                       edgecolor='black', hatch='x'))
@@ -588,7 +579,6 @@ def plot_outlook_polygons(ax, outlook_type, outlook_data):  # skipcq: PY-R1000
                 outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for multipolygon in outlook_polygon:  # Find the properties of each polygon
                     for polygon in multipolygon:
-                        x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
                             ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=color('prob', outlook_label),
                                                           edgecolor='black', hatch='x'))
