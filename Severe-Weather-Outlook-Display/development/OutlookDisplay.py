@@ -28,6 +28,23 @@ fetch = OutlookMonitoring.fetch()
 display = OutlookProcessing.display()
 
 class GUI:
+    """
+    Represents the graphical user interface (GUI) class for the severe weather outlook program.
+
+    This class is responsible for initializing and running the GUI, setting up various attributes and icons,
+    and mapping risk levels to integers.
+
+    Attributes:
+        _instance (GUI): The singleton instance of the GUI class.
+        current_directory (str): The directory of the current file.
+        tornado_icon (CTkImage): The tornado icon image.
+        home_icon (CTkImage): The home icon image.
+        lightning_icon (CTkImage): The lightning icon image.
+
+    Methods:
+        __init__(): Initializes a new instance of the GUI class.
+    """
+    
     _instance = None
 
     def __init__(self):
@@ -813,6 +830,21 @@ class GUI:
 gui = GUI()
 
 class RUN:
+    """
+    Represents the main execution class for the severe weather outlook program.
+
+    This class is responsible for initializing the program's state and log directory.
+    It provides methods for running the program, displaying popups, and logging events.
+
+    Attributes:
+        instance (int): The instance number of the program.
+        log_directory (str): The directory where log files are stored.
+
+    Methods:
+        __init__(): Initializes a new instance of the RUN class.
+        popup(type, title, message): Displays a popup dialog box with the specified type, title, and message.
+        run_program(outlook_type, day, window): Runs the severe weather outlook program for the specified outlook type and day.
+    """
     def __init__(self):
         """
         Initializes a new instance of the RUN class.

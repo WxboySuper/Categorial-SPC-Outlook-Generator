@@ -26,6 +26,25 @@ fetch = OutlookMonitoring.fetch()
 
 
 class plot:
+    """
+    Represents a class for plotting severe weather outlook data.
+
+    This class provides methods for setting up a plot, adding overlays and shapefiles, and creating an output directory.
+
+    Attributes:
+        question (str): The question to be asked.
+        output_directory (str): The directory where the output will be saved.
+        current_directory (str): The current working directory.
+        fig (matplotlib.figure.Figure): The figure object.
+        ax (matplotlib.axes.Axes): The axes object.
+
+    Methods:
+        __init__(): Initializes the plot object with default values.
+        popup(type, title, message): Displays a popup message box of the specified type with the given title and message.
+        create_output_directory(): Creates an output directory in the current directory.
+        setup_plot(): Sets up the plot by configuring the figure and axes.
+        add_overlays(outlook_type): Adds overlays and shapefiles to the plot based on the provided outlook type.
+    """
     def __init__(self):
         """
         Initializes the `plot` object with default values for the `question`, `output_directory`, and `current_directory` attributes.
@@ -331,6 +350,25 @@ class plot:
             sys.exit(0)
 
 class display:
+    """
+    Represents a class for displaying severe weather outlook data.
+
+    This class provides methods for displaying different types of outlook data, including categorical, tornado, wind, hail, and probability outlooks.
+
+    Attributes:
+        ax (matplotlib.axes.Axes): The axes object.
+        fig (matplotlib.figure.Figure): The figure object.
+        plotting (plot): An instance of the plot class for handling plotting tasks.
+
+    Methods:
+        cat(day, start_gui_callback, outlook_data): Displays a categorical outlook for a given day.
+        tor(day, start_gui_callback, outlook_data): Displays a tornado outlook for a given day.
+        wind(day, start_gui_callback, outlook_data): Displays a wind outlook for a given day.
+        hail(day, start_gui_callback, outlook_data): Displays a hail outlook for a given day.
+        d48(day, start_gui_callback, outlook_data): Displays a 48-hour outlook for a given day.
+        prob(day, start_gui_callback, outlook_data): Displays a probability outlook for a given day.
+        close_figure(): Closes the current figure.
+    """
     def __init__(self):
         """
         Initializes the display object with default values for the ax, fig, and plotting attributes.

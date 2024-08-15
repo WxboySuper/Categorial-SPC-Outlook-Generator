@@ -24,6 +24,26 @@ root.withdraw()
 
 
 class monitor:
+    """
+    Represents the monitor class for the severe weather outlook program.
+
+    This class is responsible for monitoring the RSS feed for new entries and sending notifications.
+
+    Attributes:
+        last_refresh_time (float): The time of the last refresh.
+        current_time (float): The current time.
+        current_directory (str): The directory of the current file.
+        instance (int): The instance number of the monitor.
+        rss_url (str): The URL of the RSS feed.
+        check_interval (int): The interval at which to check the RSS feed.
+        refresh_interval (int): The interval at which to refresh the list.
+        notified_titles (list): A list of titles that have already been notified.
+        first_message_title (str): The title of the first message encountered.
+
+    Methods:
+        __init__(): Initializes a new instance of the monitor class.
+        rss(): Checks the RSS feed for new entries and sends notifications.
+    """
     def __init__(self):
         """
         Initializes a new instance of the monitor class.
@@ -83,6 +103,20 @@ class monitor:
             log.info('RSS - Interval Passed')
     
 class fetch:
+    """
+    Represents a class for fetching severe weather outlook data.
+
+    This class provides methods for fetching categorical and tornado outlook data for a specified day.
+
+    Attributes:
+        question (str): The question to be asked.
+        outlook_data (dict): The fetched outlook data in JSON format.
+
+    Methods:
+        popup(type, title, message): Displays a popup message box of the specified type with the given title and message.
+        cat(day): Fetches the categorical outlook data for a specified day.
+        tornado(day): Fetches the tornado outlook data for a specified day.
+    """
     def __init__(self):
         """
         Initializes a new instance of the class.
