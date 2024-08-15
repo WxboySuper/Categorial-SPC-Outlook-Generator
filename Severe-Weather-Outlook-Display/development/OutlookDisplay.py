@@ -141,7 +141,7 @@ class GUI:
             messagebox.showwarning(title, message)
         elif type == 'question':
             self.question = messagebox.askquestion(title, message)
-            return self.question
+            return self.question  # skipcq: PYL-R1710
         else:
             messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup. The program will now quit.')
             sys.exit(0)
@@ -258,7 +258,9 @@ class GUI:
         """
         This function closes the program after prompting the user for confirmation.
 
-        It displays a popup asking the user if they want to close the program, and if the user responds with 'yes', it stops the system tray icon, withdraws the main window, and exits the program.
+        It displays a popup asking the user if they want to close the program, 
+        and if the user responds with 'yes', it stops the system tray icon, withdraws the main window, 
+        and exits the program.
 
         Parameters:
             self (object): A reference to the current instance of the class.
@@ -540,7 +542,8 @@ class GUI:
         """
         This function handles the creation of frames for different days of severe weather outlooks.
 
-        It takes a 'day' parameter which determines which day's outlook to display. The function then creates the necessary buttons and labels for that day's outlook.
+        It takes a 'day' parameter which determines which day's outlook to display. 
+        The function then creates the necessary buttons and labels for that day's outlook.
 
         The function does not return any values.
 
@@ -902,7 +905,7 @@ class RUN:
             messagebox.showwarning(title, message)
         elif type == 'question':
             self.question = messagebox.askquestion(title, message)
-            return self.question
+            return self.question  # skipcq: PYL-R1710
         else:
             messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup. The program will now quit.')
             sys.exit(0)
@@ -911,8 +914,8 @@ class RUN:
         """
         Runs the severe weather outlook program for a specified outlook type and day.
 
-        This function logs the start of the program, fetches the outlook data, checks its availability, 
-        and displays it on the map if available. If the outlook data is not available, it displays a 
+        This function logs the start of the program, fetches the outlook data, checks its availability,
+        and displays it on the map if available. If the outlook data is not available, it displays a
         warning message. It also checks if the outlook type is valid and exits the program if it's not.
 
         Parameters:

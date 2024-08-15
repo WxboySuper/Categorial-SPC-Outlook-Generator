@@ -156,7 +156,7 @@ class fetch:
             messagebox.showwarning(title, message)
         elif type == 'question':
             self.question = messagebox.askquestion(title, message)
-            return self.question
+            return self.question  # skipcq: PYL-R1710
         else:
             messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup. The program will now quit.')
             sys.exit(0)

@@ -1044,7 +1044,7 @@ def color(outlook_type, outlook_level):
 
     Parameters:
         type (str): The type of outlook (e.g., 'cat', 'tor', 'wind', 'hail', 'prob', 'd4-8').
-        outlook_type (str): The specific outlook type (e.g., 'TSTM', 'MRGL', 'SLGT', 'ENH', 'MDT', 'HIGH', '0.02', '0.05', '0.10', '0.15', '0.30', '0.45', '0.60', 'sig').
+        outlook_type (str): The specific outlook type (e.g., 'TSTM', 'MRGL', 'SLGT', 'ENH', 'MDT', 'HIGH', '0.02', '0.05', '0.10', '0.15', '0.30', '0.45', '0.60', 'sig').  # skipcq: FLK-W505
 
     Returns:
         str: The color associated with the given outlook type, or 'blue' if not found.
@@ -1118,7 +1118,7 @@ def popup(type, title, message):
         messagebox.showwarning(title, message)
     elif type == 'question':
         question = messagebox.askquestion(title, message)
-        return question
+        return question  # skipcq: PYL-R1710
     else:
         messagebox.showerror('Invalid Popup', 'There was an error when trying to display a popup. The program will now quit.')
         sys.exit(0)
@@ -1853,7 +1853,8 @@ def start_gui():
         """
         Closes the program after prompting the user for confirmation.
 
-        This function displays a popup asking the user if they want to close the program. If the user responds with 'yes', it stops the system tray icon, withdraws the main window, and exits the program.
+        This function displays a popup asking the user if they want to close the program. 
+        If the user responds with 'yes', it stops the system tray icon, withdraws the main window, and exits the program.
 
         Parameters:
             None
