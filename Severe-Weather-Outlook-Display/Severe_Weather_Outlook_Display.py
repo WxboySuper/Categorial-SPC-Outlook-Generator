@@ -1471,7 +1471,7 @@ def start_gui():
 
             # Welcome Label
             Welcome_Label = ctk.CTkLabel(main_frame,
-                                         text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', 
+                                         text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.',
                                          font=('karla', 25))
             Welcome_Label.place(x=200, y=450)
         elif day == 1:
@@ -1926,7 +1926,7 @@ def run(type, day):
             start_gui()
         if instance == 0:
             popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_cat_outlook(day, outlook_data)
     elif type == 'tor':
@@ -1936,7 +1936,7 @@ def run(type, day):
             start_gui()
         if instance == 0:
             popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_tor_outlook(day, outlook_data)
     elif type == 'wind':
@@ -1946,7 +1946,7 @@ def run(type, day):
             start_gui()
         if instance == 0:
             popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_wind_outlook(day, outlook_data)
     elif type == 'hail':
@@ -1956,7 +1956,7 @@ def run(type, day):
             start_gui()
         if instance == 0:
             popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_hail_outlook(day, outlook_data)
     elif type == 'd4-8':
@@ -1966,7 +1966,7 @@ def run(type, day):
             start_gui()
         if instance == 0:
             popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_d48_outlook(day, outlook_data)
     elif type == 'prob':
@@ -1976,7 +1976,7 @@ def run(type, day):
             start_gui()
         if instance == 0:
             popup('info', 'Program is Running',
-                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')  # skipcq: FLK-E501
             instance = 1
         display_prob_outlook(day, outlook_data)
     else:
