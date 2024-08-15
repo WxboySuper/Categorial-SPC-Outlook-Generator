@@ -66,6 +66,7 @@ class GUI:
         Returns:
             None
         """
+        self.question = None
         self.current_directory = os.path.dirname(os.path.abspath(__file__))
 
         self.tornado_icon_path = os.path.join(self.current_directory, '../files/icons/Tornado.png')
@@ -167,7 +168,7 @@ class GUI:
 
         # Initialize a window
         log.info('GUI - Initializing window')
-        self.window = ctk.CTkToplevel()
+        self.window = ctk.CTkToplevel()  # skipcq: PYL-W0201
         self.window.geometry('1700x900+50+50')
         self.window.title('Severe Weather Outlook Display')
 
@@ -176,14 +177,14 @@ class GUI:
         self.window.grid_columnconfigure(2, weight=1)
 
         # Fonts
-        self.Title_Font = ctk.CTkFont(family='Montserrat', size=50, weight='bold')
-        self.Description_Font = ctk.CTkFont(family='karla', size=21)
+        self.Title_Font = ctk.CTkFont(family='Montserrat', size=50, weight='bold')  # skipcq: PYL-W0201
+        self.Description_Font = ctk.CTkFont(family='karla', size=21)  # skipcq: PYL-W0201
 
         # Frames
-        self.sidebar_frame = ctk.CTkFrame(self.window, height=550, fg_color='#103157')
+        self.sidebar_frame = ctk.CTkFrame(self.window, height=550, fg_color='#103157')  # skipcq: PYL-W0201
         self.sidebar_frame.grid(row=0, column=0, sticky='ns')
 
-        self.main_frame = ctk.CTkFrame(self.window)
+        self.main_frame = ctk.CTkFrame(self.window)  # skipcq: PYL-W0201
         self.main_frame.grid(row=0, column=1, columnspan=2, sticky='nsew')
 
         self.side_bar()
@@ -883,6 +884,7 @@ class RUN:
         """
         self.instance = 0
         self.log_directory = 'C:\\log'
+        self.question = None
 
     def popup(self, popup_type, title, message):  # skipcq: PYL-R1710
         """
