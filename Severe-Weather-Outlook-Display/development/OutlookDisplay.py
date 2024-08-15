@@ -268,7 +268,8 @@ class GUI:
         """
         global question  # Declare question as a global variable
         log.info('GUI - Now Closing Program')
-        self.popup('question', 'Close Program?', 'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')
+        self.popup('question', 'Close Program?',
+                   'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
         if self.question == 'yes':
             if 'icon' in globals() and icon is not None:
                 icon.stop() 
@@ -303,26 +304,26 @@ class GUI:
 
         # Home Button
         Home_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Home', width=200, corner_radius=10, fg_color='transparent',
-                                        font=('karla', 26), command=lambda: self.frame_change('home'),
-                                        hover_color='#2191aa', image=self.home_icon, compound='top')
+                                         font=('karla', 26), command=lambda: self.frame_change('home'),
+                                         hover_color='#2191aa', image=self.home_icon, compound='top')
         Home_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 1 Button
         D1_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 1', width=200, corner_radius=12, fg_color='transparent',
-                                    font=('karla', 26), command=lambda: self.frame_change(1),
-                                    hover_color='#2191aa', image=self.tornado_icon)
+                                       font=('karla', 26), command=lambda: self.frame_change(1),
+                                       hover_color='#2191aa', image=self.tornado_icon)
         D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 2 Button
         D2_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 2', width=200, corner_radius=12, fg_color='transparent',
-                                    font=('karla', 26), command=lambda: self.frame_change(2),
-                                    hover_color='#2191aa', image=self.tornado_icon)
+                                       font=('karla', 26), command=lambda: self.frame_change(2),
+                                       hover_color='#2191aa', image=self.tornado_icon)
         D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 3 Button
         D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent',
-                                    font=('karla', 26), command=lambda: self.frame_change(3),
-                                    hover_color='#2191aa', image=self.lightning_icon)
+                                       font=('karla', 26), command=lambda: self.frame_change(3),
+                                       hover_color='#2191aa', image=self.lightning_icon)
         D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 4-8 Button
@@ -554,8 +555,8 @@ class GUI:
 
             # Home Button
             Home_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Home', width=200, corner_radius=10, fg_color='transparent',
-                                     font=('karla', 26), command=lambda: self.frame_change('home'),
-                                     state='disabled', image=self.home_icon, compound='top')
+                                             font=('karla', 26), command=lambda: self.frame_change('home'),
+                                             state='disabled', image=self.home_icon, compound='top')
             Home_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -572,8 +573,9 @@ class GUI:
             Title_Label.place(x=150, y=350)
 
             # Welcome Label
-            Welcome_Label = ctk.CTkLabel(self.main_frame, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', 
-                                        font=('karla', 25))
+            Welcome_Label = ctk.CTkLabel(self.main_frame,
+                                         text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.',
+                                         font=('karla', 25))
             Welcome_Label.place(x=200, y=450)
         elif day == 1:
             outlook_data_cat_day_1 = fetch.cat(1)
@@ -592,8 +594,8 @@ class GUI:
 
             # Day 1 Button
             D1_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 1', width=200, corner_radius=12, fg_color='transparent',
-                                   font=('karla', 26), command=lambda: self.frame_change(1),
-                                   state='disabled', image=self.tornado_icon)
+                                           font=('karla', 26), command=lambda: self.frame_change(1),
+                                           state='disabled', image=self.tornado_icon)
             D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -659,9 +661,9 @@ class GUI:
             self.side_bar()
 
             # Day 2 Button
-            D2_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 2',width=200, corner_radius=12, fg_color='transparent',
-                                   font=('karla', 26), command=lambda: self.frame_change(2),
-                                   state='disabled', image=self.tornado_icon)
+            D2_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 2', width=200, corner_radius=12, fg_color='transparent',
+                                           font=('karla', 26), command=lambda: self.frame_change(2),
+                                           state='disabled', image=self.tornado_icon)
             D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -720,10 +722,10 @@ class GUI:
 
             self.side_bar()
 
-            #Day 3 Button
+            # Day 3 Button
             D3_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent',
-                                   font=('karla', 26), command=lambda: self.frame_change(3),
-                                   state='disabled', image=self.lightning_icon)
+                                           font=('karla', 26), command=lambda: self.frame_change(3),
+                                           state='disabled', image=self.lightning_icon)
             D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -739,7 +741,8 @@ class GUI:
             D3_Label.grid(row=2, column=1, columnspan=2, padx=435, pady=50, sticky='nsew')
 
             # Day 3 Categorical Button
-            D3_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 3 Categorical', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('cat', 3))
+            D3_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 3 Categorical',
+                                          width=150, height=50, font=('karla', 28), command=lambda: self.button_run('cat', 3))
             D3_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 3 Categorial Risk Label
@@ -747,7 +750,8 @@ class GUI:
             highest_risk_label_cat_day_3.grid(row=3, column=2, columnspan=1, sticky='nsew')
 
             # Day 3 Probabilistic Outlook
-            D3_Prob_Button = ctk.CTkButton(self.main_frame, text='Day 3 Probabilistic', width=150, height=50, font=('karla', 28), command=lambda: self.button_run('prob', 3))
+            D3_Prob_Button = ctk.CTkButton(self.main_frame, text='Day 3 Probabilistic',
+                                           width=150, height=50, font=('karla', 28), command=lambda: self.button_run('prob', 3))
             D3_Prob_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=30, sticky='nsew')
 
             # Day 3 Probabilistic Risk Label
@@ -773,8 +777,8 @@ class GUI:
 
             # Day 4-8 Button
             D48_Side_Button = ctk.CTkButton(self.sidebar_frame, text='Day 4-8', width=200, corner_radius=12, fg_color='transparent', 
-                                    font=self.Description_Font, command=lambda: self.frame_change('d4-8'),
-                                    state='disabled', image=self.lightning_icon)
+                                            font=self.Description_Font, command=lambda: self.frame_change('d4-8'),
+                                            state='disabled', image=self.lightning_icon)
             D48_Side_Button.grid(row=5, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -790,7 +794,8 @@ class GUI:
             D48_Label.grid(row=2, column=1, columnspan=2, padx=400, pady=50, sticky='nsew')
 
             # Day 4 Button
-            D4_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 4 Outlook', font=('karla', 28), height=50, command=lambda: self.button_run('d4-8', 4))
+            D4_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 4 Outlook',
+                                          font=('karla', 28), height=50, command=lambda: self.button_run('d4-8', 4))
             D4_Cat_Button.grid(row=3, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
             # Day 4 Probabilistic Risk Label
@@ -798,7 +803,8 @@ class GUI:
             highest_risk_label_d48_day_4.grid(row=3, column=2, columnspan=1, sticky='nsew')
 
             # Day 5 Button
-            D5_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 5 Outlook', font=('karla', 28), width=150, height=50, command=lambda: self.button_run('d4-8', 5))
+            D5_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 5 Outlook',
+                                          font=('karla', 28), width=150, height=50, command=lambda: self.button_run('d4-8', 5))
             D5_Cat_Button.grid(row=4, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
             # Day 5 Probabilistic Risk Label
@@ -806,7 +812,8 @@ class GUI:
             highest_risk_label_d48_day_5.grid(row=4, column=2, columnspan=1, sticky='nsew')
 
             # Day 6 Button
-            D6_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 6 Outlook', font=('karla', 28), width=150, height=50, command=lambda: self.button_run('d4-8', 6))
+            D6_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 6 Outlook',
+                                          font=('karla', 28), width=150, height=50, command=lambda: self.button_run('d4-8', 6))
             D6_Cat_Button.grid(row=5, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
             # Day 6 Probabilistic Risk Label
@@ -814,7 +821,8 @@ class GUI:
             highest_risk_label_d48_day_6.grid(row=5, column=2, columnspan=1, sticky='nsew')
 
             # Day 7 Button
-            D7_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 7 Outlook', font=('karla', 28), width=150, height=50, command=lambda: self.button_run('d4-8', 7))
+            D7_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 7 Outlook',
+                                          font=('karla', 28), width=150, height=50, command=lambda: self.button_run('d4-8', 7))
             D7_Cat_Button.grid(row=6, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
             # Day 7 Probabilistic Risk Label
@@ -822,7 +830,8 @@ class GUI:
             highest_risk_label_d48_day_7.grid(row=6, column=2, columnspan=1, sticky='nsew')
 
             # Day 8 Button
-            D8_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 8 Outlook', font=('karla', 28), width=150, height=50, command=lambda: self.button_run('d4-8', 8))
+            D8_Cat_Button = ctk.CTkButton(self.main_frame, text='Day 8 Outlook',
+                                          font=('karla', 28), width=150, height=50, command=lambda: self.button_run('d4-8', 8))
             D8_Cat_Button.grid(row=7, column=1, columnspan=1, padx=25, pady=20, sticky='nsew')
 
             # Day 8 Probabilistic Risk Label
@@ -832,6 +841,8 @@ class GUI:
             log.error(f'Invalid Button. Day = {day}. Error on line 1305')
             self.popup('error', 'Invalid Button', "An error has occured where the button isn't programmed correctly. The program will now quit.")
             sys.exit(0)
+
+
 gui = GUI()
 
 
@@ -918,7 +929,8 @@ class RUN:
 
         if fetch.check_outlook_availability(outlook_data):
             if self.instance == 0:
-                self.popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be patient. Click "Ok" or Close the Window to Continue')
+                self.popup('info', 'Program is Running',
+                           'The Severe Weather Outlook Display is now running. The program may take some time to load so be patient. Click "Ok" or Close the Window to Continue')
                 self.instance = 1
 
             window.withdraw()
@@ -929,7 +941,8 @@ class RUN:
 
         if outlook_type not in ['cat', 'tor', 'wind', 'hail', 'd4-8', 'prob']:
             log.error(f'Invalid Outlook Type. Outlook Type = {outlook_type}')
-            self.popup('error', 'Invalid Outlook Type', "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
+            self.popup('error', 'Invalid Outlook Type',
+                       "An error has occurred where the outlook type wasn't read correctly. The program will now quit.")
             sys.exit(0)
 
     def startup(self):
@@ -955,6 +968,7 @@ class RUN:
         rss_feed_thread = threading.Thread(target=monitor.rss)
         rss_feed_thread.daemon = True
         rss_feed_thread.start()
+
 
 gui = GUI()
 run = RUN()

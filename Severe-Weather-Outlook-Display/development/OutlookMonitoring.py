@@ -395,7 +395,7 @@ class fetch:
             info: If an outlook is available.
         """
         for feature in outlook_data['features']:
-            if 'coordinates' in feature['geometry']:
+            if 'coordinates' in feature['geometry']:  # skipcq: PYL-R1705
                 log.info('There is an outlook')
                 return True
             else:

@@ -193,12 +193,12 @@ class plot:
         log.info(f'Getting {outlook_level} for {outlook_type} outlook')
         if outlook_type == 'cat':
             colors = {
-            'TSTM': 'lightgreen',
-            'MRGL': 'green',
-            'SLGT': 'yellow',
-            'ENH': 'orange',
-            'MDT': 'red',
-            'HIGH': 'magenta'
+                'TSTM': 'lightgreen',
+                'MRGL': 'green',
+                'SLGT': 'yellow',
+                'ENH': 'orange',
+                'MDT': 'red',
+                'HIGH': 'magenta'
             }
         if outlook_type == 'tor':
             colors = {
@@ -252,7 +252,8 @@ class plot:
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for polygon in outlook_polygon:  # Find the properties of each polygon
                     x, y = zip(*polygon[0])
-                    self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('cat', outlook_label)))
+                    self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                       lw=1, fc=self.color('cat', outlook_label)))
         elif outlook_type == 'tor':
             for feature in outlook_data['features']:
                 outlook_label = feature['properties']['LABEL']
@@ -262,18 +263,22 @@ class plot:
                     for polygon in outlook_polygon:  # Find the properties of each polygon
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('tor', outlook_label), edgecolor='black', hatch='x'))
+                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k',
+                                                               lw=1, fc=self.color('tor', outlook_label), edgecolor='black', hatch='x'))
                         else:
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('tor', outlook_label)))
+                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                               lw=1, fc=self.color('tor', outlook_label)))
                 elif feature['geometry']['type'] == 'MultiPolygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                     for multipolygon in outlook_polygon:  # Find the properties of each polygon
                         for polygon in multipolygon:
                             x, y = zip(*polygon[0])
                             if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('tor', outlook_label), edgecolor='black', hatch='x'))
+                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k',
+                                                                   lw=1, fc=self.color('tor', outlook_label), edgecolor='black', hatch='x'))
                             else:
-                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('tor', outlook_label)))
+                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                                   lw=1, fc=self.color('tor', outlook_label)))
         elif outlook_type == 'wind':
             for feature in outlook_data['features']:
                 outlook_label = feature['properties']['LABEL']
@@ -283,18 +288,22 @@ class plot:
                     for polygon in outlook_polygon:  # Find the properties of each polygon
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('wind', outlook_label), edgecolor='black', hatch='x'))
+                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k',
+                                                               lw=1, fc=self.color('wind', outlook_label), edgecolor='black', hatch='x'))
                         else:
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('wind', outlook_label)))
+                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                               lw=1, fc=self.color('wind', outlook_label)))
                 elif feature['geometry']['type'] == 'MultiPolygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                     for multipolygon in outlook_polygon:  # Find the properties of each polygon
                         for polygon in multipolygon:
                             x, y = zip(*polygon[0])
                             if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('wind', outlook_label), edgecolor='black', hatch='x'))
+                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k',
+                                                                   lw=1, fc=self.color('wind', outlook_label), edgecolor='black', hatch='x'))
                             else:
-                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('wind', outlook_label)))
+                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                                   lw=1, fc=self.color('wind', outlook_label)))
         elif outlook_type == 'hail':
             for feature in outlook_data['features']:
                 outlook_label = feature['properties']['LABEL']
@@ -304,18 +313,22 @@ class plot:
                     for polygon in outlook_polygon:  # Find the properties of each polygon
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('hail', outlook_label), edgecolor='black', hatch='x'))
+                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k',
+                                                               lw=1, fc=self.color('hail', outlook_label), edgecolor='black', hatch='x'))
                         else:
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('hail', outlook_label)))
+                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                               lw=1, fc=self.color('hail', outlook_label)))
                 elif feature['geometry']['type'] == 'MultiPolygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                     for multipolygon in outlook_polygon:  # Find the properties of each polygon
                         for polygon in multipolygon:
                             x, y = zip(*polygon[0])
                             if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('hail', outlook_label), edgecolor='black', hatch='x'))
+                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k',
+                                                                   lw=1, fc=self.color('hail', outlook_label), edgecolor='black', hatch='x'))
                             else:
-                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('hail', outlook_label)))
+                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                                   lw=1, fc=self.color('hail', outlook_label)))
         elif outlook_type == 'd4-8':
             for feature in outlook_data['features']:
                 outlook_label = feature['properties']['LABEL']
@@ -324,7 +337,8 @@ class plot:
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                 for polygon in outlook_polygon:  # Find the properties of each polygon
                     x, y = zip(*polygon[0])
-                    self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('d4-8', outlook_label)))
+                    self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                       lw=1, fc=self.color('d4-8', outlook_label)))
         elif outlook_type == 'prob':
             for feature in outlook_data['features']:
                 outlook_label = feature['properties']['LABEL']
@@ -334,18 +348,22 @@ class plot:
                     for polygon in outlook_polygon:  # Find the properties of each polygon
                         x, y = zip(*polygon[0])
                         if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('prob', outlook_label), edgecolor='black', hatch='x'))
+                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k',
+                                                               lw=1, fc=self.color('prob', outlook_label), edgecolor='black', hatch='x'))
                         else:
-                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('prob', outlook_label)))
+                            self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                               lw=1, fc=self.color('prob', outlook_label)))
                 elif feature['geometry']['type'] == 'MultiPolygon':
                     outlook_polygon = [outlook_polygon]  # Convert single polygon to a list for consistency
                     for multipolygon in outlook_polygon:  # Find the properties of each polygon
                         for polygon in multipolygon:
                             x, y = zip(*polygon[0])
                             if outlook_label == 'SIGN':  # Add hatching for 'SIGN' outlook type
-                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k', lw=1, fc=self.color('prob', outlook_label), edgecolor='black', hatch='x'))
+                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.2, ec='k',
+                                                                   lw=1, fc=self.color('prob', outlook_label), edgecolor='black', hatch='x'))
                             else:
-                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k', lw=1, fc=self.color('prob', outlook_label)))
+                                self.ax.add_patch(mpatches.Polygon(polygon[0], alpha=0.5, ec='k',
+                                                                   lw=1, fc=self.color('prob', outlook_label)))
         else:
             log.error(f"There was an error plotting the {type} outlook. Error on line 405.")
             self.popup('error', 'Plotting Error', 'An error has occured plotting the outlook. The program will now quit.')

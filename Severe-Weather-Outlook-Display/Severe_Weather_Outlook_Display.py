@@ -68,6 +68,7 @@ logo_icon = ctk.CTkImage(dark_image=Image.open(os.path.join(current_directory, '
 root = tk.Tk()
 root.withdraw()
 
+
 def check_rss_feed(url, interval):
     """
     Checks the RSS feed at the specified URL for new entries and sends a notification for each new entry.
@@ -124,6 +125,7 @@ def global_exception_handler(exc_type, exc_value, exc_traceback):
     """
     log.error('uncaught exception', exc_info=(exc_type, exc_value, exc_traceback))
     sys.exit(0)
+
 
 sys.excepthook = global_exception_handler
 
@@ -1050,12 +1052,12 @@ def color(outlook_type, outlook_level):
     log.info(f'Getting {outlook_level} for {outlook_type} outlook')
     if outlook_type == 'cat':
         colors = {
-        'TSTM': 'lightgreen',
-        'MRGL': 'green',
-        'SLGT': 'yellow',
-        'ENH': 'orange',
-        'MDT': 'red',
-        'HIGH': 'magenta'
+            'TSTM': 'lightgreen',
+            'MRGL': 'green',
+            'SLGT': 'yellow',
+            'ENH': 'orange',
+            'MDT': 'red',
+            'HIGH': 'magenta'
         }
     if outlook_type == 'tor':
         colors = {
@@ -1179,26 +1181,26 @@ def start_gui():
 
         # Home Button
         Home_Side_Button = ctk.CTkButton(sidebar_frame, text='Home', width=200, corner_radius=10, fg_color='transparent',
-                                        font=('karla', 26), command=lambda: frame_change('home'),
-                                        hover_color='#2191aa', image=home_icon, compound='top')
+                                         font=('karla', 26), command=lambda: frame_change('home'),
+                                         hover_color='#2191aa', image=home_icon, compound='top')
         Home_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 1 Button
         D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1', width=200, corner_radius=12, fg_color='transparent',
-                                    font=('karla', 26), command=lambda: frame_change(1),
-                                    hover_color='#2191aa', image=tornado_icon)
+                                       font=('karla', 26), command=lambda: frame_change(1),
+                                       hover_color='#2191aa', image=tornado_icon)
         D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 2 Button
         D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2', width=200, corner_radius=12, fg_color='transparent',
-                                    font=('karla', 26), command=lambda: frame_change(2),
-                                    hover_color='#2191aa', image=tornado_icon)
+                                       font=('karla', 26), command=lambda: frame_change(2),
+                                       hover_color='#2191aa', image=tornado_icon)
         D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 3 Button
         D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3', width=200, corner_radius=12, fg_color='transparent',
-                                    font=('karla', 26), command=lambda: frame_change(3),
-                                    hover_color='#2191aa', image=lightning_icon)
+                                       font=('karla', 26), command=lambda: frame_change(3),
+                                       hover_color='#2191aa', image=lightning_icon)
         D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
 
         # Day 4-8 Button
@@ -1448,8 +1450,8 @@ def start_gui():
             # Home Button
             Home_Side_Button = ctk.CTkButton(sidebar_frame, text='Home', width=200, corner_radius=10,
                                              fg_color='transparent',
-                                     font=('karla', 26), command=lambda: frame_change('home'),
-                                     state='disabled', image=home_icon, compound='top')
+                                             font=('karla', 26), command=lambda: frame_change('home'),
+                                             state='disabled', image=home_icon, compound='top')
             Home_Side_Button.grid(row=1, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -1468,8 +1470,9 @@ def start_gui():
             Title_Label.place(x=150, y=350)
 
             # Welcome Label
-            Welcome_Label = ctk.CTkLabel(main_frame, text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', 
-                                        font=('karla', 25))
+            Welcome_Label = ctk.CTkLabel(main_frame,
+                                         text='Welcome to the Severe Weather Outlook Display! Press a button below to find a outlook to dispaly.', 
+                                         font=('karla', 25))
             Welcome_Label.place(x=200, y=450)
         elif day == 1:
             outlook_data_cat_day_1 = fetch_cat_outlooks(1)
@@ -1488,8 +1491,8 @@ def start_gui():
 
             # Day 1 Button
             D1_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 1', width=200, corner_radius=12, fg_color='transparent',
-                                   font=('karla', 26), command=lambda: frame_change(1),
-                                   state='disabled', image=tornado_icon)
+                                           font=('karla', 26), command=lambda: frame_change(1),
+                                           state='disabled', image=tornado_icon)
             D1_Side_Button.grid(row=2, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -1563,8 +1566,8 @@ def start_gui():
             # Day 2 Button
             D2_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 2', width=200, corner_radius=12,
                                            fg_color='transparent',
-                                   font=('karla', 26), command=lambda: frame_change(2),
-                                   state='disabled', image=tornado_icon)
+                                           font=('karla', 26), command=lambda: frame_change(2),
+                                           state='disabled', image=tornado_icon)
             D2_Side_Button.grid(row=3, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -1632,8 +1635,8 @@ def start_gui():
             # Day 3 Button
             D3_Side_Button = ctk.CTkButton(sidebar_frame, text='Day 3', width=200, corner_radius=12,
                                            fg_color='transparent',
-                                   font=('karla', 26), command=lambda: frame_change(3),
-                                   state='disabled', image=lightning_icon)
+                                           font=('karla', 26), command=lambda: frame_change(3),
+                                           state='disabled', image=lightning_icon)
             D3_Side_Button.grid(row=4, column=0, columnspan=1, padx=5, pady=10)
 
             # Close Button
@@ -1862,7 +1865,7 @@ def start_gui():
         log.info('GUI - Now Closing Program')
         popup('question',
               'Close Program?',
-              'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')
+              'Are you sure you want to close the program? You will not receive notifications for new outlooks when the program is closed. Use "Hide" instead to hide the program and still receive new outlook notifications!')  # skipcq: FLK-E501
         if question == 'yes':
             if 'icon' in globals() and icon is not None:
                 icon.stop() 
@@ -1922,7 +1925,8 @@ def run(type, day):
             no_outlook_available()
             start_gui()
         if instance == 0:
-            popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+            popup('info', 'Program is Running',
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
             instance = 1
         display_cat_outlook(day, outlook_data)
     elif type == 'tor':
@@ -1931,7 +1935,8 @@ def run(type, day):
             no_outlook_available()
             start_gui()
         if instance == 0:
-            popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+            popup('info', 'Program is Running',
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
             instance = 1
         display_tor_outlook(day, outlook_data)
     elif type == 'wind':
@@ -1940,7 +1945,8 @@ def run(type, day):
             no_outlook_available()
             start_gui()
         if instance == 0:
-            popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+            popup('info', 'Program is Running',
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
             instance = 1
         display_wind_outlook(day, outlook_data)
     elif type == 'hail':
@@ -1949,7 +1955,8 @@ def run(type, day):
             no_outlook_available()
             start_gui()
         if instance == 0:
-            popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+            popup('info', 'Program is Running',
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
             instance = 1
         display_hail_outlook(day, outlook_data)
     elif type == 'd4-8':
@@ -1958,7 +1965,8 @@ def run(type, day):
             no_outlook_available()
             start_gui()
         if instance == 0:
-            popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+            popup('info', 'Program is Running',
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
             instance = 1
         display_d48_outlook(day, outlook_data)
     elif type == 'prob':
@@ -1967,12 +1975,14 @@ def run(type, day):
             no_outlook_available()
             start_gui()
         if instance == 0:
-            popup('info', 'Program is Running', 'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
+            popup('info', 'Program is Running',
+                  'The Severe Weather Outlook Display is now running. The program may take some time to load so be paitent. Click "Ok" or Close the Window to Continue')
             instance = 1
         display_prob_outlook(day, outlook_data)
     else:
         log.error(f'Invalid Outlook Type. Outlook Type = {type}')
-        popup('error', 'Invalid Outlook Type', "An error has occured where the outlook type wasn't read correctly. The program will now quit.")
+        popup('error', 'Invalid Outlook Type',
+              "An error has occured where the outlook type wasn't read correctly. The program will now quit.")
         sys.exit(0)
 
 
@@ -2001,6 +2011,7 @@ def startup():
                                        args=(rss_url, check_interval))
     rss_feed_thread.daemon = True
     rss_feed_thread.start()
+
 
 startup()
 start_gui()
