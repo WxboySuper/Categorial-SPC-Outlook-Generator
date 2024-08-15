@@ -44,9 +44,8 @@ class GUI:
     Methods:
         __init__(): Initializes a new instance of the GUI class.
     """
-    
-    _instance = None
 
+    _instance = None
     def __init__(self):
         """
         Initializes a new instance of the GUI class.
@@ -225,7 +224,7 @@ class GUI:
         self.window.withdraw()
         run.run_program(outlook_type, day, self.window)
 
-    def show_from_system_tray(self,icon, item):
+    def show_from_system_tray(self, logo_icon_tray, item):
         """
         Shows the application window from the system tray.
 
@@ -237,7 +236,7 @@ class GUI:
         Returns:
             None
         """
-        icon.stop()
+        logo_icon_tray.stop()
         self.window.deiconify()
 
     def hide_to_system_tray(self):
@@ -845,6 +844,7 @@ class RUN:
         popup(type, title, message): Displays a popup dialog box with the specified type, title, and message.
         run_program(outlook_type, day, window): Runs the severe weather outlook program for the specified outlook type and day.
     """
+    
     def __init__(self):
         """
         Initializes a new instance of the RUN class.

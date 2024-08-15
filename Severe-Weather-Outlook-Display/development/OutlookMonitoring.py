@@ -44,6 +44,7 @@ class monitor:
         __init__(): Initializes a new instance of the monitor class.
         rss(): Checks the RSS feed for new entries and sends notifications.
     """
+    
     def __init__(self):
         """
         Initializes a new instance of the monitor class.
@@ -117,6 +118,7 @@ class fetch:
         cat(day): Fetches the categorical outlook data for a specified day.
         tornado(day): Fetches the tornado outlook data for a specified day.
     """
+
     def __init__(self):
         """
         Initializes a new instance of the class.
