@@ -1,9 +1,11 @@
 # Severe Weather Outlook Display
 # Created by WeatherboySuper under the WeatherTrackUS Group
 
-'''Purpose of this program as of 3/18/2024 is to display the Severe Weather Outlook from the 
+"""
+Purpose of this program as of 3/18/2024 is to display the Severe Weather Outlook from the 
 Storm Prediction Center (SPC) under the National Weather Service (NWS) in a graphically friendly way
-for WeatherTrackUS and other users'''
+for WeatherTrackUS and other users
+"""
 
 # skipcq: PYL-W1203
 # skipcq: PYL-E501
