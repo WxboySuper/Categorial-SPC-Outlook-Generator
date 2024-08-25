@@ -1,0 +1,7 @@
+/.vscode
+/__pycache__
+/.venv
+/build
+/dist
+/ignore
+/Severe-Weather-Outlook-Display/__pycache__
