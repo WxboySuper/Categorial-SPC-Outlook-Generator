@@ -1,5 +1,5 @@
 # Severe Weather Outlook Display
-# Created by WeatherboySuper under the WeatherTrackUS Group
+# Created by WeatherboySuper and WxRome under the WeatherTrackUS Group
 
 """
 Purpose of this program as of 3/18/2024 is to display the Severe Weather Outlook from the
