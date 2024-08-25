@@ -1860,6 +1860,10 @@ def start_gui():  # skipcq: PY-R1000
         else:
             return
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 587d733f5bac8c930e931dd01cd7e2a1ad106b6a
     def show_from_system_tray(logo_icon_tray_1, item):  # skipcq: PYL-W0613  # skipcq: PTC-W0065
         """
         Shows the application window from the system tray.
