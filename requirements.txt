@@ -5,8 +5,8 @@ plyer>=2.1.0
 requests>=2.32.3
 geopandas==1.0.1
 ttkbootstrap>=1.10.1
-contextily==1.6.1
+contextily==1.6.2
 logging>=0.4.9.6
 pystray>=0.19.5
 feedparser>=6.0.11
-numpy==2.1.0
+numpy==2.1.1
