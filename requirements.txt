@@ -9,4 +9,4 @@ contextily==1.6.2
 logging>=0.4.9.6
 pystray>=0.19.5
 feedparser>=6.0.11
-numpy==2.1.1
+numpy==2.1.2
