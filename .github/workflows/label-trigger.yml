@@ -20,10 +20,21 @@ jobs:
     - name: Send message on label addition
       if: github.event.action == 'labeled' && github.event.label.name == 'halt-rabbit-review'
       run: |
-        if ! gh pr comment ${{ github.event.pull_request.number }} --body "@coderabbitai pause"; then
-          echo "Failed to comment on PR"
-          exit 1
-        fi
+        max_attempts=3
+        attempt=1
+        while [ $attempt -le $max_attempts ]; do
+          if gh pr comment ${{ github.event.pull_request.number }} --body "@coderabbitai pause"; then
+            echo "Successfully added pause comment on attempt $attempt"
+            exit 0
+          fi
+          echo "Failed to comment on PR (Attempt $attempt/$max_attempts)"
+          if [ $attempt -lt $max_attempts ]; then
+            sleep $((attempt * 5))
+          fi
+          attempt=$((attempt + 1))
+        done
+        echo "Error: Failed to add comment after $max_attempts attempts"
+        exit 1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
